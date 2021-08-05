@@ -3,7 +3,7 @@
     "recordType":"source",
     "authority":"TEST",
     "sourceName":"TestLicenses",
-    "sourceUrl":"https://raw.githubusercontent.com/k-int/folio-sync-tools/test/TestLicenseSource.groovy",
+    "sourceUrl":"https://raw.githubusercontent.com/k-int/folio-sync-tools/main/test/TestLicenseSource.groovy",
     "language":"groovy",
     "packaging":"script",
     "sourceMD5":"",
@@ -17,7 +17,7 @@
   {
     "recordType":"process",
     "processName":"TestLicenseImport",
-    "sourceUrl":"https://raw.githubusercontent.com/k-int/folio-sync-tools/test/TestLicenseProcess.groovy",
+    "sourceUrl":"https://raw.githubusercontent.com/k-int/folio-sync-tools/main/test/TestLicenseProcess.groovy",
     "language":"groovy",
     "packaging":"script",
     "sourceMD5":"",
