@@ -195,7 +195,7 @@ public class ProcessLaserLicense extends BaseTransformProcess implements Transfo
       // Grab the ID of our created license and use the resource mapping service to remember the correlation.
       // Next time we see resource_id as an ID of a LASER-LICENSE in the context of LASERIMPORT we will know that 
       // that resource maps to folio_licenses.id
-      def resource_mapping = rms.registerMapping('LASER-LICENSE',resource_id, 'LASERIMPORT','M','LICENSES',folio_license.id);
+      def resource_mapping = rms.registerMapping('LASER-LICENSE',folio_license.id, 'LASERIMPORT','M','LICENSES',folio_license.id);
       result.processStatus = 'COMPLETE'
       // Send back the resource mapping so it can be stashed in the record
       result.resource_mapping = resource_mapping;
