@@ -1,0 +1,97 @@
+[
+  { 
+    "recordType":"source",
+    "authority":"LASER",
+    "sourceName":"LaserLicenses",
+    "sourceUrl":"https://raw.githubusercontent.com/k-int/folio-sync-tools/laser/LaserLicensesAgent.groovy",
+    "language":"groovy",
+    "packaging":"script",
+    "sourceMD5":"f025ab3d0156e77a432fec7efe6bdec3",
+    "sourceSignedBy":null,
+    "sourceSignature":null,
+    "parameters":{
+                 "url":{ "section":"LASER.Integration", "key":"laser.url",            "type": "String", "required":true, "label":"Laser URL", "default":"https://laser-qa.hbz-nrw.de" },
+              "secret":{ "section":"LASER.Integration", "key":"laser.secret",         "type": "String", "required":true, "label":"Laser Secret" },
+               "token":{ "section":"LASER.Integration", "key":"laser.token",          "type": "String", "required":true, "label":"Laser Token" },
+          "identifier":{ "section":"LASER.Integration", "key":"laser.identifier",     "type": "String", "required":true, "label":"Laser Identifier" },
+      "identifierType":{ "section":"LASER.Integration", "key":"laser.identifierType", "type": "String", "required":true, "label":"Laser Identifier Type","default":"globalUID" }
+    },
+    "emits":"LASER::LICENSE"
+  },
+  {
+    "recordType":"source",
+    "authority":"LASER",
+    "sourceName":"LaserSubscriptions",
+    "sourceUrl":"https://raw.githubusercontent.com/k-int/folio-sync-tools/laser/LaserSubscriptionsAgent.groovy",
+    "language":"groovy",
+    "packaging":"script",
+    "sourceMD5":"fc6005bbd4ca203ed6bb5885b7d75afe",
+    "sourceSignedBy":null,
+    "sourceSignature":null,
+    "parameters":{
+                 "url":{ "section":"LASER.Integration", "key":"laser.url",            "type": "String", "required":true, "label":"Laser URL" },
+              "secret":{ "section":"LASER.Integration", "key":"laser.secret",         "type": "String", "required":true, "label":"Laser Secret" },
+               "token":{ "section":"LASER.Integration", "key":"laser.token",          "type": "String", "required":true, "label":"Laser Token" },
+          "identifier":{ "section":"LASER.Integration", "key":"laser.identifier",     "type": "String", "required":true, "label":"Laser Identifier" },
+      "identifierType":{ "section":"LASER.Integration", "key":"laser.identifierType", "type": "String", "required":true, "label":"Laser Identifier Type" }
+    },
+    "emits":"LASER::SUBSCRIPTION"
+  },
+  {
+    "recordType":"process",
+    "processName":"LaserSubscriptionImport",
+    "sourceUrl":"https://raw.githubusercontent.com/k-int/folio-sync-tools/laser/ProcessLaserSubscription.groovy",
+    "language":"groovy",
+    "packaging":"script",
+    "sourceMD5":"77437c44621743b152f8026848b00a98",
+    "sourceSignedBy":null,
+    "sourceSignature":null,
+    "accepts":"LASER::SUBSCRIPTION"
+  },
+  {
+    "recordType":"process",
+    "processName":"LaserLicenseImport",
+    "sourceUrl":"https://raw.githubusercontent.com/k-int/folio-sync-tools/laser/ProcessLaserLicense.groovy",
+    "language":"groovy",
+    "packaging":"script",
+    "sourceMD5":"a009143d18dbe8ca41d769afefdbedc8",
+    "sourceSignedBy":null,
+    "sourceSignature":null,
+    "accepts":"LASER::LICENSE"
+  },
+  { 
+    "recordType":"extract",
+    "extractName":"LASERLicenseExtract",
+    "source":"LaserLicenses",
+    "process":"LaserLicenseImport"
+  },
+  {
+    "recordType":"extract",
+    "extractName":"LASERSubscriptionExtract",
+    "source":"LaserSubscriptions",
+    "process":"LaserSubscriptionImport"
+  },
+  {
+    "recordType":"mappings",
+    "mappings":[
+      { "srcCtx":"LASER::LICENSE/TYPE",      "srcValue":"Consortium",    "mappingContext":"LASERIMPORT", "targetCtx":"FOLIO::LICENSE/TYPE",      "targetValue":"Consortial" },
+      { "srcCtx":"LASER::LICENSE/TYPE",      "srcValue":"Local",         "mappingContext":"LASERIMPORT", "targetCtx":"FOLIO::LICENSE/TYPE",      "targetValue":"Local" },
+      { "srcCtx":"LASER::LICENSE/TYPE",      "srcValue":"National",      "mappingContext":"LASERIMPORT", "targetCtx":"FOLIO::LICENSE/TYPE",      "targetValue":"National" },
+      { "srcCtx":"LASER::LICENSE/TYPE",      "srcValue":"Alliance",      "mappingContext":"LASERIMPORT", "targetCtx":"FOLIO::LICENSE/TYPE",      "targetValue":"Alliance" },
+      { "srcCtx":"LASER::LICENSE/TYPE",      "srcValue":"Participation", "mappingContext":"LASERIMPORT", "targetCtx":"FOLIO::LICENSE/TYPE",      "targetValue":"Alliance" },
+
+      { "srcCtx":"LASER::LICENSE/STATUS",    "srcValue":"In Progress",   "mappingContext":"LASERIMPORT", "targetCtx":"FOLIO::LICENSE/STATUS",    "targetValue":"Active" },
+      { "srcCtx":"LASER::LICENSE/STATUS",    "srcValue":"Current",       "mappingContext":"LASERIMPORT", "targetCtx":"FOLIO::LICENSE/STATUS",    "targetValue":"Active" },
+      { "srcCtx":"LASER::LICENSE/STATUS",    "srcValue":"Participation", "mappingContext":"LASERIMPORT", "targetCtx":"FOLIO::LICENSE/STATUS",    "targetValue":"Active" },
+      { "srcCtx":"LASER::LICENSE/STATUS",    "srcValue":"In negotiation","mappingContext":"LASERIMPORT", "targetCtx":"FOLIO::LICENSE/STATUS",    "targetValue":"In negotiation" },
+      { "srcCtx":"LASER::LICENSE/STATUS",    "srcValue":"Not yet active","mappingContext":"LASERIMPORT", "targetCtx":"FOLIO::LICENSE/STATUS",    "targetValue":"Not yet active" },
+      { "srcCtx":"LASER::LICENSE/STATUS",    "srcValue":"Rejected",      "mappingContext":"LASERIMPORT", "targetCtx":"FOLIO::LICENSE/STATUS",    "targetValue":"Rejected" },
+      { "srcCtx":"LASER::LICENSE/STATUS",    "srcValue":"Retired",       "mappingContext":"LASERIMPORT", "targetCtx":"FOLIO::LICENSE/STATUS",    "targetValue":"Expired" },
+      { "srcCtx":"LASER::LICENSE/STATUS",    "srcValue":"Expired",       "mappingContext":"LASERIMPORT", "targetCtx":"FOLIO::LICENSE/STATUS",    "targetValue":"Expired" },
+
+      { "srcCtx":"LASER::LICENSE/PROPERTY",  "srcValue":"ILL electronic","mappingContext":"LASERIMPORT", "targetCtx":"FOLIO::LICENSE/PROPDEF",   "targetValue":"Electronic ILL" },
+
+      { "srcCtx":"LASER::LICENSE/REFDATA/permissions", "srcValue":"Permitted (explicit)","mappingContext":"LASERIMPORT", "targetCtx":"FOLIO::LICENSE/REFDATA/permissions",   "targetValue":"Permitted (explicit)" }
+    ]
+  }
+]
