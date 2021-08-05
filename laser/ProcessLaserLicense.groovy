@@ -182,7 +182,7 @@ public class ProcessLaserLicense extends BaseTransformProcess implements Transfo
       name:laser_record?.reference,
       description: "Synchronized from LAS:eR license ${laser_record?.reference}/${laser_record?.globalUID} on ${new Date()}",
       type:typeString,
-      customProperties: processLicenseProperties([:],laser_record,local_context),
+      customProperties: processLicenseProperties(rms,[:],laser_record,local_context),
       status:statusString,
       localReference: laser_record.globalUID,
       startDate: laser_record?.startDate,
@@ -243,7 +243,7 @@ public class ProcessLaserLicense extends BaseTransformProcess implements Transfo
     }
   }
 
-  private Map processLicenseProperties(Map folio_license, Map laser_license, Map local_context) {
+  private Map processLicenseProperties(ResourceMappingService rms, Map folio_license, Map laser_license, Map local_context) {
     Map result = [:]
     laser_license?.properties?.each { licprop ->
       log.debug("Process license property : ${licprop}");
