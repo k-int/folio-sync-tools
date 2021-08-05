@@ -89,7 +89,7 @@
       { "srcCtx":"LASER::LICENSE/STATUS",    "srcValue":"Retired",       "mappingContext":"LASERIMPORT", "targetCtx":"FOLIO::LICENSE/STATUS",    "targetValue":"Expired" },
       { "srcCtx":"LASER::LICENSE/STATUS",    "srcValue":"Expired",       "mappingContext":"LASERIMPORT", "targetCtx":"FOLIO::LICENSE/STATUS",    "targetValue":"Expired" },
 
-      { "srcCtx":"LASER::LICENSE/PROPERTY",  "srcValue":"ILL electronic","mappingContext":"LASERIMPORT", "targetCtx":"FOLIO::LICENSE/PROPDEF",   "targetValue":"Electronic ILL" },
+      { "srcCtx":"LASER::LICENSE/PROPERTY",  "srcValue":"ILL electronic","mappingContext":"LASERIMPORT", "targetCtx":"FOLIO::LICENSE/PROPDEF",   "targetValue":"illElectronic" },
 
       { "srcCtx":"LASER::LICENSE/REFDATA/permissions", "srcValue":"Permitted (explicit)","mappingContext":"LASERIMPORT", "targetCtx":"FOLIO::LICENSE/REFDATA/permissions",   "targetValue":"Permitted (explicit)" }
     ]

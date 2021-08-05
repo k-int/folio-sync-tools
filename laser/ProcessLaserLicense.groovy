@@ -244,7 +244,9 @@ public class ProcessLaserLicense extends BaseTransformProcess implements Transfo
   }
 
   private Map processLicenseProperties(ResourceMappingService rms, Map folio_license, Map laser_license, Map local_context) {
-    Map result = [:]
+
+    Map result = folio_license.customProperties ?: [:];
+
     laser_license?.properties?.each { licprop ->
       log.debug("Process license property : ${licprop}");
       String property_name = licprop.token
@@ -256,12 +258,27 @@ public class ProcessLaserLicense extends BaseTransformProcess implements Transfo
         switch ( licprop.type ) {
           case 'Text':
             local_context.processLog.add([ts:System.currentTimeMillis(), msg:"adding text property: ${licprop.token}"]);
+            result[mapped_property.folioId] = [
+              value: licprop.value
+            ]
             break;
           case 'Date':
             local_context.processLog.add([ts:System.currentTimeMillis(), msg:"adding date property: ${licprop.token}"]);
+            result[mapped_property.folioId] = [
+              value: licprop.value
+            ]
             break;
           case 'Refdata':
-            local_context.processLog.add([ts:System.currentTimeMillis(), msg:"adding refdata property: ${licprop.token}"]);
+            def mapped_value = rms.lookupMapping("LASER::LICENSE/REFDATA/${licprop.token}",licprop.value,'LASERIMPORT')
+            local_context.processLog.add([ts:System.currentTimeMillis(), msg:"adding refdata property: ${licprop.token} mapped value ${mapped_value}"]);
+            if ( mapped_value ) {
+              result[mapped_property.folioId] = [
+                //  internal: internalValue,
+                //  note: internalNote,
+                value: mapped_value.folioId,
+                type: 'com.k_int.web.toolkit.custprops.types.CustomPropertyRefdata'
+              ]
+            }
             break;
         }
       }
