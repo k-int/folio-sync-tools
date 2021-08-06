@@ -259,22 +259,24 @@ public class ProcessLaserLicense extends BaseTransformProcess implements Transfo
           case 'Text':
             local_context.processLog.add([ts:System.currentTimeMillis(), msg:"adding text property: ${licprop.token}"]);
             result[mapped_property.folioId] = [
+              note: noteParagraphJoiner(licprop.note, licprop.paragraph),
               value: licprop.value
             ]
             break;
           case 'Date':
             local_context.processLog.add([ts:System.currentTimeMillis(), msg:"adding date property: ${licprop.token}"]);
             result[mapped_property.folioId] = [
+              note: noteParagraphJoiner(licprop.note, licprop.paragraph),
               value: licprop.value
             ]
             break;
           case 'Refdata':
             def mapped_value = rms.lookupMapping("LASER::LICENSE/REFDATA/${licprop.token}",licprop.value,'LASERIMPORT')
-            local_context.processLog.add([ts:System.currentTimeMillis(), msg:"adding refdata property: ${licprop.token} mapped value ${mapped_value}"]);
+            local_context.processLog.add([ts:System.currentTimeMillis(), msg:"adding refdata property: ${licprop.token}:${licprop.value} mapped value ${mapped_value}"]);
             if ( mapped_value ) {
               result[mapped_property.folioId] = [
                 //  internal: internalValue,
-                //  note: internalNote,
+                note: noteParagraphJoiner(licprop.note, licprop.paragraph),
                 value: mapped_value.folioId,
                 type: 'com.k_int.web.toolkit.custprops.types.CustomPropertyRefdata'
               ]
@@ -300,4 +302,20 @@ public class ProcessLaserLicense extends BaseTransformProcess implements Transfo
     return result;
 
   }
+
+  public String noteParagraphJoiner(String note, String paragraph) {
+    // The paragraph information for custom properties will for now be stored alongside the note in FOLIO's internalNote field, with a delimiter defined below
+    String delimiter = " :: "
+
+    if (note != null && paragraph != null) {
+      return note << delimiter << paragraph;
+    } else if (note == null && paragraph == null) {
+      return null;
+    } else if (note == null) {
+      return paragraph;
+    } else {
+      return note;
+    }
+  }
+
 }
