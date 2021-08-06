@@ -271,7 +271,7 @@ public class ProcessLaserLicense extends BaseTransformProcess implements Transfo
             ]
             break;
           case 'Refdata':
-            def mapped_value = rms.lookupMapping("LASER::LICENSE/REFDATA/${licprop.token}",licprop.value,'LASERIMPORT')
+            def mapped_value = rms.lookupMapping("LASER::LICENSE/REFDATA/${licprop.refdataCategory}",licprop.value,'LASERIMPORT')
             local_context.processLog.add([ts:System.currentTimeMillis(), msg:"adding refdata property: ${licprop.token}:${licprop.value} mapped value ${mapped_value}"]);
             if ( mapped_value ) {
               result[mapped_property.folioId] = [
