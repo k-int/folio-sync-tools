@@ -94,7 +94,8 @@
       { "srcCtx":"LASER::LICENSE/PROPERTY",  "srcValue":"Post Cancellation Online Access", 
                                                                             "mappingContext":"LASERIMPORT", "targetCtx":"FOLIO::LICENSE/PROPERTY",   "targetValue":"postCancellationAccess" },
 
-      { "srcCtx":"LASER::LICENSE/REFDATA/permissions", "srcValue":"Permitted (explicit)","mappingContext":"LASERIMPORT", "targetCtx":"FOLIO::LICENSE/REFDATA/y.n",   "targetValue":"Permitted (explicit)" },
+      { "srcCtx":"LASER::LICENSE/REFDATA/permissions", "srcValue":"Permitted (explicit)","mappingContext":"LASERIMPORT", "targetCtx":"FOLIO::LICENSE/REFDATA/permissions",   "targetValue":"Permitted (explicit)" },
+      { "srcCtx":"LASER::LICENSE/REFDATA/permissions", "srcValue":"Prohibited (interpreted)","mappingContext":"LASERIMPORT", "targetCtx":"FOLIO::LICENSE/REFDATA/permissions",   "targetValue":"Prohibited (interpreted)" },
 
       { "srcCtx":"LASER::LICENSE/REFDATA/y.n",   "srcValue":"Yes",   "mappingContext":"LASERIMPORT", "targetCtx":"FOLIO::LICENSE/REFDATA/y.n",     "targetValue":"Yes" },
       { "srcCtx":"LASER::LICENSE/REFDATA/y.n",   "srcValue":"No",    "mappingContext":"LASERIMPORT", "targetCtx":"FOLIO::LICENSE/REFDATA/y.n",     "targetValue":"No" },
