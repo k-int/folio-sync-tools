@@ -125,8 +125,8 @@ public class ProcessLaserLicense extends BaseTransformProcess implements Transfo
 
 
         if ( fi != null ) {
-          local_context.processLog.add([ts:System.currentTimeMillis(), msg:"Applying located feedbacko ${answer}"])
           def answer = fi.parsedAnswer
+          local_context.processLog.add([ts:System.currentTimeMillis(), msg:"Applying located feedbacko ${answer}"])
           switch ( answer?.answerType ) {
             case 'create':
               createLicense(folioHelper, rms, parsed_record, result, local_context);
