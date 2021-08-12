@@ -140,9 +140,14 @@ public class ProcessLaserLicense extends BaseTransformProcess implements Transfo
               println("Import ${resource_id} as ${answer}");
               if ( answer?.mappedResource?.id ) {
                 def resource_mapping = rms.registerMapping('LASER-LICENSE',resource_id, 'LASERIMPORT','M','LICENSES',answer?.mappedResource?.id);
-                result.resource_mapping = resource_mapping;
-                updateLicense(folioHelper, rm.folioId,parsed_record,result)
-                result.processStatus = 'COMPLETE'
+                if ( resource_mapping ) {
+                  result.resource_mapping = resource_mapping;
+                  updateLicense(folioHelper, resource_mapping.folioId,parsed_record,result)
+                  result.processStatus = 'COMPLETE'
+                }
+                else {
+                  local_context.processLog.add([ts:System.currentTimeMillis(), msg:"Resource mapping step failed"]);
+                }
               }
               else {
                 local_context.processLog.add([ts:System.currentTimeMillis(), msg:"Feedback to map existing is incomplete : ${answer}. Missing mappedResource.id"]);
