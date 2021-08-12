@@ -125,6 +125,7 @@ public class ProcessLaserLicense extends BaseTransformProcess implements Transfo
 
 
         if ( fi != null ) {
+          local_context.processLog.add([ts:System.currentTimeMillis(), msg:"Applying located feedbacko ${answer}"])
           def answer = fi.parsedAnswer
           switch ( answer?.answerType ) {
             case 'create':
@@ -136,11 +137,16 @@ public class ProcessLaserLicense extends BaseTransformProcess implements Transfo
               result.processStatus = 'COMPLETE'
               break;
             case 'map':
-              println("Import ${resource_id} as ${answer?.value}");
-              def resource_mapping = rms.registerMapping('LASER-LICENSE',resource_id, 'LASERIMPORT','M','LICENSES',answer?.value);
-              result.resource_mapping = resource_mapping;
-              updateLicense(folioHelper, rm.folioId,parsed_record,result)
-              result.processStatus = 'COMPLETE'
+              println("Import ${resource_id} as ${answer}");
+              if ( answer?.mappedResource?.id ) {
+                def resource_mapping = rms.registerMapping('LASER-LICENSE',resource_id, 'LASERIMPORT','M','LICENSES',answer?.mappedResource?.id);
+                result.resource_mapping = resource_mapping;
+                updateLicense(folioHelper, rm.folioId,parsed_record,result)
+                result.processStatus = 'COMPLETE'
+              }
+              else {
+                local_context.processLog.add([ts:System.currentTimeMillis(), msg:"Feedback to map existing is incomplete : ${answer}. Missing mappedResource.id"]);
+              }
               // We are mapping a new external resource to an existing internal license - this is a put rather than a post
               // def folio_licenses = folioHelper.okapiPut("/licenses/licenses/${answer.value}", requestBody);
               break;
@@ -155,6 +161,7 @@ public class ProcessLaserLicense extends BaseTransformProcess implements Transfo
       }
       else {
         println("Got existing mapping... process ${rm}");
+        local_context.processLog.add([ts:System.currentTimeMillis(), msg:"attempt update existing license mapping: ${rm}"]);
         updateLicense(folioHelper, rm.folioId, parsed_record, result)
         result.processStatus = 'COMPLETE'
       }
@@ -162,6 +169,7 @@ public class ProcessLaserLicense extends BaseTransformProcess implements Transfo
     catch ( Exception e ) {
       println("\n\n***Exception in record processing***\n\n");
       e.printStackTrace()
+      log.error("Exception in process",e);
       local_context.processLog.add([ts:System.currentTimeMillis(), msg:"Problem in processing ${e.message}"]);
     }
 
