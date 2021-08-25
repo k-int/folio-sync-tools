@@ -4,6 +4,7 @@ import mod_remote_sync.source.TransformProcess;
 
 import org.springframework.context.ApplicationContext
 import groovy.util.logging.Slf4j
+import groovy.json.JsonSlurper
 
 @Slf4j
 public class ProcessLaserSubscription implements TransformProcess {
