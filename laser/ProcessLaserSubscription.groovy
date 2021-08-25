@@ -42,6 +42,11 @@ public class ProcessLaserSubscription implements TransformProcess {
                      ApplicationContext ctx,
                      Map local_context) {
 
+    String new_package_name = local_context.parsed_record.name;
+
+    // The subscription is composed of packages from GOKB
+    // local_context.parsed_record.packages.each { pkg ->
+    //   pkg.globalUid == gokb UID of package
     def folio_package_json = generateFOLIOPackageJSON('one',local_context.parsed_record);
     return [
       processStatus:'FAIL'   // FAIL|COMPLETE

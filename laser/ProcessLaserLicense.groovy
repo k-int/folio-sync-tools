@@ -116,6 +116,7 @@ public class ProcessLaserLicense extends BaseTransformProcess implements Transfo
       if ( rm == null ) {
 
         println("No existing resource mapping found checking for feedback item");
+        local_context.processLog.add([ts:System.currentTimeMillis(), msg:'License is new to FOLIO - check for create/update/ignore feedback'])
 
         // No existing mapping - see if we have a decision about creating or updating an existing record
         String feedback_correlation_id = "LASER-LICENSE:${resource_id}:LASERIMPORT:MANUAL-RESOURCE-MAPPING".toString()
