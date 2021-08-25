@@ -12,21 +12,43 @@ public class ProcessLaserSubscription implements TransformProcess {
                             byte[] input_record,
                             ApplicationContext ctx,
                             Map local_context) {
-    return [
-      preflightStatus:'FAIL'  // FAIL|PASS
+
+    boolean pass = false;
+
+    try {
+      // test source makes JSON records - so parse the byte array accordingly
+      def jsonSlurper = new JsonSlurper()
+      def parsed_record = jsonSlurper.parseText(new String(input_record))
+
+      // Stash the parsed record so that we can use it in the process step without re-parsing if preflight passes
+      local_context.parsed_record = parsed_record;
+
+      local_context.processLog.add([ts:System.currentTimeMillis(), msg:"ProcessLaserSubscription::preflightCheck(${resource_id},..) ${new Date()}"]);
+
+      pass=true
+    }
+    catch (Exception e) {
+    }
+
+    result = [
+      preflightStatus: pass ? 'PASS' : 'FAIL'
     ]
+
+    return result;
   }
 
   public Map process(String resource_id,
                      byte[] input_record,
                      ApplicationContext ctx,
                      Map local_context) {
+
+    def folio_package_json = generateFOLIOPackageJSON('one',local_context.parsed_record);
     return [
       processStatus:'FAIL'   // FAIL|COMPLETE
     ]
   }
 
-  private Map generateFOLIOPackageJSON(String generated_package_name, String generated_file_name, Map subscription) {
+  private Map generateFOLIOPackageJSON(String generated_package_name, Map subscription) {
     def pkg_data = [
       "header": [
          "dataSchema": [
