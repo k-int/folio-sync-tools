@@ -5,6 +5,9 @@ import mod_remote_sync.source.TransformProcess;
 import org.springframework.context.ApplicationContext
 import groovy.util.logging.Slf4j
 import groovy.json.JsonSlurper
+import java.time.LocalDateTime
+import java.time.LocalDate
+
 
 @Slf4j
 public class ProcessLaserSubscription implements TransformProcess {
