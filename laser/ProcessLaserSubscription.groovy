@@ -18,6 +18,7 @@ public class ProcessLaserSubscription implements TransformProcess {
                             Map local_context) {
 
     boolean pass = false;
+    def result = [:]
 
     try {
       // test source makes JSON records - so parse the byte array accordingly
