@@ -12,6 +12,7 @@ import mod_remote_sync.ResourceMapping
 import mod_remote_sync.FeedbackItem
 import mod_remote_sync.ImportFeedbackService
 import groovy.json.JsonSlurper
+import com.k_int.web.toolkit.settings.AppSetting
 
 @Slf4j
 public class ProcessLaserLicense extends BaseTransformProcess implements TransformProcess {
@@ -91,12 +92,19 @@ public class ProcessLaserLicense extends BaseTransformProcess implements Transfo
                      ApplicationContext ctx,
                      Map local_context) {
 
+    log.debug("ProcessLaserLicense::process(${resource_id},...)");
+
     def result = [
       processStatus:'FAIL'  // FAIL|COMPLETE
     ]
 
-    log.debug("ProcessLaserLicense::process(${resource_id},...)");
-    println("Record to import: ${new String(input_record)}");
+    String folio_user = AppSetting.findByKey('laser.ermFOLIOUser')?.value
+    String folio_pass = AppSetting.findByKey('laser.ermFOLIOPass')?.value
+    String okapi_host = System.getenv("OKAPI_SERVICE_HOST") ?: 'okapi'
+    String okapi_port = System.getenv("OKAPI_SERVICE_PORT") ?: '9130'
+
+    log("user: ${folio_user},..., okapi_host:${okapi_host}, okapi_port:${okapi_port}");
+
     local_context.processLog.add([ts:System.currentTimeMillis(), msg:"ProcessLaserLicense::process(${resource_id},..) ${new Date()}"]);
 
     try {

@@ -55,6 +55,11 @@ public class ProcessLaserSubscription implements TransformProcess {
                      ApplicationContext ctx,
                      Map local_context) {
 
+    String folio_user = AppSetting.findByKey('laser.ermFOLIOUser')?.value
+    String folio_pass = AppSetting.findByKey('laser.ermFOLIOPass')?.value
+    String okapi_host = System.getenv("OKAPI_SERVICE_HOST") ?: 'okapi'
+    String okapi_port = System.getenv("OKAPI_SERVICE_PORT") ?: '9130'
+
     String new_package_name = local_context.parsed_record.name;
 
     ResourceMappingService rms = ctx.getBean('resourceMappingService');
