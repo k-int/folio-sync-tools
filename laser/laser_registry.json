@@ -14,7 +14,9 @@
               "secret":{ "section":"LASER.Integration", "key":"laser.secret",         "type": "String", "required":true, "label":"Laser Secret" },
                "token":{ "section":"LASER.Integration", "key":"laser.token",          "type": "String", "required":true, "label":"Laser Token" },
           "identifier":{ "section":"LASER.Integration", "key":"laser.identifier",     "type": "String", "required":true, "label":"Laser Identifier" },
-      "identifierType":{ "section":"LASER.Integration", "key":"laser.identifierType", "type": "String", "required":true, "label":"Laser Identifier Type","default":"globalUID" }
+      "identifierType":{ "section":"LASER.Integration", "key":"laser.identifierType", "type": "String", "required":true, "label":"Laser Identifier Type","default":"globalUID" },
+        "ermFOLIOUser":{ "section":"LASER.Integration", "key":"laser.ermFOLIOUser",   "type": "String", "required":true, "label":"FOLIO ERM User"},
+        "ermFOLIOPass":{ "section":"LASER.Integration", "key":"laser.ermFOLIOPass",   "type": "String", "required":true, "label":"FOLIO ERM Pass"}
     },
     "emits":"LASER::LICENSE"
   },
@@ -33,7 +35,9 @@
               "secret":{ "section":"LASER.Integration", "key":"laser.secret",         "type": "String", "required":true, "label":"Laser Secret" },
                "token":{ "section":"LASER.Integration", "key":"laser.token",          "type": "String", "required":true, "label":"Laser Token" },
           "identifier":{ "section":"LASER.Integration", "key":"laser.identifier",     "type": "String", "required":true, "label":"Laser Identifier" },
-      "identifierType":{ "section":"LASER.Integration", "key":"laser.identifierType", "type": "String", "required":true, "label":"Laser Identifier Type" }
+      "identifierType":{ "section":"LASER.Integration", "key":"laser.identifierType", "type": "String", "required":true, "label":"Laser Identifier Type" },
+        "ermFOLIOUser":{ "section":"LASER.Integration", "key":"laser.ermFOLIOUser",   "type": "String", "required":true, "label":"FOLIO ERM User"},
+        "ermFOLIOPass":{ "section":"LASER.Integration", "key":"laser.ermFOLIOPass",   "type": "String", "required":true, "label":"FOLIO ERM Pass"}
     },
     "emits":"LASER::SUBSCRIPTION"
   },
