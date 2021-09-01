@@ -57,8 +57,8 @@ public class ProcessLaserSubscription implements TransformProcess {
 
     String folio_user = AppSetting.findByKey('laser.ermFOLIOUser')?.value;
     String folio_pass = AppSetting.findByKey('laser.ermFOLIOPass')?.value;
-    String okapi_host = System.getenv("OKAPI_SERVICE_HOST") ?: 'okapi';
-    String okapi_port = System.getenv("OKAPI_SERVICE_PORT") ?: '9130';
+    String okapi_host = System.getenv('OKAPI_SERVICE_HOST') ?: 'okapi';
+    String okapi_port = System.getenv('OKAPI_SERVICE_PORT') ?: '9130';
 
     String new_package_name = local_context.parsed_record.name;
 
@@ -67,7 +67,7 @@ public class ProcessLaserSubscription implements TransformProcess {
     FolioHelperService folioHelper = ctx.getBean('folioHelperService');
 
     // Create or update the "custom package" representing the contents of this agreement
-    def folio_package_json = generateFOLIOPackageJSON('one',local_context.parsed_record);
+    def folio_package_json = generateFOLIOPackageJSON(new_package_name,local_context.parsed_record);
     upsertPackage(folio_package_json, folioHelper);
 
     return [
