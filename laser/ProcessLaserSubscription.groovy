@@ -19,7 +19,6 @@ import mod_remote_sync.ImportFeedbackService
 
 @Slf4j
 public class ProcessLaserSubscription implements TransformProcess {
-    def folio_license = folioHelper.okapiPost('/licenses/licenses', requestBody);
 
   public Map preflightCheck(String resource_id,
                             byte[] input_record,

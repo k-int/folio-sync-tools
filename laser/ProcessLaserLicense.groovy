@@ -204,6 +204,7 @@ public class ProcessLaserLicense extends BaseTransformProcess implements Transfo
     ]
 
     def folio_license = folioHelper.okapiPost('/licenses/licenses', requestBody);
+    local_context.processLog.add([ts:System.currentTimeMillis(), msg:"Result of okapiPost /licenses/licenses: ${folio_license?.id}");
 
     if ( folio_license ) {
       // Grab the ID of our created license and use the resource mapping service to remember the correlation.
