@@ -103,7 +103,7 @@ public class ProcessLaserLicense extends BaseTransformProcess implements Transfo
     String okapi_host = System.getenv("OKAPI_SERVICE_HOST") ?: 'okapi'
     String okapi_port = System.getenv("OKAPI_SERVICE_PORT") ?: '9130'
 
-    log("user: ${folio_user},..., okapi_host:${okapi_host}, okapi_port:${okapi_port}");
+    log.debug("user: ${folio_user},..., okapi_host:${okapi_host}, okapi_port:${okapi_port}");
 
     local_context.processLog.add([ts:System.currentTimeMillis(), msg:"ProcessLaserLicense::process(${resource_id},..) ${new Date()}"]);
 
