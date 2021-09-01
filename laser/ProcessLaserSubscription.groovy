@@ -11,6 +11,7 @@ import java.time.LocalDate
 
 @Slf4j
 public class ProcessLaserSubscription implements TransformProcess {
+    def folio_license = folioHelper.okapiPost('/licenses/licenses', requestBody);
 
   public Map preflightCheck(String resource_id,
                             byte[] input_record,
@@ -49,13 +50,25 @@ public class ProcessLaserSubscription implements TransformProcess {
 
     String new_package_name = local_context.parsed_record.name;
 
-    // The subscription is composed of packages from GOKB
-    // local_context.parsed_record.packages.each { pkg ->
-    //   pkg.globalUid == gokb UID of package
+    ResourceMappingService rms = ctx.getBean('resourceMappingService');
+    ImportFeedbackService feedbackHelper = ctx.getBean('importFeedbackService');
+    FolioHelperService folioHelper = ctx.getBean('folioHelperService');
+
+    // Create or update the "custom package" representing the contents of this agreement
     def folio_package_json = generateFOLIOPackageJSON('one',local_context.parsed_record);
+    upsertPackage(folio_package_json, folioHelper);
+
     return [
       processStatus:'FAIL'   // FAIL|COMPLETE
     ]
+  }
+
+  private Map upsertPackage(Map folio_package_json, FolioHelperService folioHelper) {
+    // 1. see if we can locate an existing package with reference folio_package_json.reference (The laser UUID)
+    // the /erm/packages/import endpoint automatically checks for an existing record with the given reference and updates
+    // any existing package - perfect!
+    def import_response = folioHelper.okapiPost('/erm/packages/import', folio_package_json);
+    return import_response;
   }
 
   private Map generateFOLIOPackageJSON(String generated_package_name, Map subscription) {
