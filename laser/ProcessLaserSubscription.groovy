@@ -74,7 +74,7 @@ public class ProcessLaserSubscription implements TransformProcess {
     // See if we already have a record for the subscription with this LASER guid
     def existing_subscription = lookupAgreement(local_context.parsed_record.globalUID)
 
-    if ( existing_subscription != null ) }{
+    if ( existing_subscription != null ) {
       local_context.processLog.add([ts:System.currentTimeMillis(), msg:"Matched an existing subscription - ${existing_subscription.id}"]);
     }
     else {
