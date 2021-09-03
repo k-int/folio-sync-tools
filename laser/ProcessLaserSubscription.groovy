@@ -77,11 +77,13 @@ public class ProcessLaserSubscription implements TransformProcess {
     try {
       // Create or update the "custom package" representing the contents of this agreement
       def folio_package_json = generateFOLIOPackageJSON(new_package_name,local_context.parsed_record);
-      def package_details = upsertPackage(folio_package_json, folioHelper);
+      // def package_details = upsertPackage(folio_package_json, folioHelper);
+      def package_details = upsertPackage(folio_package_json, fc);
       local_context.processLog.add([ts:System.currentTimeMillis(), msg:"Result of upsert custom package for sub: ${package_details}"]);
 
       // See if we already have a record for the subscription with this LASER guid
-      def existing_subscription = lookupAgreement(local_context.parsed_record.globalUID, folioHelper)
+      // def existing_subscription = lookupAgreement(local_context.parsed_record.globalUID, folioHelper)
+      def existing_subscription = lookupAgreement(local_context.parsed_record.globalUID, fc)
 
       if ( existing_subscription != null ) {
         local_context.processLog.add([ts:System.currentTimeMillis(), msg:"Matched an existing subscription - ${existing_subscription.id}"]);
@@ -98,7 +100,8 @@ public class ProcessLaserSubscription implements TransformProcess {
     return result
   }
 
-  private Map upsertPackage(Map folio_package_json, FolioHelperService folioHelper) {
+  // private Map upsertPackage(Map folio_package_json, FolioHelperService folioHelper) {
+  private Map upsertPackage(Map folio_package_json, FolioClient folioHelper) {
     // 1. see if we can locate an existing package with reference folio_package_json.reference (The laser UUID)
     // the /erm/packages/import endpoint automatically checks for an existing record with the given reference and updates
     // any existing package - perfect!
@@ -202,7 +205,8 @@ public class ProcessLaserSubscription implements TransformProcess {
     return dateOutput;
   }
 
-  def lookupAgreement(String ref, FolioHelperService folioHelper) {
+  // def lookupAgreement(String ref, FolioHelperService folioHelper) {
+  def lookupAgreement(String ref, FolioClient folioHelper) {
     def result = null;
 
     def search_response = folioHelper.okapiGet('/erm/sas', [
