@@ -207,6 +207,9 @@ public class ProcessLaserSubscription implements TransformProcess {
 
   // def lookupAgreement(String ref, FolioHelperService folioHelper) {
   def lookupAgreement(String ref, FolioClient folioHelper) {
+
+    log.debug("lookupAgreement(${ref},...)");
+
     def result = null;
 
     def search_response = folioHelper.okapiGet('/erm/sas', [
@@ -218,16 +221,23 @@ public class ProcessLaserSubscription implements TransformProcess {
       ]
     );
 
-    switch ( search_response.totalRecords ) {
-      case 0:
-        result = null;
-        break;
-      case 1:
-        result = search_response.results[0]
-        break;
-      default:
-        throw new RuntimeException("Multiple subscriptions matched");
-        break;
+    log.debug("lookup agreement response: ${search_response} ${search_response?.class?.name}");
+
+    if ( search_response ) {
+      switch ( search_response?.totalRecords ) {
+        case 0:
+          result = null;
+          break;
+        case 1:
+          result = search_response.results[0]
+          break;
+        default:
+          throw new RuntimeException("Multiple subscriptions matched");
+          break;
+      }
+    }
+    else { 
+      log.warn("No response to agreement lookup");
     }
 
     return result;
