@@ -68,7 +68,18 @@ public class ProcessLaserSubscription implements TransformProcess {
 
     // Create or update the "custom package" representing the contents of this agreement
     def folio_package_json = generateFOLIOPackageJSON(new_package_name,local_context.parsed_record);
-    upsertPackage(folio_package_json, folioHelper);
+    def package_details = upsertPackage(folio_package_json, folioHelper);
+    local_context.processLog.add([ts:System.currentTimeMillis(), msg:"Result of upsert custom package for sub: ${package_details}"]);
+
+    // See if we already have a record for the subscription with this LASER guid
+    def existing_subscription = lookupAgreement(local_context.parsed_record.globalUID)
+
+    if ( existing_subscription != null ) }{
+      local_context.processLog.add([ts:System.currentTimeMillis(), msg:"Matched an existing subscription - ${existing_subscription.id}"]);
+    }
+    else {
+      local_context.processLog.add([ts:System.currentTimeMillis(), msg:"No existing subscription for ${local_context.parsed_record.globalUID}"]);
+    }
 
     return [
       processStatus:'FAIL'   // FAIL|COMPLETE
@@ -178,4 +189,32 @@ public class ProcessLaserSubscription implements TransformProcess {
     }
     return dateOutput;
   }
+
+  def lookupAgreement(String ref) {
+    def result = null;
+
+    def search_response = folioHelper.okapiGet('/erm/sas', [
+        filters: "localReference==${ref}",
+        perPage:10,
+        sort:'localReference',
+        term:ref,
+        stats:true
+      ]
+    );
+
+    switch ( search_response.totalRecords ) {
+      case 0:
+        result = null;
+        break;
+      case 1:
+        result = search_response.results[0]
+        break;
+      default:
+        throw new RuntimeException("Multiple subscriptions matched");
+        break;
+    }
+
+    return result;
+  }
+
 }
