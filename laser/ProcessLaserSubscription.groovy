@@ -10,12 +10,13 @@ import java.time.LocalDate
 
 import mod_remote_sync.PolicyHelperService
 import mod_remote_sync.folio.FolioHelperService
+import mod_remote_sync.folio.FolioClient
+import mod_remote_sync.folio.FolioClientImpl
 import mod_remote_sync.ResourceMappingService
 import mod_remote_sync.ResourceMapping
 import mod_remote_sync.FeedbackItem
 import mod_remote_sync.ImportFeedbackService
 import com.k_int.web.toolkit.settings.AppSetting
-
 
 @Slf4j
 public class ProcessLaserSubscription implements TransformProcess {
@@ -55,6 +56,10 @@ public class ProcessLaserSubscription implements TransformProcess {
                      ApplicationContext ctx,
                      Map local_context) {
 
+    Map result = [
+      processStatus:'FAIL'   // FAIL|COMPLETE
+    ]
+
     String folio_user = AppSetting.findByKey('laser.ermFOLIOUser')?.value;
     String folio_pass = AppSetting.findByKey('laser.ermFOLIOPass')?.value;
     String okapi_host = System.getenv('OKAPI_SERVICE_HOST') ?: 'okapi';
@@ -62,28 +67,33 @@ public class ProcessLaserSubscription implements TransformProcess {
 
     String new_package_name = local_context.parsed_record.name;
 
+    FolioClient fc = new FolioClientImpl(okapi_host, okapi_port, local_context.tenant, folio_user, folio_pass, 60000);
+
     ResourceMappingService rms = ctx.getBean('resourceMappingService');
     ImportFeedbackService feedbackHelper = ctx.getBean('importFeedbackService');
     FolioHelperService folioHelper = ctx.getBean('folioHelperService');
 
-    // Create or update the "custom package" representing the contents of this agreement
-    def folio_package_json = generateFOLIOPackageJSON(new_package_name,local_context.parsed_record);
-    def package_details = upsertPackage(folio_package_json, folioHelper);
-    local_context.processLog.add([ts:System.currentTimeMillis(), msg:"Result of upsert custom package for sub: ${package_details}"]);
+    try {
+      // Create or update the "custom package" representing the contents of this agreement
+      def folio_package_json = generateFOLIOPackageJSON(new_package_name,local_context.parsed_record);
+      def package_details = upsertPackage(folio_package_json, folioHelper);
+      local_context.processLog.add([ts:System.currentTimeMillis(), msg:"Result of upsert custom package for sub: ${package_details}"]);
 
-    // See if we already have a record for the subscription with this LASER guid
-    def existing_subscription = lookupAgreement(local_context.parsed_record.globalUID, folioHelper)
+      // See if we already have a record for the subscription with this LASER guid
+      def existing_subscription = lookupAgreement(local_context.parsed_record.globalUID, folioHelper)
 
-    if ( existing_subscription != null ) {
-      local_context.processLog.add([ts:System.currentTimeMillis(), msg:"Matched an existing subscription - ${existing_subscription.id}"]);
+      if ( existing_subscription != null ) {
+        local_context.processLog.add([ts:System.currentTimeMillis(), msg:"Matched an existing subscription - ${existing_subscription.id}"]);
+      }
+      else {
+        local_context.processLog.add([ts:System.currentTimeMillis(), msg:"No existing subscription for ${local_context.parsed_record.globalUID}"]);
+      }
     }
-    else {
-      local_context.processLog.add([ts:System.currentTimeMillis(), msg:"No existing subscription for ${local_context.parsed_record.globalUID}"]);
+    catch ( Exception e ) {
+      log.warn("Exception processing LASER subscription");
     }
 
-    return [
-      processStatus:'FAIL'   // FAIL|COMPLETE
-    ]
+    return result
   }
 
   private Map upsertPackage(Map folio_package_json, FolioHelperService folioHelper) {
