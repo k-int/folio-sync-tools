@@ -72,7 +72,7 @@ public class ProcessLaserSubscription implements TransformProcess {
     local_context.processLog.add([ts:System.currentTimeMillis(), msg:"Result of upsert custom package for sub: ${package_details}"]);
 
     // See if we already have a record for the subscription with this LASER guid
-    def existing_subscription = lookupAgreement(local_context.parsed_record.globalUID)
+    def existing_subscription = lookupAgreement(local_context.parsed_record.globalUID, folioHelper)
 
     if ( existing_subscription != null ) {
       local_context.processLog.add([ts:System.currentTimeMillis(), msg:"Matched an existing subscription - ${existing_subscription.id}"]);
@@ -190,7 +190,7 @@ public class ProcessLaserSubscription implements TransformProcess {
     return dateOutput;
   }
 
-  def lookupAgreement(String ref) {
+  def lookupAgreement(String ref, FolioHelperService folioHelper) {
     def result = null;
 
     def search_response = folioHelper.okapiGet('/erm/sas', [
