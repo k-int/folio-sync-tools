@@ -68,6 +68,7 @@ public class ProcessLaserSubscription implements TransformProcess {
     String new_package_name = local_context.parsed_record.name;
 
     FolioClient fc = new FolioClientImpl(okapi_host, okapi_port, local_context.tenant, folio_user, folio_pass, 60000);
+    fc.ensureLogin();
 
     ResourceMappingService rms = ctx.getBean('resourceMappingService');
     ImportFeedbackService feedbackHelper = ctx.getBean('importFeedbackService');
@@ -90,7 +91,8 @@ public class ProcessLaserSubscription implements TransformProcess {
       }
     }
     catch ( Exception e ) {
-      log.warn("Exception processing LASER subscription");
+      local_context.processLog.add([ts:System.currentTimeMillis(), msg:"Exception processing LASER subscription: ${e.message}"]);
+      log.error("Exception processing LASER subscription",e);
     }
 
     return result
