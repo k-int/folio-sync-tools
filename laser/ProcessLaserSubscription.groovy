@@ -117,7 +117,7 @@ public class ProcessLaserSubscription implements TransformProcess {
       // Iterate over the titles in the package and add a content item for each one
       pkg.issueEntitlements.each { ie ->
 
-      ArrayList coverage = buildCoverageStatements(ie.coverages);
+        ArrayList coverage = buildCoverageStatements(ie.coverages);
 
         content_items.add([
           //"depth": null,
@@ -141,6 +141,7 @@ public class ProcessLaserSubscription implements TransformProcess {
 
     // String pkg_json = JsonOutput.toJson(pkg_data);
 
+    log.debug("Package data:${pkg_data}");
     return pkg_data;
   }
 
