@@ -21,10 +21,22 @@ import com.k_int.web.toolkit.settings.AppSetting
 @Slf4j
 public class ProcessLaserSubscription implements TransformProcess {
 
+  // see https://laser-dev.hbz-nrw.de/api/index
+
   public Map preflightCheck(String resource_id,
                             byte[] input_record,
                             ApplicationContext ctx,
                             Map local_context) {
+
+    String folio_user = AppSetting.findByKey('laser.ermFOLIOUser')?.value;
+    String folio_pass = AppSetting.findByKey('laser.ermFOLIOPass')?.value;
+    String okapi_host = System.getenv('OKAPI_SERVICE_HOST') ?: 'okapi';
+    String okapi_port = System.getenv('OKAPI_SERVICE_PORT') ?: '9130';
+
+    FolioClient fc = new FolioClientImpl(okapi_host, okapi_port, local_context.tenant, folio_user, folio_pass, 60000);
+    fc.ensureLogin();
+
+    local_context.folioClient = fc;
 
     boolean pass = false;
     def result = [:]
@@ -36,6 +48,10 @@ public class ProcessLaserSubscription implements TransformProcess {
 
       // Stash the parsed record so that we can use it in the process step without re-parsing if preflight passes
       local_context.parsed_record = parsed_record;
+
+      // LAS:eR subcriptions carry the license reference in license.globalUID
+      log.debug("Try to look up laser license ${local_context.parsed_record.license.globalUID}");
+      local_context.folio_license_in_force = null;
 
       local_context.processLog.add([ts:System.currentTimeMillis(), msg:"ProcessLaserSubscription::preflightCheck(${resource_id},..) ${new Date()}"]);
 
@@ -60,37 +76,25 @@ public class ProcessLaserSubscription implements TransformProcess {
       processStatus:'FAIL'   // FAIL|COMPLETE
     ]
 
-    String folio_user = AppSetting.findByKey('laser.ermFOLIOUser')?.value;
-    String folio_pass = AppSetting.findByKey('laser.ermFOLIOPass')?.value;
-    String okapi_host = System.getenv('OKAPI_SERVICE_HOST') ?: 'okapi';
-    String okapi_port = System.getenv('OKAPI_SERVICE_PORT') ?: '9130';
 
     String new_package_name = local_context.parsed_record.name;
 
-    FolioClient fc = new FolioClientImpl(okapi_host, okapi_port, local_context.tenant, folio_user, folio_pass, 60000);
-    fc.ensureLogin();
-
     ResourceMappingService rms = ctx.getBean('resourceMappingService');
     ImportFeedbackService feedbackHelper = ctx.getBean('importFeedbackService');
-    FolioHelperService folioHelper = ctx.getBean('folioHelperService');
 
     try {
       // Create or update the "custom package" representing the contents of this agreement
       def folio_package_json = generateFOLIOPackageJSON(new_package_name,local_context.parsed_record);
       // def package_details = upsertPackage(folio_package_json, folioHelper);
-      def package_details = upsertPackage(folio_package_json, fc);
+      def package_details = upsertPackage(folio_package_json, local_context.folioClient);
       local_context.processLog.add([ts:System.currentTimeMillis(), msg:"Result of upsert custom package for sub: ${package_details}"]);
 
-      // See if we already have a record for the subscription with this LASER guid
-      // def existing_subscription = lookupAgreement(local_context.parsed_record.globalUID, folioHelper)
-      def existing_subscription = lookupAgreement(local_context.parsed_record.globalUID, fc)
+      upsertSubscription(local_context.folioClient,
+                         '', // prefix
+                         local_context.parsed_record,
+                         local_context.folio_license_in_force,
+                         package_details.id);
 
-      if ( existing_subscription != null ) {
-        local_context.processLog.add([ts:System.currentTimeMillis(), msg:"Matched an existing subscription - ${existing_subscription.id}"]);
-      }
-      else {
-        local_context.processLog.add([ts:System.currentTimeMillis(), msg:"No existing subscription for ${local_context.parsed_record.globalUID}"]);
-      }
     }
     catch ( Exception e ) {
       local_context.processLog.add([ts:System.currentTimeMillis(), msg:"Exception processing LASER subscription: ${e.message}"]);
@@ -243,5 +247,161 @@ public class ProcessLaserSubscription implements TransformProcess {
 
     return result;
   }
+
+  def upsertSubscription(FolioClient folioHelper,
+                         String prefix, 
+                         Map subscription, 
+                         String folio_license_id, 
+                         String folio_pkg_id = null) {
+
+    def existing_subscription = lookupAgreement(subscription.globalUID, folioHelper)
+
+    if ( existing_subscription ) {
+      println("Located existing subscription ${existing_subscription.id} - update");
+      updateAgreement(folioHelper, 
+                      subscription.name, 
+                      subscription, 
+                      folio_license_id, 
+                      folio_pkg_id, 
+                      existing_subscription.id);
+    }
+    else {
+      println("No subscription found - create");
+      createAgreement(folioHelper, 
+                      subscription.name, 
+                      subscription, 
+                      folio_license_id, 
+                      folio_pkg_id);
+    }
+  }
+
+  def createAgreement(FolioClient folioHelper,
+                      Map subscription, 
+                      String folio_license_id, 
+                      String folio_pkg_id) {
+    def result = null;
+    println("createAgreement(${subscription.name},${folio_license_id}...)");
+
+    // We only add the custom package as an agreement line if the data from folio contained contentItems
+    def items
+    if (folio_pkg_id) {
+      items = [
+        [
+          resource: [
+            id: folio_pkg_id
+          ]
+        ]
+      ]
+    }
+
+    try {
+      ArrayList periods = pm.buildPeriodList(subscription)
+      // Map statusMappings = pm.getAgreementStatusMap(subscription.status)
+      // String statusString = statusMappings.get('agreement.status')
+      String statusString = 'Draft';
+      String reasonForClosure = null
+
+      if (statusString == null) {
+        throw new Exception ("Mapping not found for LAS:eR status ${license.status}")
+      }
+      // reasonForClosure = statusMappings.get('agreement.reasonForClosure')
+
+
+      result = folioHelper.okapiPost('/erm/sas', {
+        [
+          name:subscription.name,
+          agreementStatus:statusString,
+          reasonForClosure: reasonForClosure,
+          description:"Imported from LAS:eR on ${new Date()}",
+          localReference: subscription.globalUID,
+          periods: periods,
+          linkedLicenses:[
+            [
+              remoteId:folio_license_id,
+              status:'controlling'
+            ]
+          ],
+          items: items
+        ]
+      });
+
+      return result;
+    } catch (Exception e) {
+      println("FATAL ERROR: Skipping agreement creation: ${e.message}")
+    }
+  }
+
+  def updateAgreement(FolioClient folioHelper,
+                      Map subscription, 
+                      String folio_license_id, 
+                      String folio_pkg_id, 
+                      String agreementId) {
+    def result = null;
+    println("updateAgreement(${subscription.name},${folio_license_id}...)");
+
+    ArrayList linkedLicenses = []
+
+    try {
+      Map existing_controlling_license_data = pm.lookupExistingAgreementControllingLicense(subscription.globalUID)
+      println("Comparing license id: ${folio_license_id} to existing controlling license link: ${existing_controlling_license_data.existingLicenseId}")
+      if (existing_controlling_license_data.existingLicenseId != folio_license_id) {
+        println("Existing controlling license differs from data harvested from LAS:eR--updating")
+        linkedLicenses = [
+          [
+            id: existing_controlling_license_data.existingLinkId,
+            _delete: true
+          ],
+          [
+            remoteId:folio_license_id,
+            status:'controlling'
+          ]
+        ]
+      } else {
+        println("Existing controlling license matches data harvested from LAS:eR--moving on")
+      }
+    } catch (Exception e) {
+      println("Warning: Cannot update controlling information for agreement: ${e.message}")
+    }
+
+    ArrayList periods = []
+
+    try {
+      periods = pm.buildPeriodList(subscription)
+      // TODO We don't currently allow for changes in packages to make their way into FOLIO
+    } catch (Exception e) {
+      println("Warning: Cannot update period information for agreement: ${e.message}")
+    }
+    String statusString = null
+    Map statusMappings = [:]
+    try {
+      statusMappings = null; // pm.getAgreementStatusMap(subscription.status)
+      statusString = null; // statusMappings.get('agreement.status')
+
+      if (statusString == null) {
+        throw new Exception ("Mapping not found for LAS:eR status ${license.status}")
+      }
+    } catch (Exception e) {
+      println("Warning: Cannot update status information for agreement: ${e.message}")
+    }
+
+    Map requestBody = [
+      name: subscription.name,
+      linkedLicenses: linkedLicenses,
+      periods: periods
+    ]
+
+    if (statusString != null) {
+      requestBody["agreementStatus"] = statusString
+      requestBody["reasonForClosure"] = null // statusMappings.get('agreement.reasonForClosure')
+    }
+
+    println("Agreement PUT Request body: ${pm.prettyPrinter(requestBody)}")
+
+    result = folioHelper.okapiPut("/erm/sas/${agreementId}", requestBody);
+
+    return result;
+  }
+
+
 
 }
