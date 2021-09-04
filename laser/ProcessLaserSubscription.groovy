@@ -10,12 +10,13 @@ import java.time.LocalDate
 
 import mod_remote_sync.PolicyHelperService
 import mod_remote_sync.folio.FolioHelperService
+import mod_remote_sync.folio.FolioClient
+import mod_remote_sync.folio.FolioClientImpl
 import mod_remote_sync.ResourceMappingService
 import mod_remote_sync.ResourceMapping
 import mod_remote_sync.FeedbackItem
 import mod_remote_sync.ImportFeedbackService
 import com.k_int.web.toolkit.settings.AppSetting
-
 
 @Slf4j
 public class ProcessLaserSubscription implements TransformProcess {
@@ -55,6 +56,10 @@ public class ProcessLaserSubscription implements TransformProcess {
                      ApplicationContext ctx,
                      Map local_context) {
 
+    Map result = [
+      processStatus:'FAIL'   // FAIL|COMPLETE
+    ]
+
     String folio_user = AppSetting.findByKey('laser.ermFOLIOUser')?.value;
     String folio_pass = AppSetting.findByKey('laser.ermFOLIOPass')?.value;
     String okapi_host = System.getenv('OKAPI_SERVICE_HOST') ?: 'okapi';
@@ -62,20 +67,41 @@ public class ProcessLaserSubscription implements TransformProcess {
 
     String new_package_name = local_context.parsed_record.name;
 
+    FolioClient fc = new FolioClientImpl(okapi_host, okapi_port, local_context.tenant, folio_user, folio_pass, 60000);
+    fc.ensureLogin();
+
     ResourceMappingService rms = ctx.getBean('resourceMappingService');
     ImportFeedbackService feedbackHelper = ctx.getBean('importFeedbackService');
     FolioHelperService folioHelper = ctx.getBean('folioHelperService');
 
-    // Create or update the "custom package" representing the contents of this agreement
-    def folio_package_json = generateFOLIOPackageJSON(new_package_name,local_context.parsed_record);
-    upsertPackage(folio_package_json, folioHelper);
+    try {
+      // Create or update the "custom package" representing the contents of this agreement
+      def folio_package_json = generateFOLIOPackageJSON(new_package_name,local_context.parsed_record);
+      // def package_details = upsertPackage(folio_package_json, folioHelper);
+      def package_details = upsertPackage(folio_package_json, fc);
+      local_context.processLog.add([ts:System.currentTimeMillis(), msg:"Result of upsert custom package for sub: ${package_details}"]);
 
-    return [
-      processStatus:'FAIL'   // FAIL|COMPLETE
-    ]
+      // See if we already have a record for the subscription with this LASER guid
+      // def existing_subscription = lookupAgreement(local_context.parsed_record.globalUID, folioHelper)
+      def existing_subscription = lookupAgreement(local_context.parsed_record.globalUID, fc)
+
+      if ( existing_subscription != null ) {
+        local_context.processLog.add([ts:System.currentTimeMillis(), msg:"Matched an existing subscription - ${existing_subscription.id}"]);
+      }
+      else {
+        local_context.processLog.add([ts:System.currentTimeMillis(), msg:"No existing subscription for ${local_context.parsed_record.globalUID}"]);
+      }
+    }
+    catch ( Exception e ) {
+      local_context.processLog.add([ts:System.currentTimeMillis(), msg:"Exception processing LASER subscription: ${e.message}"]);
+      log.error("Exception processing LASER subscription",e);
+    }
+
+    return result
   }
 
-  private Map upsertPackage(Map folio_package_json, FolioHelperService folioHelper) {
+  // private Map upsertPackage(Map folio_package_json, FolioHelperService folioHelper) {
+  private Map upsertPackage(Map folio_package_json, FolioClient folioHelper) {
     // 1. see if we can locate an existing package with reference folio_package_json.reference (The laser UUID)
     // the /erm/packages/import endpoint automatically checks for an existing record with the given reference and updates
     // any existing package - perfect!
@@ -179,4 +205,43 @@ public class ProcessLaserSubscription implements TransformProcess {
     }
     return dateOutput;
   }
+
+  // def lookupAgreement(String ref, FolioHelperService folioHelper) {
+  def lookupAgreement(String ref, FolioClient folioHelper) {
+
+    log.debug("lookupAgreement(${ref},...)");
+
+    def result = null;
+
+    def search_response = folioHelper.okapiGet('/erm/sas', [
+        filters: "localReference==${ref}",
+        perPage:10,
+        sort:'localReference',
+        term:ref,
+        stats:true
+      ]
+    );
+
+    log.debug("lookup agreement response: ${search_response} ${search_response?.class?.name}");
+
+    if ( search_response ) {
+      switch ( search_response?.totalRecords ) {
+        case 0:
+          result = null;
+          break;
+        case 1:
+          result = search_response.results[0]
+          break;
+        default:
+          throw new RuntimeException("Multiple subscriptions matched");
+          break;
+      }
+    }
+    else { 
+      log.warn("No response to agreement lookup");
+    }
+
+    return result;
+  }
+
 }
