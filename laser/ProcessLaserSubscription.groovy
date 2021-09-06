@@ -62,11 +62,11 @@ public class ProcessLaserSubscription implements TransformProcess {
         if ( license_rm != null ) {
           pass=true
           local_context.folio_license_in_force = license_rm.folioId;
-          log.debug("Located local laser license ${license_rm.folioId} for LASER license ${local_context.parsed_record?.license?.globalUID}");
+          log.debug("Located local laser license ${license_rm.folioId} for LASER license ${laser_license_guid}");
         }
         else {
-          local_context.processLog.add([ts:System.currentTimeMillis(), msg:"No FOLIO license for LASER:${local_context.parsed_record?.license?.globalUID}"]);
-          log.warn("Unable to find local laser license for LASER license ${local_context.parsed_record?.license?.globalUID}");
+          local_context.processLog.add([ts:System.currentTimeMillis(), msg:"No FOLIO license for LASER:${laser_license_guid}"]);
+          log.warn("Unable to find local laser license for LASER license ${laser_license_guid}");
         }
       }
       else {
