@@ -28,29 +28,31 @@ public class ProcessLaserSubscription implements TransformProcess {
                             ApplicationContext ctx,
                             Map local_context) {
 
-    String folio_user = AppSetting.findByKey('laser.ermFOLIOUser')?.value;
-    String folio_pass = AppSetting.findByKey('laser.ermFOLIOPass')?.value;
-    String okapi_host = System.getenv('OKAPI_SERVICE_HOST') ?: 'okapi';
-    String okapi_port = System.getenv('OKAPI_SERVICE_PORT') ?: '9130';
-
-    FolioClient fc = new FolioClientImpl(okapi_host, okapi_port, local_context.tenant, folio_user, folio_pass, 60000);
-    fc.ensureLogin();
-
-    local_context.folioClient = fc;
 
     boolean pass = false;
     def result = [:]
 
     try {
+      String folio_user = AppSetting.findByKey('laser.ermFOLIOUser')?.value;
+      String folio_pass = AppSetting.findByKey('laser.ermFOLIOPass')?.value;
+      String okapi_host = System.getenv('OKAPI_SERVICE_HOST') ?: 'okapi';
+      String okapi_port = System.getenv('OKAPI_SERVICE_PORT') ?: '9130';
+
+      FolioClient fc = new FolioClientImpl(okapi_host, okapi_port, local_context.tenant, folio_user, folio_pass, 60000);
+      fc.ensureLogin();
+
+      local_context.folioClient = fc;
+
       // test source makes JSON records - so parse the byte array accordingly
       def jsonSlurper = new JsonSlurper()
       def parsed_record = jsonSlurper.parseText(new String(input_record))
+      log.info("Process subscription: ${parsed_record}");
 
       // Stash the parsed record so that we can use it in the process step without re-parsing if preflight passes
       local_context.parsed_record = parsed_record;
 
       // LAS:eR subcriptions carry the license reference in license.globalUID
-      log.debug("Try to look up laser license ${local_context.parsed_record.license.globalUID}");
+      log.info("Try to look up laser license ${local_context.parsed_record?.license?.globalUID}");
       local_context.folio_license_in_force = null;
 
       local_context.processLog.add([ts:System.currentTimeMillis(), msg:"ProcessLaserSubscription::preflightCheck(${resource_id},..) ${new Date()}"]);
@@ -58,6 +60,7 @@ public class ProcessLaserSubscription implements TransformProcess {
       pass=true
     }
     catch (Exception e) {
+      local_context.processLog.add([ts:System.currentTimeMillis(), msg:"Error in preflight: ${e.message}"]);
     }
 
     result = [
@@ -76,6 +79,8 @@ public class ProcessLaserSubscription implements TransformProcess {
       processStatus:'FAIL'   // FAIL|COMPLETE
     ]
 
+    log.info("ProcessLaserSubscription::process(${resource_id})");
+    local_context.processLog.add([ts:System.currentTimeMillis(), msg:"ProcessLaserSubscription::process(${resource_id})"]);
 
     String new_package_name = local_context.parsed_record.name;
 
