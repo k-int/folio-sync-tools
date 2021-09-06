@@ -204,7 +204,7 @@ public class ProcessLaserSubscription implements TransformProcess {
 
     // String pkg_json = JsonOutput.toJson(pkg_data);
 
-    log.debug("Package data:${pkg_data}");
+    // log.debug("Package data:${pkg_data}");
     return pkg_data;
   }
 
