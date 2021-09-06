@@ -53,16 +53,24 @@ public class ProcessLaserSubscription implements TransformProcess {
       local_context.parsed_record = parsed_record;
 
       // LAS:eR subcriptions carry the license reference in license.globalUID
-      log.info("Try to look up laser license ${local_context.parsed_record?.license?.globalUID}");
-      ResourceMapping license_rm = rms.lookupMapping('LASER-LICENSE', local_context.parsed_record?.license?.globalUID, 'LASERIMPORT')
-      if ( license_rm != null ) {
-        pass=true
-        local_context.folio_license_in_force = license_rm.folioId;
-        log.debug("Located local laser license ${license_rm.folioId} for LASER license ${local_context.parsed_record?.license?.globalUID}");
+      // We will not try to process this subscription until the license sync task has created a record for the license
+      // this sub depends on.
+      String laser_license_guid = local_context.parsed_record?.licenses?[0].globalUID;
+      log.info("Try to look up laser license ${laser_license_guid}");
+      if ( laser_license_guid != null ) {
+        ResourceMapping license_rm = rms.lookupMapping('LASER-LICENSE', laser_license_guid, 'LASERIMPORT')
+        if ( license_rm != null ) {
+          pass=true
+          local_context.folio_license_in_force = license_rm.folioId;
+          log.debug("Located local laser license ${license_rm.folioId} for LASER license ${local_context.parsed_record?.license?.globalUID}");
+        }
+        else {
+          local_context.processLog.add([ts:System.currentTimeMillis(), msg:"No FOLIO license for LASER:${local_context.parsed_record?.license?.globalUID}"]);
+          log.warn("Unable to find local laser license for LASER license ${local_context.parsed_record?.license?.globalUID}");
+        }
       }
       else {
-        local_context.processLog.add([ts:System.currentTimeMillis(), msg:"No FOLIO license for LASER:${local_context.parsed_record?.license?.globalUID}"]);
-        log.warn("Unable to find local laser license for LASER license ${local_context.parsed_record?.license?.globalUID}");
+        local_context.processLog.add([ts:System.currentTimeMillis(), msg:"No LASER License referenced in sub - unable to continue"]);
       }
 
       local_context.processLog.add([ts:System.currentTimeMillis(), msg:"ProcessLaserSubscription::preflightCheck(${resource_id},..) ${new Date()}"]);
