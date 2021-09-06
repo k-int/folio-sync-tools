@@ -311,7 +311,7 @@ public class ProcessLaserSubscription implements TransformProcess {
       // reasonForClosure = statusMappings.get('agreement.reasonForClosure')
 
 
-      result = folioHelper.okapiPost('/erm/sas', {
+      result = folioHelper.okapiPost('/erm/sas',
         [
           name:subscription.name,
           agreementStatus:statusString,
@@ -327,7 +327,7 @@ public class ProcessLaserSubscription implements TransformProcess {
           ],
           items: items
         ]
-      });
+      );
 
       return result;
     } catch (Exception e) {
