@@ -60,7 +60,6 @@ public class ProcessLaserSubscription implements TransformProcess {
       if ( laser_license_guid != null ) {
         ResourceMapping license_rm = rms.lookupMapping('LASER-LICENSE', laser_license_guid, 'LASERIMPORT')
         if ( license_rm != null ) {
-          pass=true
           local_context.folio_license_in_force = license_rm.folioId;
           log.debug("Located local laser license ${license_rm.folioId} for LASER license ${laser_license_guid}");
         }
@@ -73,6 +72,8 @@ public class ProcessLaserSubscription implements TransformProcess {
         local_context.processLog.add([ts:System.currentTimeMillis(), msg:"No LASER License referenced in sub - unable to continue"]);
       }
 
+      // We're passing everything - but not mapping licenses we don't know about
+      pass=true
       local_context.processLog.add([ts:System.currentTimeMillis(), msg:"ProcessLaserSubscription::preflightCheck(${resource_id},..) ${new Date()}"]);
     }
     catch (Exception e) {
@@ -288,7 +289,6 @@ public class ProcessLaserSubscription implements TransformProcess {
     if ( existing_subscription ) {
       println("Located existing subscription ${existing_subscription.id} - update");
       result = updateAgreement(folioHelper, 
-                      subscription.name, 
                       subscription, 
                       folio_license_id, 
                       folio_pkg_id, 
