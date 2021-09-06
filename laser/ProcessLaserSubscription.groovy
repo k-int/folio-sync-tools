@@ -31,6 +31,7 @@ public class ProcessLaserSubscription implements TransformProcess {
 
     boolean pass = false;
     def result = [:]
+    ResourceMappingService rms = ctx.getBean('resourceMappingService');
 
     try {
       String folio_user = AppSetting.findByKey('laser.ermFOLIOUser')?.value;
@@ -46,18 +47,25 @@ public class ProcessLaserSubscription implements TransformProcess {
       // test source makes JSON records - so parse the byte array accordingly
       def jsonSlurper = new JsonSlurper()
       def parsed_record = jsonSlurper.parseText(new String(input_record))
-      log.info("Process subscription: ${parsed_record}");
+      log.info("Process subscription: ${parsed_record?.name}");
 
       // Stash the parsed record so that we can use it in the process step without re-parsing if preflight passes
       local_context.parsed_record = parsed_record;
 
       // LAS:eR subcriptions carry the license reference in license.globalUID
       log.info("Try to look up laser license ${local_context.parsed_record?.license?.globalUID}");
-      local_context.folio_license_in_force = null;
+      ResourceMapping license_rm = rms.lookupMapping('LASER-LICENSE', local_context.parsed_record?.license?.globalUID, 'LASERIMPORT')
+      if ( license_rm != null ) {
+        pass=true
+        local_context.folio_license_in_force = license_rm.folioId;
+        log.debug("Located local laser license ${license_rm.folioId} for LASER license ${local_context.parsed_record?.license?.globalUID}");
+      }
+      else {
+        local_context.processLog.add([ts:System.currentTimeMillis(), msg:"No FOLIO license for LASER:${local_context.parsed_record?.license?.globalUID}"]);
+        log.warn("Unable to find local laser license for LASER license ${local_context.parsed_record?.license?.globalUID}");
+      }
 
       local_context.processLog.add([ts:System.currentTimeMillis(), msg:"ProcessLaserSubscription::preflightCheck(${resource_id},..) ${new Date()}"]);
-
-      pass=true
     }
     catch (Exception e) {
       local_context.processLog.add([ts:System.currentTimeMillis(), msg:"Error in preflight: ${e.message}"]);
