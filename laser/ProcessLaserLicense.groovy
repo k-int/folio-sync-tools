@@ -181,12 +181,11 @@ public class ProcessLaserLicense extends BaseTransformProcess implements Transfo
       }
     }
     catch ( Exception e ) {
-      println("\n\n***Exception in record processing***\n\n");
-      e.printStackTrace()
       log.error("Exception in process",e);
       local_context.processLog.add([ts:System.currentTimeMillis(), msg:"Problem in processing ${e.message}"]);
     }
 
+    log.debug("ProcessLaserLicense complete / ${result.resource_mapping}");
     return result;
   }
 

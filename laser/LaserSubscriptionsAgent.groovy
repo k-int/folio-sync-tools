@@ -97,7 +97,7 @@ public class LaserSubscriptionsAgent implements RemoteSyncActivity {
                                    'LASER',
                                    'LASER:SUB:'+sub.globalUID,
                                    'LASER:SUB',
-                                   sub.reference ?: 'LASER Sub',
+                                   sub.reference ?: 'LASER Sub '+sub.name,
                                    sub_hash,
                                    sub_json_bytes);
 

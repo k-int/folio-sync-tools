@@ -96,7 +96,7 @@ public class LaserLicensesAgent implements RemoteSyncActivity {
                                    'LASER',
                                    'LASER:LICENSE:'+license_info.globalUID,
                                    'LASER:LICENSE',
-                                   license_info.reference ?: "LASER License",
+                                   'LASER License '+license_info.reference,
                                    license_hash,
                                    license_json_bytes);
 
