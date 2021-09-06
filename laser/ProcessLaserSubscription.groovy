@@ -231,7 +231,7 @@ public class ProcessLaserSubscription implements TransformProcess {
       ]
     );
 
-    log.debug("lookup agreement response: ${search_response} ${search_response?.class?.name}");
+    log.debug("lookup agreement response totalRecords: ${search_response?.totalRecords}");
 
     if ( search_response ) {
       switch ( search_response?.totalRecords ) {
@@ -273,7 +273,6 @@ public class ProcessLaserSubscription implements TransformProcess {
     else {
       println("No subscription found - create");
       createAgreement(folioHelper, 
-                      subscription.name, 
                       subscription, 
                       folio_license_id, 
                       folio_pkg_id);
