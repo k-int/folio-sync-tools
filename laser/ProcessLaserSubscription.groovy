@@ -109,6 +109,7 @@ public class ProcessLaserSubscription implements TransformProcess {
       def folio_package_json = generateFOLIOPackageJSON(new_package_name,local_context.parsed_record);
       // def package_details = upsertPackage(folio_package_json, folioHelper);
       def package_details = upsertPackage(folio_package_json, local_context.folioClient);
+
       local_context.processLog.add([ts:System.currentTimeMillis(), msg:"Result of upsert custom package for sub: ${package_details}"]);
 
       def upsert_sub_result = upsertSubscription(local_context.folioClient,
@@ -116,7 +117,7 @@ public class ProcessLaserSubscription implements TransformProcess {
                          local_context.parsed_record,
                          local_context.folio_license_in_force,
                          result,
-                         package_details?.id);
+                         package_details?.packageId);
 
       if ( upsert_sub_result?.id != null ) {
         result.processStatus = 'COMPLETE'
@@ -141,6 +142,7 @@ public class ProcessLaserSubscription implements TransformProcess {
     // the /erm/packages/import endpoint automatically checks for an existing record with the given reference and updates
     // any existing package - perfect!
     def import_response = folioHelper.okapiPost('/erm/packages/import', folio_package_json);
+    log.debug("/erm/packages/import response: ${import_response}");
     return import_response;
   }
 
@@ -286,11 +288,13 @@ public class ProcessLaserSubscription implements TransformProcess {
                          Map processing_result,
                          String folio_pkg_id = null) {
 
+    log.debug("upsertSubscription(...,${prefix},${folio_license_id},${folio_pkg_id}...");
+
     def existing_subscription = lookupAgreement(subscription.globalUID, folioHelper)
     def result = null;
 
     if ( existing_subscription ) {
-      println("Located existing subscription ${existing_subscription.id} - update");
+      println("Located existing subscription ${existing_subscription.id} - update - ${folio_pkg_id}");
       result = updateAgreement(folioHelper, 
                       subscription, 
                       folio_license_id, 
@@ -298,7 +302,7 @@ public class ProcessLaserSubscription implements TransformProcess {
                       existing_subscription);
     }
     else {
-      println("No subscription found - create");
+      println("No subscription found - create - package will be ${folio_pkg_id}");
       result = createAgreement(folioHelper, 
                       subscription, 
                       folio_license_id, 
@@ -316,10 +320,11 @@ public class ProcessLaserSubscription implements TransformProcess {
                       String folio_license_id, 
                       String folio_pkg_id) {
     def result = null;
-    println("createAgreement(${subscription.name},${folio_license_id}...)");
+    println("createAgreement(${subscription.name},${folio_license_id},${folio_pkg_id}...)");
 
     // We only add the custom package as an agreement line if the data from folio contained contentItems
     def items
+
     if (folio_pkg_id) {
       items = [
         [
@@ -328,6 +333,9 @@ public class ProcessLaserSubscription implements TransformProcess {
           ]
         ]
       ]
+    }
+    else {
+      log.debug("No folio package found corresponding to laser sub.. Skip add content")
     }
 
     try {
