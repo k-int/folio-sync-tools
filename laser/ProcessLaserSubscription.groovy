@@ -110,11 +110,17 @@ public class ProcessLaserSubscription implements TransformProcess {
       def package_details = upsertPackage(folio_package_json, local_context.folioClient);
       local_context.processLog.add([ts:System.currentTimeMillis(), msg:"Result of upsert custom package for sub: ${package_details}"]);
 
-      upsertSubscription(local_context.folioClient,
+      def upsert_sub_result = upsertSubscription(local_context.folioClient,
                          '', // prefix
                          local_context.parsed_record,
                          local_context.folio_license_in_force,
-                         package_details.id);
+                         result,
+                         package_details?.id);
+
+      if ( upsert_sub_result.id != null ) {
+        result.processStatus = 'COMPLETE'
+        // result.resource_mapping = 
+      }
 
     }
     catch ( Exception e ) {
@@ -273,13 +279,15 @@ public class ProcessLaserSubscription implements TransformProcess {
                          String prefix, 
                          Map subscription, 
                          String folio_license_id, 
+                         Map processing_result,
                          String folio_pkg_id = null) {
 
     def existing_subscription = lookupAgreement(subscription.globalUID, folioHelper)
+    def result = null;
 
     if ( existing_subscription ) {
       println("Located existing subscription ${existing_subscription.id} - update");
-      updateAgreement(folioHelper, 
+      result = updateAgreement(folioHelper, 
                       subscription.name, 
                       subscription, 
                       folio_license_id, 
@@ -288,11 +296,16 @@ public class ProcessLaserSubscription implements TransformProcess {
     }
     else {
       println("No subscription found - create");
-      createAgreement(folioHelper, 
+      result = createAgreement(folioHelper, 
                       subscription, 
                       folio_license_id, 
                       folio_pkg_id);
+      if ( result && result.id != null ) {
+        log.debug("We should stash the mapped agreement details here");
+      }
     }
+
+    return result;
   }
 
   def createAgreement(FolioClient folioHelper,
@@ -345,10 +358,11 @@ public class ProcessLaserSubscription implements TransformProcess {
         ]
       );
 
-      return result;
     } catch (Exception e) {
       println("FATAL ERROR: Skipping agreement creation: ${e.message}")
     }
+
+    return result;
   }
 
   def updateAgreement(FolioClient folioHelper,
