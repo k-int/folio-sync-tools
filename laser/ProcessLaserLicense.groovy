@@ -117,7 +117,7 @@ public class ProcessLaserLicense extends BaseTransformProcess implements Transfo
 
       // Lets see if we know about this resource already
       // These three parameters correlate with the first three parameters to policyHelper.manualResourceMapping in the preflight step
-      ResourceMapping rm = rms.lookupMapping('LASER-LICENSE',parsed_record.id,'LASERIMPORT');
+      ResourceMapping rm = rms.lookupMapping('LASER-LICENSE',parsed_record.globalUID,'LASERIMPORT');
 
       println("Load record : ${parsed_record}");
 
@@ -148,7 +148,7 @@ public class ProcessLaserLicense extends BaseTransformProcess implements Transfo
             case 'map':
               println("Import ${resource_id} as ${answer}");
               if ( answer?.mappedResource?.id ) {
-                def resource_mapping = rms.registerMapping('LASER-LICENSE',parsed_record.id, 'LASERIMPORT','M','LICENSES',answer?.mappedResource?.id);
+                def resource_mapping = rms.registerMapping('LASER-LICENSE',parsed_record.globalUID, 'LASERIMPORT','M','LICENSES',answer?.mappedResource?.id);
                 if ( resource_mapping ) {
                   result.resource_mapping = resource_mapping;
                   updateLicense(folioHelper, resource_mapping.folioId,parsed_record,result)
@@ -218,7 +218,7 @@ public class ProcessLaserLicense extends BaseTransformProcess implements Transfo
       // Grab the ID of our created license and use the resource mapping service to remember the correlation.
       // Next time we see resource_id as an ID of a LASER-LICENSE in the context of LASERIMPORT we will know that 
       // that resource maps to folio_licenses.id
-      def resource_mapping = rms.registerMapping('LASER-LICENSE',laser_record.id, 'LASERIMPORT','M','LICENSES',folio_license.id);
+      def resource_mapping = rms.registerMapping('LASER-LICENSE', laser_record.globalUID, 'LASERIMPORT','M','LICENSES',folio_license.id);
       result.processStatus = 'COMPLETE'
       // Send back the resource mapping so it can be stashed in the record
       log.debug("Create resource assigning resource mapping: ${resource_mapping}");
