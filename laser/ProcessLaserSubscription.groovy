@@ -55,7 +55,7 @@ public class ProcessLaserSubscription implements TransformProcess {
       // LAS:eR subcriptions carry the license reference in license.globalUID
       // We will not try to process this subscription until the license sync task has created a record for the license
       // this sub depends on.
-      String laser_license_guid = local_context.parsed_record?.licenses?[0].globalUID;
+      String laser_license_guid = local_context.parsed_record?.licenses[0]?.globalUID;
       log.info("Try to look up laser license ${laser_license_guid}");
       if ( laser_license_guid != null ) {
         ResourceMapping license_rm = rms.lookupMapping('LASER-LICENSE', laser_license_guid, 'LASERIMPORT')
