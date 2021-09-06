@@ -268,7 +268,7 @@ public class ProcessLaserSubscription implements TransformProcess {
                       subscription, 
                       folio_license_id, 
                       folio_pkg_id, 
-                      existing_subscription.id);
+                      existing_subscription);
     }
     else {
       println("No subscription found - create");
@@ -299,7 +299,7 @@ public class ProcessLaserSubscription implements TransformProcess {
     }
 
     try {
-      ArrayList periods = pm.buildPeriodList(subscription)
+      ArrayList periods = buildPeriodList(subscription, null)
       // Map statusMappings = pm.getAgreementStatusMap(subscription.status)
       // String statusString = statusMappings.get('agreement.status')
       String statusString = 'Draft';
@@ -339,14 +339,16 @@ public class ProcessLaserSubscription implements TransformProcess {
                       Map subscription, 
                       String folio_license_id, 
                       String folio_pkg_id, 
-                      String agreementId) {
+                      Map folio_agreement) {
+
+    String agreementId = folio_agreement.id
     def result = null;
     println("updateAgreement(${subscription.name},${folio_license_id}...)");
 
     ArrayList linkedLicenses = []
 
     try {
-      Map existing_controlling_license_data = pm.lookupExistingAgreementControllingLicense(subscription.globalUID)
+      Map existing_controlling_license_data = lookupExistingAgreementControllingLicense(folio_agreement)
       println("Comparing license id: ${folio_license_id} to existing controlling license link: ${existing_controlling_license_data.existingLicenseId}")
       if (existing_controlling_license_data.existingLicenseId != folio_license_id) {
         println("Existing controlling license differs from data harvested from LAS:eR--updating")
@@ -370,7 +372,7 @@ public class ProcessLaserSubscription implements TransformProcess {
     ArrayList periods = []
 
     try {
-      periods = pm.buildPeriodList(subscription)
+      periods = buildPeriodList(subscription, folio_agreement)
       // TODO We don't currently allow for changes in packages to make their way into FOLIO
     } catch (Exception e) {
       println("Warning: Cannot update period information for agreement: ${e.message}")
@@ -399,13 +401,62 @@ public class ProcessLaserSubscription implements TransformProcess {
       requestBody["reasonForClosure"] = null // statusMappings.get('agreement.reasonForClosure')
     }
 
-    println("Agreement PUT Request body: ${pm.prettyPrinter(requestBody)}")
-
     result = folioHelper.okapiPut("/erm/sas/${agreementId}", requestBody);
 
     return result;
   }
 
+
+  public ArrayList buildPeriodList(Map subscription, Map folioAgreement) {
+    println("buildPeriodList ::${subscription.globalUID}")
+
+    if (subscription.startDate == null) {
+      throw new RuntimeException ("There is no startDate for this subscription")
+    }
+
+    ArrayList periodList = []
+
+    if (folioAgreement) {
+      // We already have an agreement, so the period will need updating
+      Map deleteMap = [
+        id: folioAgreement.periods?.getAt(0)?.get('id'),
+        _delete: true
+      ]
+      periodList.add(deleteMap)
+    }
+
+    Map newPeriod = [
+      startDate: subscription.startDate,
+      endDate: subscription.endDate
+    ]
+
+    periodList.add(newPeriod)
+
+    return periodList;
+  }
+
+  // Returns the license link id of the current controlling license
+  public Map lookupExistingAgreementControllingLicense(Map folio_agreement) {
+
+    Map result = [:]
+
+    ArrayList linkedLicenses = [] // folio_agreement.linkedLicenses
+    linkedLicenses = folio_agreement.linkedLicenses.find { obj.status?.value == 'controlling' };
+
+    // The below should always go smoothly, since FOLIO only allows a single controlling license. If this fails then something hasd gone wrong internally in FOLIO
+    switch ( linkedLicenses.size() ) {
+      case 0:
+        result = [existingLinkId: null, existingLicenseId: null];
+        break;
+      case 1:
+        result = [existingLinkId: linkedLicenses[0].id, existingLicenseId: linkedLicenses[0].remoteId]
+        break;
+      default:
+        throw new RuntimeException("Multiple agreement controlling licenses found (${linkedLicenses.size()})");
+        break;
+    }
+    return result;
+  }
 
 
 }
