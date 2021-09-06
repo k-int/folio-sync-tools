@@ -118,9 +118,12 @@ public class ProcessLaserSubscription implements TransformProcess {
                          result,
                          package_details?.id);
 
-      if ( upsert_sub_result.id != null ) {
+      if ( upsert_sub_result?.id != null ) {
         result.processStatus = 'COMPLETE'
         // result.resource_mapping = 
+      }
+      else {
+        log.warn("Result of upsertSubscription: ${upsert_sub_result}");
       }
 
     }
@@ -339,6 +342,16 @@ public class ProcessLaserSubscription implements TransformProcess {
       }
       // reasonForClosure = statusMappings.get('agreement.reasonForClosure')
 
+      def linked_licenses = null;
+      if ( folio_license_id ) {
+        linked_licenses = [
+          [
+            remoteId:folio_license_id,
+            status:'controlling'
+          ]
+        ]
+      }
+
 
       result = folioHelper.okapiPost('/erm/sas',
         [
@@ -348,12 +361,7 @@ public class ProcessLaserSubscription implements TransformProcess {
           description:"Imported from LAS:eR on ${new Date()}",
           localReference: subscription.globalUID,
           periods: periods,
-          linkedLicenses:[
-            [
-              remoteId:folio_license_id,
-              status:'controlling'
-            ]
-          ],
+          linkedLicenses: linked_licenses,
           items: items
         ]
       );
