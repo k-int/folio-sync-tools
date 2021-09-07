@@ -108,9 +108,15 @@ public class ProcessLaserSubscription implements TransformProcess {
       // Create or update the "custom package" representing the contents of this agreement
       def folio_package_json = generateFOLIOPackageJSON(new_package_name,local_context.parsed_record);
       // def package_details = upsertPackage(folio_package_json, folioHelper);
-      def package_details = upsertPackage(folio_package_json, local_context.folioClient);
 
-      local_context.processLog.add([ts:System.currentTimeMillis(), msg:"Result of upsert custom package for sub: ${package_details}"]);
+      def package_details = null;
+      if ( folio_package_json.records[0].contentItems?.size() > 0 ) {
+        package_details = upsertPackage(folio_package_json, local_context.folioClient);
+        local_context.processLog.add([ts:System.currentTimeMillis(), msg:"Result of upsert custom package for sub: ${package_details}"]);
+      }
+      else {
+        local_context.processLog.add([ts:System.currentTimeMillis(), msg:"Found no items for package - skip package creation"]);
+      }
 
       def upsert_sub_result = upsertSubscription(local_context.folioClient,
                          '', // prefix
