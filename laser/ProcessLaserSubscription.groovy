@@ -473,7 +473,7 @@ public class ProcessLaserSubscription implements TransformProcess {
       if ( ( folioAgreement.periods ) && 
            ( folioAgreement.periods.size() > 0 ) ) {
         Map deleteMap = [
-          id: folioAgreement.periods?.getAt(0)?.id
+          id: folioAgreement.periods?.getAt(0)?.id,
           _delete: true
         ]
         periodList.add(deleteMap)
