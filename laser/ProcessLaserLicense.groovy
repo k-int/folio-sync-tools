@@ -5,6 +5,8 @@ import mod_remote_sync.source.BaseTransformProcess;
 
 import org.springframework.context.ApplicationContext
 import groovy.util.logging.Slf4j
+import mod_remote_sync.folio.FolioClient
+import mod_remote_sync.folio.FolioClientImpl
 import mod_remote_sync.PolicyHelperService
 import mod_remote_sync.ResourceMappingService
 import mod_remote_sync.ResourceMapping
