@@ -6,7 +6,6 @@ import mod_remote_sync.source.BaseTransformProcess;
 import org.springframework.context.ApplicationContext
 import groovy.util.logging.Slf4j
 import mod_remote_sync.PolicyHelperService
-import mod_remote_sync.folio.FolioHelperService
 import mod_remote_sync.ResourceMappingService
 import mod_remote_sync.ResourceMapping
 import mod_remote_sync.FeedbackItem
@@ -29,6 +28,16 @@ public class ProcessLaserLicense extends BaseTransformProcess implements Transfo
     Map result = null;
 
     try {
+      String folio_user = AppSetting.findByKey('laser.ermFOLIOUser')?.value;
+      String folio_pass = AppSetting.findByKey('laser.ermFOLIOPass')?.value;
+      String okapi_host = System.getenv('OKAPI_SERVICE_HOST') ?: 'okapi';
+      String okapi_port = System.getenv('OKAPI_SERVICE_PORT') ?: '9130';
+      log.debug("user: ${folio_user},..., okapi_host:${okapi_host}, okapi_port:${okapi_port}");
+
+      FolioClient fc = new FolioClientImpl(okapi_host, okapi_port, local_context.tenant, folio_user, folio_pass, 60000);
+      fc.ensureLogin();
+
+      local_context.folioClient = fc;
 
       // test source makes JSON records - so parse the byte array accordingly
       def jsonSlurper = new JsonSlurper()
@@ -98,12 +107,6 @@ public class ProcessLaserLicense extends BaseTransformProcess implements Transfo
       processStatus:'FAIL'  // FAIL|COMPLETE
     ]
 
-    String folio_user = AppSetting.findByKey('laser.ermFOLIOUser')?.value
-    String folio_pass = AppSetting.findByKey('laser.ermFOLIOPass')?.value
-    String okapi_host = System.getenv("OKAPI_SERVICE_HOST") ?: 'okapi'
-    String okapi_port = System.getenv("OKAPI_SERVICE_PORT") ?: '9130'
-
-    log.debug("user: ${folio_user},..., okapi_host:${okapi_host}, okapi_port:${okapi_port}");
 
     local_context.processLog.add([ts:System.currentTimeMillis(), msg:"ProcessLaserLicense::process(${resource_id},..) ${new Date()}"]);
 
@@ -111,7 +114,6 @@ public class ProcessLaserLicense extends BaseTransformProcess implements Transfo
 
       ResourceMappingService rms = ctx.getBean('resourceMappingService');
       ImportFeedbackService feedbackHelper = ctx.getBean('importFeedbackService');
-      FolioHelperService folioHelper = ctx.getBean('folioHelperService');
 
       def parsed_record = local_context.parsed_record
 
@@ -138,7 +140,7 @@ public class ProcessLaserLicense extends BaseTransformProcess implements Transfo
           local_context.processLog.add([ts:System.currentTimeMillis(), msg:"Applying located feedbacko ${answer}"])
           switch ( answer?.answerType ) {
             case 'create':
-              createLicense(folioHelper, rms, parsed_record, result, local_context);
+              createLicense(local_context.folioClient, rms, parsed_record, result, local_context);
               result.processStatus = 'COMPLETE'
               break;
             case 'ignore':
@@ -151,7 +153,7 @@ public class ProcessLaserLicense extends BaseTransformProcess implements Transfo
                 def resource_mapping = rms.registerMapping('LASER-LICENSE',parsed_record.globalUID, 'LASERIMPORT','M','LICENSES',answer?.mappedResource?.id);
                 if ( resource_mapping ) {
                   result.resource_mapping = resource_mapping;
-                  updateLicense(folioHelper, resource_mapping.folioId,parsed_record,result)
+                  updateLicense(local_context.folioClient, resource_mapping.folioId,parsed_record,result)
                   result.processStatus = 'COMPLETE'
                 }
                 else {
@@ -161,8 +163,6 @@ public class ProcessLaserLicense extends BaseTransformProcess implements Transfo
               else {
                 local_context.processLog.add([ts:System.currentTimeMillis(), msg:"Feedback to map existing is incomplete : ${answer}. Missing mappedResource.id"]);
               }
-              // We are mapping a new external resource to an existing internal license - this is a put rather than a post
-              // def folio_licenses = folioHelper.okapiPut("/licenses/licenses/${answer.value}", requestBody);
               break;
             default:
               println("Unhandled answer type: ${answer?.answerType}");
@@ -176,7 +176,7 @@ public class ProcessLaserLicense extends BaseTransformProcess implements Transfo
       else {
         println("Got existing mapping... process ${rm}");
         local_context.processLog.add([ts:System.currentTimeMillis(), msg:"attempt update existing license mapping: ${rm}"]);
-        updateLicense(folioHelper, rm.folioId, parsed_record, result)
+        updateLicense(local_context.folioClient, rm.folioId, parsed_record, result)
         result.processStatus = 'COMPLETE'
       }
     }
@@ -189,7 +189,7 @@ public class ProcessLaserLicense extends BaseTransformProcess implements Transfo
     return result;
   }
 
-  private void createLicense(FolioHelperService folioHelper, ResourceMappingService rms, Map laser_record, Map result, Map local_context) {
+  private void createLicense(FolioClient folioHelper, ResourceMappingService rms, Map laser_record, Map result, Map local_context) {
 
     // See https://gitlab.com/knowledge-integration/folio/middleware/folio-laser-erm-legacy/-/blob/master/spike/process.groovy#L207
     // See https://gitlab.com/knowledge-integration/folio/middleware/folio-laser-erm-legacy/-/blob/master/spike/FolioClient.groovy#L74
@@ -228,7 +228,7 @@ public class ProcessLaserLicense extends BaseTransformProcess implements Transfo
     }
   }
 
-  private void updateLicense(FolioHelperService folioHelper, String folio_license_id, Map laser_record, Map result) {
+  private void updateLicense(FolioClient folioHelper, String folio_license_id, Map laser_record, Map result) {
     log.debug("update existing license");
   }
 
