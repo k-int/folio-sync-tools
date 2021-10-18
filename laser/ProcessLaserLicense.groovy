@@ -63,12 +63,20 @@ public class ProcessLaserLicense extends BaseTransformProcess implements Transfo
 
       pass &= checkValueMapping(policyHelper,feedbackHelper,true,'LASER::LICENSE/STATUS', parsed_record.status, 'LASERIMPORT', 
                                 'FOLIO::LICENSE/STATUS', local_context, parsed_record?.status,
-                                [prompt:"Please provide a mapping for LASER License Status ${parsed_record.status}"]);
+                                [
+                                  prompt:"Please provide a mapping for LASER License Status ${parsed_record.status}",
+                                  subtype:'refdata',
+                                  refdataUrl:'/licenses/refdata/status'
+                                ]);
 
       String type_value = parsed_record.calculatedType ?: parsed_record.instanceOf.calculatedType ?: 'NO TYPE' 
 
       pass &= checkValueMapping(policyHelper,feedbackHelper,true,'LASER::LICENSE/TYPE', type_value, 'LASERIMPORT', 'FOLIO::LICENSE/TYPE', local_context, type_value,
-                           [prompt:"Please provide a mapping for LASER License Type ${type_value}"]);
+                           [
+                             prompt:"Please provide a mapping for LASER License Type ${type_value}",
+                             subtype:'refdata',
+                             refdataUrl:'/licenses/refdata/licenseType'
+                           ]);
 
       pass &= preflightLicenseProperties(parsed_record, rms, policyHelper, feedbackHelper, local_context)
 
@@ -253,6 +261,7 @@ public class ProcessLaserLicense extends BaseTransformProcess implements Transfo
                              "FOLIO::LICENSE/REFDATA/${mapped_property.folioId}", 
                              local_context, licprop.value,
                              [prompt:"Map License refdata value ${licprop.refdataCategory}/${licprop.value} - in target category ${mapped_property.folioId}",
+                              subtype:"refdata",
                               type:"refdata"
                              ]);
           }
