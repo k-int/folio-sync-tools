@@ -128,5 +128,15 @@
       { "srcCtx":"LASER::LICENSE/REFDATA/y.n.o", "srcValue":"No",    "mappingContext":"LASERIMPORT", "targetCtx":"FOLIO::LICENSE/REFDATA/y.n.o",   "targetValue":"No" },
       { "srcCtx":"LASER::LICENSE/REFDATA/y.n.o", "srcValue":"Other", "mappingContext":"LASERIMPORT", "targetCtx":"FOLIO::LICENSE/REFDATA/y.n.o",   "targetValue":"Other" }
     ]
+  },
+  {
+    "recordType":"authorityControl",
+    "authorities":{
+                 "FOLIO::LICENSE/PROPERTY":{ "type":"custprop", "service":"/licenses/custprops"},
+            "FOLIO::LICENSE/REFDATA/y.n.o":{ "type":"refdata",  "service":"/licenses/refdata/Yes%2FNo%2FOther" },
+      "FOLIO::LICENSE/REFDATA/permissions":{ "type":"refdata",  "service":"/licenses/refdata/Permitted%2FProhibited" },
+                   "FOLIO::LICENSE/STATUS":{ "type":"refdata",  "service":"/licenses/refdata/License/status" },
+                     "FOLIO::LICENSE/TYPE":{ "type":"refdata",  "service":"/licenses/refdata/License/type" }
+    }
   }
 ]
