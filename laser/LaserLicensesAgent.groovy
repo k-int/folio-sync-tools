@@ -64,52 +64,60 @@ public class LaserLicensesAgent implements RemoteSyncActivity {
     String secret=rsc.getAppSetting('laser.secret')
     String token=rsc.getAppSetting('laser.token')
 
-    String auth = makeAuth('/api/v0/licenseList', '', '', 'q='+identifierType+'&v='+identifier,secret);
+    if ( ( identifier != null ) &&
+         ( url != null ) &&
+         ( secret != null ) &&
+         ( token != null ) ) {
 
-    println("gotAuth: ${auth} - request licenses of type ${identifierType}/id ${identifier} request URL is ${url}");
+      String auth = makeAuth('/api/v0/licenseList', '', '', 'q='+identifierType+'&v='+identifier,secret);
 
-    def http = configure {
-      request.uri = url
-    }
+      println("gotAuth: ${auth} - request licenses of type ${identifierType}/id ${identifier} request URL is ${url}");
 
-    def result = http.get {
-      request.uri.path = '/api/v0/licenseList'
-      request.headers['x-authorization'] = "hmac $token:::$auth,hmac-sha256"
-      request.headers['accept'] = 'application/json'
-      request.uri.query = [
-        q:identifierType,
-        v:identifier
-      ]
-      response.when(200) { FromServer fs, Object body ->
-        println("OK");
-        body.each { license_info ->
-          println("Retrieve license ${license_info.globalUID}");
-          def license = getLicense(license_info.globalUID, url, secret, token)
-          if ( license ) {
-            def license_json = JsonOutput.toJson(license);
-            MessageDigest md5_digest = MessageDigest.getInstance("MD5");
-            byte[] license_json_bytes = license_json.toString().getBytes()
-            md5_digest.update(license_json_bytes);
-            byte[] md5sum = md5_digest.digest();
-            String license_hash = new BigInteger(1, md5sum).toString(16);
-            rsc.upsertSourceRecord(source_id,
-                                   'LASER',
-                                   'LASER:LICENSE:'+license_info.globalUID,
-                                   'LASER:LICENSE',
-                                   'LASER License '+license_info.reference,
-                                   license_hash,
-                                   license_json_bytes);
+      def http = configure {
+        request.uri = url
+      }
 
-            // N.B. in an OAI agent we would update state here so that the next run could pick up
-            // where the last run completed. In LASER we have to reprocess the full list every time
-            // as there appears to be no cursor mechanism
+      def result = http.get {
+        request.uri.path = '/api/v0/licenseList'
+        request.headers['x-authorization'] = "hmac $token:::$auth,hmac-sha256"
+        request.headers['accept'] = 'application/json'
+        request.uri.query = [
+          q:identifierType,
+          v:identifier
+        ]
+        response.when(200) { FromServer fs, Object body ->
+          println("OK");
+          body.each { license_info ->
+            println("Retrieve license ${license_info.globalUID}");
+            def license = getLicense(license_info.globalUID, url, secret, token)
+            if ( license ) {
+              def license_json = JsonOutput.toJson(license);
+              MessageDigest md5_digest = MessageDigest.getInstance("MD5");
+              byte[] license_json_bytes = license_json.toString().getBytes()
+              md5_digest.update(license_json_bytes);
+              byte[] md5sum = md5_digest.digest();
+              String license_hash = new BigInteger(1, md5sum).toString(16);
+              rsc.upsertSourceRecord(source_id,
+                                     'LASER',
+                                     'LASER:LICENSE:'+license_info.globalUID,
+                                     'LASER:LICENSE',
+                                     'LASER License '+license_info.reference,
+                                     license_hash,
+                                     license_json_bytes);
+  
+              // N.B. in an OAI agent we would update state here so that the next run could pick up
+              // where the last run completed. In LASER we have to reprocess the full list every time
+              // as there appears to be no cursor mechanism
+            }
           }
         }
-      }
-      response.when(400) { FromServer fs, Object body ->
-        println("Problem processing licenses ${body}");
+        response.when(400) { FromServer fs, Object body ->
+          println("Problem processing licenses ${body}");
+        }
       }
     }
-
+    else {
+      println("Missing LASER config");
+    }
   }
 }
