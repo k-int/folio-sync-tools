@@ -55,21 +55,27 @@ public class ProcessLaserSubscription implements TransformProcess {
       // LAS:eR subcriptions carry the license reference in license.globalUID
       // We will not try to process this subscription until the license sync task has created a record for the license
       // this sub depends on.
-      String laser_license_guid = local_context.parsed_record?.licenses[0]?.globalUID;
-      log.info("Try to look up laser license ${laser_license_guid}");
-      if ( laser_license_guid != null ) {
-        ResourceMapping license_rm = rms.lookupMapping('LASER-LICENSE', laser_license_guid, 'LASERIMPORT')
-        if ( license_rm != null ) {
-          local_context.folio_license_in_force = license_rm.folioId;
-          log.debug("Located local laser license ${license_rm.folioId} for LASER license ${laser_license_guid}");
+      if ( ( local_context.parsed_record?.licenses != null ) &&
+           ( local_context.parsed_record?.licenses.size() > 0 ) ) {
+        String laser_license_guid = local_context.parsed_record?.licenses[0]?.globalUID;
+        log.info("Try to look up laser license ${laser_license_guid}");
+        if ( laser_license_guid != null ) {
+          ResourceMapping license_rm = rms.lookupMapping('LASER-LICENSE', laser_license_guid, 'LASERIMPORT')
+          if ( license_rm != null ) {
+            local_context.folio_license_in_force = license_rm.folioId;
+            log.debug("Located local laser license ${license_rm.folioId} for LASER license ${laser_license_guid}");
+          }
+          else {
+            local_context.processLog.add([ts:System.currentTimeMillis(), msg:"No FOLIO license for LASER:${laser_license_guid}"]);
+            log.warn("Unable to find local laser license for LASER license ${laser_license_guid}");
+          }
         }
         else {
-          local_context.processLog.add([ts:System.currentTimeMillis(), msg:"No FOLIO license for LASER:${laser_license_guid}"]);
-          log.warn("Unable to find local laser license for LASER license ${laser_license_guid}");
+          local_context.processLog.add([ts:System.currentTimeMillis(), msg:"No LASER License referenced in sub - unable to continue"]);
         }
       }
       else {
-        local_context.processLog.add([ts:System.currentTimeMillis(), msg:"No LASER License referenced in sub - unable to continue"]);
+        local_context.processLog.add([ts:System.currentTimeMillis(), msg:"Source subscription does not seem to carry license data"]);
       }
 
       // We're passing everything - but not mapping licenses we don't know about
