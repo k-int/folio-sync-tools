@@ -106,7 +106,7 @@ public class ProcessLaserSubscription implements TransformProcess {
 
     try {
       // Create or update the "custom package" representing the contents of this agreement
-      def folio_package_json = generateFOLIOPackageJSON(new_package_name,local_context.parsed_record);
+      def folio_package_json = generateFOLIOPackageJSON(new_package_name,local_context.parsed_record,local_context);
       // def package_details = upsertPackage(folio_package_json, folioHelper);
 
       def package_details = null;
@@ -147,12 +147,14 @@ public class ProcessLaserSubscription implements TransformProcess {
     // 1. see if we can locate an existing package with reference folio_package_json.reference (The laser UUID)
     // the /erm/packages/import endpoint automatically checks for an existing record with the given reference and updates
     // any existing package - perfect!
+    log.debug("Attempt package upsert....");
     def import_response = folioHelper.okapiPost('/erm/packages/import', folio_package_json);
     log.debug("/erm/packages/import response: ${import_response}");
     return import_response;
   }
 
-  private Map generateFOLIOPackageJSON(String generated_package_name, Map subscription) {
+  private Map generateFOLIOPackageJSON(String generated_package_name, Map subscription, Map local_context) {
+
     def pkg_data = [
       "header": [
          "dataSchema": [
@@ -188,8 +190,9 @@ public class ProcessLaserSubscription implements TransformProcess {
 
         ArrayList coverage = buildCoverageStatements(ie.coverages);
 
+        local_context.processLog.add([ts:System.currentTimeMillis(), msg:"Adding Title ${ie?.tipp?.title?.title}");
+
         content_items.add([
-          //"depth": null,
           "accessStart": dealWithLaserDate(ie.accessStartDate),
           "accessEnd": dealWithLaserDate(ie.accessEndDate),
           "coverage": coverage,
