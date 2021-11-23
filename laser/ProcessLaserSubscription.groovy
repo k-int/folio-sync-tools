@@ -365,7 +365,7 @@ public class ProcessLaserSubscription implements TransformProcess {
       String reasonForClosure = null
 
       if (statusString == null) {
-        throw new Exception ("Mapping not found for LAS:eR status ${license.status}")
+        // throw new Exception ("Mapping not found for LAS:eR status ${license.status}")
       }
       // reasonForClosure = statusMappings.get('agreement.reasonForClosure')
 
@@ -449,7 +449,7 @@ public class ProcessLaserSubscription implements TransformProcess {
       statusString = null; // statusMappings.get('agreement.status')
 
       if (statusString == null) {
-        throw new Exception ("Mapping not found for LAS:eR status ${license.status}")
+        throw new Exception ("Mapping not found for LAS:eR status ${folio_agreement.status}")
       }
     } catch (Exception e) {
       println("Warning: Cannot update status information for agreement: ${e.message}")
