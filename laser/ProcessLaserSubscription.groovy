@@ -23,6 +23,10 @@ public class ProcessLaserSubscription implements TransformProcess {
 
   // see https://laser-dev.hbz-nrw.de/api/index
 
+  private static List<String> REQUIRED_PERMISSIONS = [
+    'erm.packages.collection.import'
+  ]
+
   public Map preflightCheck(String resource_id,
                             byte[] input_record,
                             ApplicationContext ctx,
@@ -41,6 +45,9 @@ public class ProcessLaserSubscription implements TransformProcess {
 
       FolioClient fc = new FolioClientImpl(okapi_host, okapi_port, local_context.tenant, folio_user, folio_pass, 60000);
       fc.ensureLogin();
+
+      if ( fc.checkPermissionGranted( REQUIRED_PERMISSIONS ) == false )
+        throw new RuntimeException("Configured user is missing a required permission from the set ${REQUIRED_PERMISSIONS}")
 
       local_context.folioClient = fc;
 
