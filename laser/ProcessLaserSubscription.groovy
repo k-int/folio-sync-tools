@@ -63,7 +63,7 @@ public class ProcessLaserSubscription implements TransformProcess {
       // We will not try to process this subscription until the license sync task has created a record for the license
       // this sub depends on.
       if ( ( local_context.parsed_record?.licenses != null ) &&
-           ( local_context.parsed_record?.licenses.size() > 0 ) ) {
+           ( local_context.parsed_record?.licenses?.size() > 0 ) ) {
         String laser_license_guid = local_context.parsed_record?.licenses[0]?.globalUID;
         log.info("Try to look up laser license ${laser_license_guid}");
         if ( laser_license_guid != null ) {
@@ -408,14 +408,15 @@ public class ProcessLaserSubscription implements TransformProcess {
 
     String agreementId = folio_agreement.id
     def result = null;
-    println("updateAgreement(${subscription.name},${folio_license_id}...)");
+    println("updateAgreement(name:${subscription.name},folio_license_id:${folio_license_id}...)");
 
     ArrayList linkedLicenses = []
 
     try {
       Map existing_controlling_license_data = lookupExistingAgreementControllingLicense(folio_agreement)
       println("Comparing license id: ${folio_license_id} to existing controlling license link: ${existing_controlling_license_data.existingLicenseId}")
-      if (existing_controlling_license_data.existingLicenseId != folio_license_id) {
+      if ( ( existing_controlling_license_data == null ) ||
+           (existing_controlling_license_data.existingLicenseId != folio_license_id) ) {
         println("Existing controlling license differs from data harvested from LAS:eR--updating")
         linkedLicenses = [
           [
@@ -484,7 +485,7 @@ public class ProcessLaserSubscription implements TransformProcess {
     if (folioAgreement) {
       // We already have an agreement, so the period will need updating
       if ( ( folioAgreement.periods ) && 
-           ( folioAgreement.periods.size() > 0 ) ) {
+           ( folioAgreement.periods?.size() > 0 ) ) {
         Map deleteMap = [
           id: folioAgreement.periods?.getAt(0)?.id,
           _delete: true
@@ -509,7 +510,9 @@ public class ProcessLaserSubscription implements TransformProcess {
     Map result = [:]
 
     ArrayList linkedLicenses = [] // folio_agreement.linkedLicenses
-    linkedLicenses = folio_agreement.linkedLicenses.find { obj.status?.value == 'controlling' };
+    linkedLicenses = folio_agreement?.linkedLicenses?.find { obj.status?.value == 'controlling' };
+    if ( linkedLicenses == null ) 
+      linkedLicenses=[];
 
     // The below should always go smoothly, since FOLIO only allows a single controlling license. If this fails then something hasd gone wrong internally in FOLIO
     switch ( linkedLicenses.size() ) {
@@ -520,11 +523,10 @@ public class ProcessLaserSubscription implements TransformProcess {
         result = [existingLinkId: linkedLicenses[0].id, existingLicenseId: linkedLicenses[0].remoteId]
         break;
       default:
-        throw new RuntimeException("Multiple agreement controlling licenses found (${linkedLicenses.size()})");
+        throw new RuntimeException("Multiple agreement controlling licenses found/2 (${linkedLicenses.size()})");
         break;
     }
     return result;
   }
-
 
 }
