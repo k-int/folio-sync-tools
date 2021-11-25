@@ -23,7 +23,7 @@ public class ProcessLaserSubscription implements TransformProcess {
 
   // see https://laser-dev.hbz-nrw.de/api/index
 
-  private static List<String> REQUIRED_PERMISSIONS = [
+  private static String[] REQUIRED_PERMISSIONS = [
     'erm.packages.collection.import'
   ]
 
