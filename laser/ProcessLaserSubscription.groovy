@@ -379,6 +379,15 @@ public class ProcessLaserSubscription implements TransformProcess {
         ]
       }
 
+      def custom_properties = []
+      // At the same level as status is properies which is an array of maps where each map
+      // contains the keys note, refdataCategory, name, description, isPublic, value - these need to be brought over
+      if ( subscription?.properies ) {
+        subscription.properies.each { subprop ->
+          // Map property
+        }
+      }
+    
 
       result = folioHelper.okapiPost('/erm/sas',
         [
@@ -389,7 +398,8 @@ public class ProcessLaserSubscription implements TransformProcess {
           localReference: subscription.globalUID,
           periods: periods,
           linkedLicenses: linked_licenses,
-          items: items
+          items: items,
+          customProperties: custom_properties
         ]
       );
 
