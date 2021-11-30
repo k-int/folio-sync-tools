@@ -36,6 +36,8 @@ public class ProcessLaserSubscription implements TransformProcess {
     boolean pass = false;
     def result = [:]
     ResourceMappingService rms = ctx.getBean('resourceMappingService');
+    PolicyHelperService policyHelper = ctx.getBean('policyHelperService');
+    ImportFeedbackService feedbackHelper = ctx.getBean('importFeedbackService');
 
     try {
       String folio_user = AppSetting.findByKey('laser.ermFOLIOUser')?.value;
@@ -87,7 +89,10 @@ public class ProcessLaserSubscription implements TransformProcess {
 
       // We're passing everything - but not mapping licenses we don't know about
       pass=true
-      local_context.processLog.add([ts:System.currentTimeMillis(), msg:"ProcessLaserSubscription::preflightCheck(${resource_id},..) ${new Date()}"]);
+
+      pass &= preflightLicenseProperties(parsed_record, rms, policyHelper, feedbackHelper, local_context)
+
+      local_context.processLog.add([ts:System.currentTimeMillis(), msg:"ProcessLaserSubscription::preflightCheck(${resource_id},..) ${new Date()} result: ${pass}"]);
     }
     catch (Exception e) {
       local_context.processLog.add([ts:System.currentTimeMillis(), msg:"Error in preflight: ${e.message}"]);
@@ -131,8 +136,10 @@ public class ProcessLaserSubscription implements TransformProcess {
         local_context.processLog.add([ts:System.currentTimeMillis(), msg:"Found no items for package - skip package creation"]);
       }
 
-      def upsert_sub_result = upsertSubscription(local_context.folioClient,
+      def upsert_sub_result = upsertSubscription(rms,
+                         local_context.folioClient,
                          '', // prefix
+                         local_context,
                          local_context.parsed_record,
                          local_context.folio_license_in_force,
                          result,
@@ -300,8 +307,10 @@ public class ProcessLaserSubscription implements TransformProcess {
     return result;
   }
 
-  def upsertSubscription(FolioClient folioHelper,
+  def upsertSubscription(ResourceMappingService rms,
+                         FolioClient folioHelper,
                          String prefix, 
+                         Map local_context,
                          Map subscription, 
                          String folio_license_id, 
                          Map processing_result,
@@ -314,7 +323,9 @@ public class ProcessLaserSubscription implements TransformProcess {
 
     if ( existing_subscription ) {
       println("Located existing subscription ${existing_subscription.id} - update - ${folio_pkg_id}");
-      result = updateAgreement(folioHelper, 
+      result = updateAgreement(rms,
+                      local_context,
+                      folioHelper, 
                       subscription, 
                       folio_license_id, 
                       folio_pkg_id, 
@@ -322,7 +333,9 @@ public class ProcessLaserSubscription implements TransformProcess {
     }
     else {
       println("No subscription found - create - package will be ${folio_pkg_id}");
-      result = createAgreement(folioHelper, 
+      result = createAgreement(rms,
+                      local_context,
+                      folioHelper, 
                       subscription, 
                       folio_license_id, 
                       folio_pkg_id);
@@ -334,7 +347,9 @@ public class ProcessLaserSubscription implements TransformProcess {
     return result;
   }
 
-  def createAgreement(FolioClient folioHelper,
+  def createAgreement(ResourceMappingService rms,
+                      Map local_context,
+                      FolioClient folioHelper,
                       Map subscription, 
                       String folio_license_id, 
                       String folio_pkg_id) {
@@ -379,16 +394,6 @@ public class ProcessLaserSubscription implements TransformProcess {
         ]
       }
 
-      def custom_properties = []
-      // At the same level as status is properies which is an array of maps where each map
-      // contains the keys note, refdataCategory, name, description, isPublic, value - these need to be brought over
-      if ( subscription?.properies ) {
-        subscription.properies.each { subprop ->
-          // Map property
-        }
-      }
-    
-
       result = folioHelper.okapiPost('/erm/sas',
         [
           name:subscription.name,
@@ -399,7 +404,7 @@ public class ProcessLaserSubscription implements TransformProcess {
           periods: periods,
           linkedLicenses: linked_licenses,
           items: items,
-          customProperties: custom_properties
+          customProperties: processSubscriptionProperties(rms,[:],subscription,local_context)
         ]
       );
 
@@ -410,7 +415,9 @@ public class ProcessLaserSubscription implements TransformProcess {
     return result;
   }
 
-  def updateAgreement(FolioClient folioHelper,
+  def updateAgreement(ResourceMappingService rms,
+                      Map local_context,
+                      FolioClient folioHelper,
                       Map subscription, 
                       String folio_license_id, 
                       String folio_pkg_id, 
@@ -466,10 +473,14 @@ public class ProcessLaserSubscription implements TransformProcess {
       println("Warning: Cannot update status information for agreement: ${e.message}")
     }
 
+    // need to add - current items
+    def items = folio_agreement.items;
+
     Map requestBody = [
-      name: subscription.name,
-      linkedLicenses: linkedLicenses,
-      periods: periods
+      'name': subscription.name,
+      'linkedLicenses': linkedLicenses,
+      'periods': periods,
+      'items': items
     ]
 
     if (statusString != null) {
@@ -537,6 +548,112 @@ public class ProcessLaserSubscription implements TransformProcess {
         break;
     }
     return result;
+  }
+
+  private boolean preflightSubscriptionProperties(Map laser_subscription,
+                                                  ResourceMappingService rms,
+                                                  PolicyHelperService policyHelper,
+                                                  ImportFeedbackService feedbackHelper,
+                                                  Map local_context) {
+    boolean result = true;
+    laser_subscription?.properties?.each { subprop ->
+      log.debug("preflight laser subscription prop ${subprop}");
+      if ( subprop.value != null ) {
+        def mapped_property = rms.lookupMapping('LASER::SUBSCRIPTION/PROPERTY',subprop.token,'LASERIMPORT')
+        if ( mapped_property != null ) {
+          // We know about this subscription property - if it's refdata see if we know about the value mapping
+          log.debug("Check subscription property value for ${subprop}");
+          if ( subprop.type == 'Refdata' ) {
+            result &= checkValueMapping(policyHelper,
+                          feedbackHelper,false,"LASER::SUBSCRIPTION/REFDATA/${subprop.refdataCategory}", subprop.value, 'LASERIMPORT',
+                             "FOLIO::SUBSCRIPTION/REFDATA/${mapped_property.folioId}",
+                             local_context, subprop.value,
+                             [prompt:"Map License refdata value ${subprop.refdataCategory}/${subprop.value} - in target category ${mapped_property.folioId}",
+                              subtype:"refdata",
+                              type:"refdata"
+                             ]);
+          }
+          // other types are Text and Date
+        }
+        else {
+          // We've not seen this subscription property before - add it to the list of potentials
+          result &= checkValueMapping(policyHelper,
+                          feedbackHelper,false,'LASER::SUBSCRIPTION/PROPERTY', subprop.token, 'LASERIMPORT', 'FOLIO::SUBSCRIPTION/PROPERTY', local_context, subprop.token,
+                             [prompt:"Map Optional Subscription Property ${subprop.token}(${subprop.type})",
+                              type:"refdata"
+                             ]);
+        }
+      }
+      else {
+        // Skipping NULL subscription property value
+      }
+    }
+  }
+
+  private Map processSubscriptionProperties(ResourceMappingService rms, Map folio_subscription, Map laser_subscription, Map local_context) {
+
+    Map result = folio_subscription.customProperties ?: [:];
+
+    laser_subscription?.properties?.each { subprop ->
+      log.debug("Process subscription property : ${subprop}");
+      if ( subprop.value != null ) {
+        String property_name = subprop.token
+
+        def mapped_property = rms.lookupMapping('LASER::SUBSCRIPTION/PROPERTY',subprop.token,'LASERIMPORT')
+
+        if ( mapped_property != null ) {
+          switch ( subprop.type ) {
+            case 'Text':
+              local_context.processLog.add([ts:System.currentTimeMillis(), msg:"adding text property: ${subprop.token}"]);
+              result[mapped_property.folioId] = [
+                note: noteParagraphJoiner(subprop.note, subprop.paragraph),
+                value: subprop.value
+              ]
+              break;
+            case 'Date':
+              local_context.processLog.add([ts:System.currentTimeMillis(), msg:"adding date property: ${subprop.token}"]);
+              result[mapped_property.folioId] = [
+                note: noteParagraphJoiner(subprop.note, subprop.paragraph),
+                value: subprop.value
+              ]
+              break;
+            case 'Refdata':
+              def mapped_value = rms.lookupMapping("LASER::SUBSCRIPTION/REFDATA/${subprop.refdataCategory}",subprop.value,'LASERIMPORT')
+              local_context.processLog.add([ts:System.currentTimeMillis(), msg:"adding refdata property: ${subprop.token}:${subprop.value} mapped value ${mapped_value}"]);
+              if ( mapped_value ) {
+                result[mapped_property.folioId] = [
+                  //  internal: internalValue,
+                  note: noteParagraphJoiner(subprop.note, subprop.paragraph),
+                  value: mapped_value.folioId,
+                  type: 'com.k_int.web.toolkit.custprops.types.CustomPropertyRefdata'
+                ]
+              }
+              break;
+          }
+        }
+        else {
+          // Skip any unmapped license property
+          local_context.processLog.add([ts:System.currentTimeMillis(), msg:"Skipping unmapped license property: ${subprop.token}"]);
+        }
+      }
+    }
+
+    return result;
+  }
+
+  public String noteParagraphJoiner(String note, String paragraph) {
+    // The paragraph information for custom properties will for now be stored alongside the note in FOLIO's internalNote field, with a delimiter defined below
+    String delimiter = " :: "
+
+    if (note != null && paragraph != null) {
+      return note << delimiter << paragraph;
+    } else if (note == null && paragraph == null) {
+      return null;
+    } else if (note == null) {
+      return paragraph;
+    } else {
+      return note;
+    }
   }
 
 }
