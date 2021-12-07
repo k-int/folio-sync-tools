@@ -435,20 +435,25 @@ public class ProcessLaserSubscription implements TransformProcess {
       Map existing_controlling_license_data = lookupExistingAgreementControllingLicense(folio_agreement)
       println("Comparing license id: ${folio_license_id} to existing controlling license link: ${existing_controlling_license_data.existingLicenseId}")
       if ( ( existing_controlling_license_data == null ) ||
-           (existing_controlling_license_data.existingLicenseId != folio_license_id) ) {
+           ( existing_controlling_license_data.existingLicenseId != folio_license_id) ) {
         println("Existing controlling license differs from data harvested from LAS:eR--updating")
-        local_context.processLog.add([ts:System.currentTimeMillis(), msg:"Controlling licnese has changed - unlinking ${existing_controlling_license_data.existingLinkId} and add ${folio_license_id}");
-        linkedLicenses = [
-          [
+        linkedLicenses = []
+
+        if ( existing_controlling_license_data.existingLicenseId != null ) {
+          local_context.processLog.add([ts:System.currentTimeMillis(), msg:"Controlling licnese has changed - unlinking ${existing_controlling_license_data.existingLinkId}"]);
+          linkedLicenses.add ( [
             id: existing_controlling_license_data.existingLinkId,
             remoteId: existing_controlling_license_data.existingLicenseId,
             _delete: true
-          ],
+          ])
+        }
+
+        local_context.processLog.add([ts:System.currentTimeMillis(), msg:"Adding controlling license: ${folio_license_id}"]);
+        linkedLicenses.add(
           [
             remoteId:folio_license_id,
             status:'controlling'
-          ]
-        ]
+          ] )
       } else {
         println("Existing controlling license matches data harvested from LAS:eR--moving on")
       }
