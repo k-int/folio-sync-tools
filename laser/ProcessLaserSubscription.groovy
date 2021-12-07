@@ -427,6 +427,8 @@ public class ProcessLaserSubscription implements TransformProcess {
     def result = null;
     println("updateAgreement(name:${subscription.name},folio_license_id:${folio_license_id}...)");
 
+    local_context.processLog.add([ts:System.currentTimeMillis(), msg:"update existing agreement: ${agreementId}"]);
+
     ArrayList linkedLicenses = []
 
     try {
@@ -435,9 +437,11 @@ public class ProcessLaserSubscription implements TransformProcess {
       if ( ( existing_controlling_license_data == null ) ||
            (existing_controlling_license_data.existingLicenseId != folio_license_id) ) {
         println("Existing controlling license differs from data harvested from LAS:eR--updating")
+        local_context.processLog.add([ts:System.currentTimeMillis(), msg:"Controlling licnese has changed - unlinking ${existing_controlling_license_data.existingLinkId} and add ${folio_license_id}");
         linkedLicenses = [
           [
             id: existing_controlling_license_data.existingLinkId,
+            remoteId: existing_controlling_license_data.existingLicenseId,
             _delete: true
           ],
           [
