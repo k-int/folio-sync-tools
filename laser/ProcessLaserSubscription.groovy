@@ -148,6 +148,7 @@ public class ProcessLaserSubscription implements TransformProcess {
                          local_context.parsed_record,
                          local_context.folio_license_in_force,
                          result,
+                         feedbackHelper,
                          package_details?.packageId);
 
       if ( upsert_sub_result?.id != null ) {
@@ -323,6 +324,7 @@ public class ProcessLaserSubscription implements TransformProcess {
                          Map subscription, 
                          String folio_license_id, 
                          Map processing_result,
+                         ImportFeedbackService feedbackHelper,
                          String folio_pkg_id = null) {
 
     log.debug("upsertSubscription(...,${prefix},${folio_license_id},${folio_pkg_id}...");
