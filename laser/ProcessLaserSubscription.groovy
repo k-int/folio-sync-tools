@@ -95,7 +95,7 @@ public class ProcessLaserSubscription extends BaseTransformProcess implements Tr
       // Users must select, for each subscription, if the incoming subscription should be matched to an existing agreement or if a new
       // agreement should be created to track that laser sub
       pass &= mappingCheck(policyHelper,feedbackHelper,true,'LASER-SUBSCRIPTION', resource_id, 'LASERIMPORT', 'FOLIO::AGREEMENT', local_context, parsed_record?.reference,
-                           [ prompt:"Please indicate if the LASER Subscription \"${parsed_record?.reference}\" with ID ${resource_id} should be mapped to an existing FOLIO Agreement, a new FOLIO Agreement created to track it, or the resorce should be ignored", folioResourceType:'Agreement']);
+                           [ prompt:"Please indicate if the LASER Subscription \"${parsed_record?.reference}\" with ID ${resource_id} should be mapped to an existing FOLIO Agreement, a new FOLIO Agreement created to track it, or the resorce should be ignored", folioResourceType:'agreement']);
 
       pass &= preflightLicenseProperties(parsed_record, rms, policyHelper, feedbackHelper, local_context)
 

@@ -59,7 +59,7 @@ public class ProcessLaserLicense extends BaseTransformProcess implements Transfo
 
       // Check to see if we already know about this license or if we should ask the user to create/map it
       pass &= mappingCheck(policyHelper,feedbackHelper,true,'LASER-LICENSE', resource_id, 'LASERIMPORT', 'FOLIO::LICENSE', local_context, parsed_record?.reference,
-                           [ prompt:"Please indicate if the LASER License \"${parsed_record?.reference}\" with ID ${resource_id} should be mapped to an existing FOLIO License, a new FOLIO license created to track it, or the resorce should be ignored", folioResourceType:'License']);
+                           [ prompt:"Please indicate if the LASER License \"${parsed_record?.reference}\" with ID ${resource_id} should be mapped to an existing FOLIO License, a new FOLIO license created to track it, or the resorce should be ignored", folioResourceType:'license']);
 
       pass &= checkValueMapping(policyHelper,feedbackHelper,true,'LASER::LICENSE/STATUS', parsed_record.status, 'LASERIMPORT', 
                                 'FOLIO::LICENSE/STATUS', local_context, parsed_record?.status,
