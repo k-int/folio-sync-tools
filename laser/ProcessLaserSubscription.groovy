@@ -1,6 +1,8 @@
 package folio.modrs.scripts
 
 import mod_remote_sync.source.TransformProcess;
+import mod_remote_sync.source.BaseTransformProcess;
+
 
 import org.springframework.context.ApplicationContext
 import groovy.util.logging.Slf4j
