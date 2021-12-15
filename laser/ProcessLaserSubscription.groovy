@@ -90,6 +90,11 @@ public class ProcessLaserSubscription implements TransformProcess {
       // We're passing everything - but not mapping licenses we don't know about
       pass=true
 
+      // Users must select, for each subscription, if the incoming subscription should be matched to an existing agreement or if a new
+      // agreement should be created to track that laser sub
+      pass &= mappingCheck(policyHelper,feedbackHelper,true,'LASER-SUBSCRIPTION', resource_id, 'LASERIMPORT', 'FOLIO::AGREEMENT', local_context, parsed_record?.reference,
+                           [ prompt:"Please indicate if the LASER Subscription \"${parsed_record?.reference}\" with ID ${resource_id} should be mapped to an existing FOLIO Agreement, a new FOLIO Agreement created to track it, or the resorce should be ignored", folioResourceType:'Agreement']);
+
       pass &= preflightLicenseProperties(parsed_record, rms, policyHelper, feedbackHelper, local_context)
 
       local_context.processLog.add([ts:System.currentTimeMillis(), msg:"ProcessLaserSubscription::preflightCheck(${resource_id},..) ${new Date()} result: ${pass}"]);
@@ -272,6 +277,7 @@ public class ProcessLaserSubscription implements TransformProcess {
     return dateOutput;
   }
 
+
   // def lookupAgreement(String ref, FolioHelperService folioHelper) {
   def lookupAgreement(String ref, FolioClient folioHelper) {
 
@@ -321,11 +327,16 @@ public class ProcessLaserSubscription implements TransformProcess {
 
     log.debug("upsertSubscription(...,${prefix},${folio_license_id},${folio_pkg_id}...");
 
-    def existing_subscription = lookupAgreement(subscription.globalUID, folioHelper)
+    ResourceMapping rm = rms.lookupMapping('LASER-SUBSCRIPTION',subscription.globalUID,'LASERIMPORT');
+
     def result = null;
 
-    if ( existing_subscription ) {
-      println("Located existing subscription ${existing_subscription.id} - update - ${folio_pkg_id}");
+    if ( rm != null ) {
+      println("Located existing mapping for subscription ${existing_subscription.id} - update - ${folio_pkg_id}");
+
+      // def existing_subscription = lookupAgreement(subscription.globalUID, folioHelper)
+      def existing_subscription = folioHelper.okapiGet('/erm/sas/'+rm.folioId)
+    
       result = updateAgreement(rms,
                       local_context,
                       folioHelper, 
@@ -335,16 +346,67 @@ public class ProcessLaserSubscription implements TransformProcess {
                       existing_subscription);
     }
     else {
-      println("No subscription found - create - package will be ${folio_pkg_id}");
-      result = createAgreement(rms,
+      String feedback_correlation_id = "LASER-SUBSCRIPTION:${subscription.globalUID}:LASERIMPORT:MANUAL-RESOURCE-MAPPING".toString()
+      FeedbackItem fi = feedbackHelper.lookupFeedback(feedback_correlation_id)
+
+        if ( fi != null ) {
+          def answer = fi.parsedAnswer
+          local_context.processLog.add([ts:System.currentTimeMillis(), msg:"Applying located feedbacko ${answer}"])
+          switch ( answer?.answerType ) {
+            case 'create':
+              result = createAgreement(rms,
                       local_context,
                       folioHelper, 
                       subscription, 
                       folio_license_id, 
                       folio_pkg_id);
-      if ( result && result.id != null ) {
-        log.debug("We should stash the mapped agreement details here");
+              if ( result && result.id != null ) {
+                // Remember the ID of the agreement we are mapping this LASER subscription into
+                def resource_mapping = rms.registerMapping('LASER-SUBSCRIPTION',subscription.globalUID, 'LASERIMPORT','M','AGREEMENTS',result.id);
+              }
+              result.processStatus = 'COMPLETE'
+              break;
+            case 'ignore':
+              println("Ignore ${resource_id} from LASER");
+              result.processStatus = 'COMPLETE'
+              break;
+            case 'map':
+              println("Import ${resource_id} as ${answer}");
+              if ( answer?.mappedResource?.id ) {
+                def resource_mapping = rms.registerMapping('LASER-SUBSCRIPTION',subscription.globalUID, 'LASERIMPORT','M','AGREEMENTS',answer?.mappedResource?.id);
+                if ( resource_mapping ) { 
+                  result.resource_mapping = resource_mapping;
+                  // updateLicense(local_context.folioClient, resource_mapping.folioId,parsed_record,result)
+                  def existing_subscription = folioHelper.okapiGet('/erm/sas/'+resource_mapping.folioId)
+                  result = updateAgreement(rms,
+                                           local_context,
+                                           folioHelper,
+                                           subscription,
+                                           folio_license_id,
+                                           folio_pkg_id,
+                                           existing_subscription)
+                  result.processStatus = 'COMPLETE'
+                }
+                else {
+                  local_context.processLog.add([ts:System.currentTimeMillis(), msg:"Resource mapping step failed"]);
+                }
+              }
+              else {
+                local_context.processLog.add([ts:System.currentTimeMillis(), msg:"Feedback to map existing is incomplete : ${answer}. Missing mappedResource.id"]);
+              }
+              break;
+            default:
+              println("Unhandled answer type: ${answer?.answerType}");
+              break;
+          }
+        }
+        else {
+          local_context.processLog.add([ts:System.currentTimeMillis(), msg:"Process blocked awaiting feedback with correlation id ${feedback_correlation_id}"]);
+        }
+
       }
+
+
     }
 
     return result;
