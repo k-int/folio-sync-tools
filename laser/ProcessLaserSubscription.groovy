@@ -215,7 +215,7 @@ public class ProcessLaserSubscription implements TransformProcess {
 
         ArrayList coverage = buildCoverageStatements(ie.coverages);
 
-        local_context.processLog.add([ts:System.currentTimeMillis(), msg:"Adding Title ${ie?.tipp?.title?.title}");
+        local_context.processLog.add([ts:System.currentTimeMillis(), msg:"Adding Title ${ie?.tipp?.title?.title}"]);
 
         content_items.add([
           "accessStart": dealWithLaserDate(ie.accessStartDate),
