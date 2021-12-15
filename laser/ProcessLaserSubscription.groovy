@@ -19,7 +19,7 @@ import mod_remote_sync.ImportFeedbackService
 import com.k_int.web.toolkit.settings.AppSetting
 
 @Slf4j
-public class ProcessLaserSubscription implements TransformProcess {
+public class ProcessLaserSubscription extends BaseTransformProcess implements TransformProcess {
 
   // see https://laser-dev.hbz-nrw.de/api/index
 
