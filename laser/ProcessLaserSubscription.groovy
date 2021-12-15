@@ -349,11 +349,12 @@ public class ProcessLaserSubscription implements TransformProcess {
       String feedback_correlation_id = "LASER-SUBSCRIPTION:${subscription.globalUID}:LASERIMPORT:MANUAL-RESOURCE-MAPPING".toString()
       FeedbackItem fi = feedbackHelper.lookupFeedback(feedback_correlation_id)
 
-        if ( fi != null ) {
-          def answer = fi.parsedAnswer
-          local_context.processLog.add([ts:System.currentTimeMillis(), msg:"Applying located feedbacko ${answer}"])
-          switch ( answer?.answerType ) {
-            case 'create':
+      if ( fi != null ) {
+
+        def answer = fi.parsedAnswer
+        local_context.processLog.add([ts:System.currentTimeMillis(), msg:"Applying located feedbacko ${answer}"])
+        switch ( answer?.answerType ) {
+          case 'create':
               result = createAgreement(rms,
                       local_context,
                       folioHelper, 
@@ -366,49 +367,44 @@ public class ProcessLaserSubscription implements TransformProcess {
               }
               result.processStatus = 'COMPLETE'
               break;
-            case 'ignore':
+          case 'ignore':
               println("Ignore ${resource_id} from LASER");
               result.processStatus = 'COMPLETE'
               break;
-            case 'map':
-              println("Import ${resource_id} as ${answer}");
-              if ( answer?.mappedResource?.id ) {
-                def resource_mapping = rms.registerMapping('LASER-SUBSCRIPTION',subscription.globalUID, 'LASERIMPORT','M','AGREEMENTS',answer?.mappedResource?.id);
-                if ( resource_mapping ) { 
-                  result.resource_mapping = resource_mapping;
-                  // updateLicense(local_context.folioClient, resource_mapping.folioId,parsed_record,result)
-                  def existing_subscription = folioHelper.okapiGet('/erm/sas/'+resource_mapping.folioId)
-                  result = updateAgreement(rms,
-                                           local_context,
-                                           folioHelper,
-                                           subscription,
-                                           folio_license_id,
-                                           folio_pkg_id,
-                                           existing_subscription)
-                  result.processStatus = 'COMPLETE'
-                }
-                else {
-                  local_context.processLog.add([ts:System.currentTimeMillis(), msg:"Resource mapping step failed"]);
-                }
+          case 'map':
+            println("Import ${resource_id} as ${answer}");
+            if ( answer?.mappedResource?.id ) {
+              def resource_mapping = rms.registerMapping('LASER-SUBSCRIPTION',subscription.globalUID, 'LASERIMPORT','M','AGREEMENTS',answer?.mappedResource?.id);
+              if ( resource_mapping ) { 
+                result.resource_mapping = resource_mapping;
+                // updateLicense(local_context.folioClient, resource_mapping.folioId,parsed_record,result)
+                def existing_subscription = folioHelper.okapiGet('/erm/sas/'+resource_mapping.folioId)
+                result = updateAgreement(rms,
+                                         local_context,
+                                         folioHelper,
+                                         subscription,
+                                         folio_license_id,
+                                         folio_pkg_id,
+                                         existing_subscription)
+                result.processStatus = 'COMPLETE'
               }
               else {
-                local_context.processLog.add([ts:System.currentTimeMillis(), msg:"Feedback to map existing is incomplete : ${answer}. Missing mappedResource.id"]);
+                local_context.processLog.add([ts:System.currentTimeMillis(), msg:"Resource mapping step failed"]);
               }
-              break;
-            default:
-              println("Unhandled answer type: ${answer?.answerType}");
-              break;
-          }
+            }
+            else {
+                local_context.processLog.add([ts:System.currentTimeMillis(), msg:"Feedback to map existing is incomplete : ${answer}. Missing mappedResource.id"]);
+            }
+            break;
+          default:
+            println("Unhandled answer type: ${answer?.answerType}");
+            break;
         }
-        else {
-          local_context.processLog.add([ts:System.currentTimeMillis(), msg:"Process blocked awaiting feedback with correlation id ${feedback_correlation_id}"]);
-        }
-
       }
-
-
+      else {
+        local_context.processLog.add([ts:System.currentTimeMillis(), msg:"Process blocked awaiting feedback with correlation id ${feedback_correlation_id}"]);
+      }
     }
-
     return result;
   }
 
