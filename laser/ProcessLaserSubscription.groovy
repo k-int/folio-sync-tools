@@ -662,6 +662,10 @@ public class ProcessLaserSubscription extends BaseTransformProcess implements Tr
         // Skipping NULL subscription property value
       }
     }
+    
+    local_context.processLog.add([ts:System.currentTimeMillis(), msg:"Preflight subscription properties: ${result}"]);
+
+    return result
   }
 
   private Map processSubscriptionProperties(ResourceMappingService rms, Map folio_subscription, Map laser_subscription, Map local_context) {
