@@ -97,7 +97,7 @@ public class ProcessLaserSubscription extends BaseTransformProcess implements Tr
       pass &= mappingCheck(policyHelper,feedbackHelper,true,'LASER-SUBSCRIPTION', resource_id, 'LASERIMPORT', 'FOLIO::AGREEMENT', local_context, parsed_record?.name,
                            [ prompt:"Please indicate if the LASER Subscription \"${parsed_record?.name}\" with ID ${parsed_record?.globalUID} should be mapped to an existing FOLIO Agreement, a new FOLIO Agreement created to track it, or the resorce should be ignored", folioResourceType:'agreement']);
 
-      pass &= preflightLicenseProperties(parsed_record, rms, policyHelper, feedbackHelper, local_context)
+      pass &= preflightSubscriptionProperties(parsed_record, rms, policyHelper, feedbackHelper, local_context)
 
       local_context.processLog.add([ts:System.currentTimeMillis(), msg:"ProcessLaserSubscription::preflightCheck(${resource_id},..) ${new Date()} result: ${pass}"]);
     }
