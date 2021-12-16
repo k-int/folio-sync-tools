@@ -336,8 +336,6 @@ public class ProcessLaserSubscription extends BaseTransformProcess implements Tr
     def result = null;
 
     if ( rm != null ) {
-      println("Located existing mapping for subscription ${existing_subscription.id} - update - ${folio_pkg_id}");
-
       // def existing_subscription = lookupAgreement(subscription.globalUID, folioHelper)
       def existing_subscription = folioHelper.okapiGet('/erm/sas/'+rm.folioId)
 
