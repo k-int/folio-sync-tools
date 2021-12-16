@@ -329,7 +329,7 @@ public class ProcessLaserSubscription extends BaseTransformProcess implements Tr
                          ImportFeedbackService feedbackHelper,
                          String folio_pkg_id = null) {
 
-    log.debug("upsertSubscription(...,${prefix},${folio_license_id},${folio_pkg_id}...");
+    log.debug("upsertSubscription(...,prefix:${prefix},lic:${folio_license_id},pkg:${folio_pkg_id}...)");
 
     ResourceMapping rm = rms.lookupMapping('LASER-SUBSCRIPTION',subscription.globalUID,'LASERIMPORT');
 
@@ -340,17 +340,25 @@ public class ProcessLaserSubscription extends BaseTransformProcess implements Tr
 
       // def existing_subscription = lookupAgreement(subscription.globalUID, folioHelper)
       def existing_subscription = folioHelper.okapiGet('/erm/sas/'+rm.folioId)
+
+      if ( existing_subscription ) {
+        log.debug("Result of GET /erm/sas/${rm.folioId}: sub with id ${existing_subscription?.id}");
     
-      result = updateAgreement(rms,
-                      local_context,
-                      folioHelper, 
-                      subscription, 
-                      folio_license_id, 
-                      folio_pkg_id, 
-                      existing_subscription);
+        result = updateAgreement(rms,
+                        local_context,
+                        folioHelper, 
+                        subscription, 
+                        folio_license_id, 
+                        folio_pkg_id, 
+                        existing_subscription);
+      }
+      else {
+        log.warn("Unable to locate named subscription");
+        local_context.processLog.add([ts:System.currentTimeMillis(), msg:"Unable to locate the nominated FOLIO agreement selected as the mapping for this sub"]);
+      }
     }
     else {
-      String feedback_correlation_id = "LASER-SUBSCRIPTION:${subscription.globalUID}:LASERIMPORT:MANUAL-RESOURCE-MAPPING".toString()
+      String feedback_correlation_id = "LASER-SUBSCRIPTION:LASER:SUB:${subscription.globalUID}:LASERIMPORT:MANUAL-RESOURCE-MAPPING".toString()
       FeedbackItem fi = feedbackHelper.lookupFeedback(feedback_correlation_id)
 
       if ( fi != null ) {
