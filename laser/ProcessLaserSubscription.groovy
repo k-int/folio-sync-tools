@@ -363,6 +363,8 @@ public class ProcessLaserSubscription extends BaseTransformProcess implements Tr
 
       if ( fi != null ) {
 
+        log.debug("apply feedback ${answer}");
+
         def answer = fi.parsedAnswer
         local_context.processLog.add([ts:System.currentTimeMillis(), msg:"Applying located feedbacko ${answer}"])
         switch ( answer?.answerType ) {
@@ -380,11 +382,11 @@ public class ProcessLaserSubscription extends BaseTransformProcess implements Tr
               result.processStatus = 'COMPLETE'
               break;
           case 'ignore':
-              println("Ignore ${resource_id} from LASER");
+              println("Ignore subscription ${subscription.globalUID} from LASER");
               result.processStatus = 'COMPLETE'
               break;
           case 'map':
-            println("Import ${resource_id} as ${answer}");
+            println("Import ${subscription.globalUID} as ${answer}");
             if ( answer?.mappedResource?.id ) {
               def resource_mapping = rms.registerMapping('LASER-SUBSCRIPTION',subscription.globalUID, 'LASERIMPORT','M','AGREEMENTS',answer?.mappedResource?.id);
               if ( resource_mapping ) { 
