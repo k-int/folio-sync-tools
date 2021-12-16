@@ -390,7 +390,6 @@ public class ProcessLaserSubscription extends BaseTransformProcess implements Tr
             if ( answer?.mappedResource?.id ) {
               def resource_mapping = rms.registerMapping('LASER-SUBSCRIPTION',subscription.globalUID, 'LASERIMPORT','M','AGREEMENTS',answer?.mappedResource?.id);
               if ( resource_mapping ) { 
-                result.resource_mapping = resource_mapping;
                 // updateLicense(local_context.folioClient, resource_mapping.folioId,parsed_record,result)
                 def existing_subscription = folioHelper.okapiGet('/erm/sas/'+resource_mapping.folioId)
                 result = updateAgreement(rms,
@@ -400,6 +399,7 @@ public class ProcessLaserSubscription extends BaseTransformProcess implements Tr
                                          folio_license_id,
                                          folio_pkg_id,
                                          existing_subscription)
+                result.resource_mapping = resource_mapping;
                 result.processStatus = 'COMPLETE'
               }
               else {
