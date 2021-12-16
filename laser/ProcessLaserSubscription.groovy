@@ -363,9 +363,9 @@ public class ProcessLaserSubscription extends BaseTransformProcess implements Tr
 
       if ( fi != null ) {
 
+        def answer = fi.parsedAnswer
         log.debug("apply feedback ${answer}");
 
-        def answer = fi.parsedAnswer
         local_context.processLog.add([ts:System.currentTimeMillis(), msg:"Applying located feedbacko ${answer}"])
         switch ( answer?.answerType ) {
           case 'create':
