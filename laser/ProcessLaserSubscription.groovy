@@ -389,7 +389,7 @@ public class ProcessLaserSubscription extends BaseTransformProcess implements Tr
               def resource_mapping = rms.registerMapping('LASER-SUBSCRIPTION',subscription.globalUID, 'LASERIMPORT','M','AGREEMENTS',answer?.mappedResource?.id);
               if ( resource_mapping ) { 
                 // updateLicense(local_context.folioClient, resource_mapping.folioId,parsed_record,result)
-                def existing_subscription = folioHelper.okapiGet('/erm/sas/'+resource_mapping.folioId)
+                def existing_subscription = folioHelper.okapiGet('/erm/sas/'+resource_mapping.folioId, [:])
                 result = updateAgreement(rms,
                                          local_context,
                                          folioHelper,
@@ -542,10 +542,18 @@ public class ProcessLaserSubscription extends BaseTransformProcess implements Tr
       // II removing this for now - we don't want to always be nuking the periods we have attached 
       // we should compare and carefully merge the data rather than nuke and replace.
       //
-      def period_for_sub = folio_agreement.periods.find { ( ( it.startDate == subscription.startDate ) && ( it.endDate == subscription.endDate ) ) }
+      def period_for_sub = null; // folio_agreement.periods.find { ( ( it.startDate == subscription.startDate ) && ( it.endDate == subscription.endDate ) ) }
+      folio_agreement.periods.each { agg_period ->
+        log.debug("check period ${agg_period} for ${subscription.startDate}/${subscription.endDate}");
+        if ( ( agg_period.startDate.equals(subscription.startDate) ) &&
+             ( agg_period.endDate.equals(subscription.endDate ) ) ) {
+          period_for_sub = agg_period;
+        }
+      }
+
       if ( period_for_sub == null ) {
         log.debug("Unable to locate period for agreement relating to sub - add one");
-        periods.add([ startDate: subscription.startDate, endDate: subscription.endDate ])
+        // periods.add([ startDate: subscription.startDate, endDate: subscription.endDate ])
       }
     } catch (Exception e) {
       println("Warning: Cannot update period information for agreement: ${e.message}")
