@@ -538,11 +538,19 @@ public class ProcessLaserSubscription extends BaseTransformProcess implements Tr
     ArrayList periods = []
 
     try {
-      periods = buildPeriodList(subscription, folio_agreement)
-      // TODO We don't currently allow for changes in packages to make their way into FOLIO
+      // periods = buildPeriodList(subscription, folio_agreement)
+      // II removing this for now - we don't want to always be nuking the periods we have attached 
+      // we should compare and carefully merge the data rather than nuke and replace.
+      //
+      def period_for_sub = folio_agreement.periods.find { ( ( it.startDate == subscription.startDate ) && ( it.endDate == subscription.endDate ) ) }
+      if ( period_for_sub == null ) {
+        log.debug("Unable to locate period for agreement relating to sub - add one");
+        periods.add([ startDate: subscription.startDate, endDate: subscription.endDate ])
+      }
     } catch (Exception e) {
       println("Warning: Cannot update period information for agreement: ${e.message}")
     }
+
     String statusString = null
     Map statusMappings = [:]
     try {
@@ -556,8 +564,12 @@ public class ProcessLaserSubscription extends BaseTransformProcess implements Tr
       println("Warning: Cannot update status information for agreement: ${e.message}")
     }
 
-    // need to add - current items
+    // Look to see if there is an entitlement for the custom package relating to this subscription
     def items = folio_agreement.items;
+    def located_laser_entitlement = items.find { it.resource.reference?.startsWith('LASER:') }
+    if ( located_laser_entitlement != null ) {
+      log.debug("Located entitlement for custom package")
+    }
 
     // items should contain a resource which includes folio_pkg_id
 
