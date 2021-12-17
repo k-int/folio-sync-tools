@@ -436,7 +436,8 @@ public class ProcessLaserSubscription extends BaseTransformProcess implements Tr
       items = [
         [
           resource: [
-            id: folio_pkg_id
+            id: folio_pkg_id,
+            reference: "LASER:${subscription.globalUID}"
           ]
         ]
       ]
@@ -557,6 +558,8 @@ public class ProcessLaserSubscription extends BaseTransformProcess implements Tr
 
     // need to add - current items
     def items = folio_agreement.items;
+
+    // items should contain a resource which includes folio_pkg_id
 
     Map requestBody = [
       'name': subscription.name,
