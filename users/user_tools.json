@@ -1,0 +1,44 @@
+[
+  { 
+    "recordType":"source",
+    "authority":"K-INT",
+    "sourceName":"UserToolsGoogleSheet",
+    "sourceUrl":"https://raw.githubusercontent.com/k-int/folio-sync-tools/main/user/GoogleDocsUsersSource.groovy",
+    "language":"groovy",
+    "packaging":"script",
+    "sourceMD5":"f025ab3d0156e77a432fec7efe6bdec3",
+    "sourceSignedBy":null,
+    "sourceSignature":null,
+    "parameters":{
+      "url":{ "section":"K-INT.UserTools", "key":"usertools.url", "type": "String",  "required":true, "label":"Users URL" }
+    },
+    "emits":"K-INT::GENERIC_USER_RECORD"
+  },
+  {
+    "recordType":"process",
+    "processName":"UserToolsImport",
+    "sourceUrl":"https://raw.githubusercontent.com/k-int/folio-sync-tools/main/user/ProcessUserToolsRecord.groovy",
+    "language":"groovy",
+    "packaging":"script",
+    "sourceMD5":"77437c44621743b152f8026848b00a98",
+    "sourceSignedBy":null,
+    "sourceSignature":null,
+    "accepts":"K-INT::GENERIC_USER_RECORD"
+  },
+  {
+    "recordType":"extract",
+    "extractName":"USERTOOLS_EXTRACT",
+    "source":"UserToolsGoogleSheet",
+    "process":"UserToolsImport"
+  },
+  {
+    "recordType":"mappings",
+    "mappings":[
+    ]
+  },
+  {
+    "recordType":"authorityControl",
+    "authorities":{
+    }
+  }
+]
