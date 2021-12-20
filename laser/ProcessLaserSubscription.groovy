@@ -19,6 +19,7 @@ import mod_remote_sync.ResourceMapping
 import mod_remote_sync.FeedbackItem
 import mod_remote_sync.ImportFeedbackService
 import com.k_int.web.toolkit.settings.AppSetting
+import com.k_int.web.toolkit.refdata.RefdataValue;
 
 @Slf4j
 public class ProcessLaserSubscription extends BaseTransformProcess implements TransformProcess {
@@ -124,23 +125,29 @@ public class ProcessLaserSubscription extends BaseTransformProcess implements Tr
     log.info("ProcessLaserSubscription::process(${resource_id})");
     local_context.processLog.add([ts:System.currentTimeMillis(), msg:"ProcessLaserSubscription::process(${resource_id})"]);
 
+    String sync_titles = AppSetting.findByKey('laser.syncTitles')?.value?.value
     String new_package_name = local_context.parsed_record.name;
 
     ResourceMappingService rms = ctx.getBean('resourceMappingService');
     ImportFeedbackService feedbackHelper = ctx.getBean('importFeedbackService');
 
     try {
-      // Create or update the "custom package" representing the contents of this agreement
-      def folio_package_json = generateFOLIOPackageJSON(new_package_name,local_context.parsed_record,local_context);
-      // def package_details = upsertPackage(folio_package_json, folioHelper);
-
       def package_details = null;
-      if ( folio_package_json.records[0].contentItems?.size() > 0 ) {
-        package_details = upsertPackage(folio_package_json, local_context.folioClient);
-        local_context.processLog.add([ts:System.currentTimeMillis(), msg:"Result of upsert custom package for sub: ${package_details}"]);
+
+      if ( sync_titles?.equalsIgnoreCase('yes') ) {
+        // Create or update the "custom package" representing the contents of this agreement
+        def folio_package_json = generateFOLIOPackageJSON(new_package_name,local_context.parsed_record,local_context);
+
+        if ( folio_package_json.records[0].contentItems?.size() > 0 ) {
+          package_details = upsertPackage(folio_package_json, local_context.folioClient);
+          local_context.processLog.add([ts:System.currentTimeMillis(), msg:"Result of upsert custom package for sub: ${package_details}"]);
+        }
+        else {
+          local_context.processLog.add([ts:System.currentTimeMillis(), msg:"Found no items for package - skip package creation"]);
+        }
       }
       else {
-        local_context.processLog.add([ts:System.currentTimeMillis(), msg:"Found no items for package - skip package creation"]);
+        local_context.processLog.add([ts:System.currentTimeMillis(), msg:"Sync titles is off or unset - skip package creation"]);
       }
 
       def upsert_sub_result = upsertSubscription(rms,

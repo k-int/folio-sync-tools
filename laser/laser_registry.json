@@ -37,7 +37,8 @@
           "identifier":{ "section":"LASER.Integration", "key":"laser.identifier",     "type": "String",   "required":true, "label":"Laser Identifier" },
       "identifierType":{ "section":"LASER.Integration", "key":"laser.identifierType", "type": "String",   "required":true, "label":"Laser Identifier Type" },
         "ermFOLIOUser":{ "section":"LASER.Integration", "key":"laser.ermFOLIOUser",   "type": "String",   "required":true, "label":"FOLIO ERM User"},
-        "ermFOLIOPass":{ "section":"LASER.Integration", "key":"laser.ermFOLIOPass",   "type": "Password", "required":true, "label":"FOLIO ERM Pass"}
+        "ermFOLIOPass":{ "section":"LASER.Integration", "key":"laser.ermFOLIOPass",   "type": "Password", "required":true, "label":"FOLIO ERM Pass"},
+          "syncTitles":{ "section":"LASER.Integration", "key":"laser.syncTitles",     "type": "Refdata",  "required":true, "label":"Should package titles be synced", "vocab":"YN"}
     },
     "emits":"LASER::SUBSCRIPTION"
   },
