@@ -250,17 +250,16 @@ public class ProcessLaserLicense extends BaseTransformProcess implements Transfo
     boolean result = true;
     laser_license?.properties?.each { licprop ->
       log.debug("preflight laser license prop ${licprop}");
-      if ( licprop.value != null ) {
         def mapped_property = rms.lookupMapping('LASER::LICENSE/PROPERTY',licprop.token,'LASERIMPORT')
         if ( mapped_property != null ) {
           // We know about this license property - if it's refdata see if we know about the value mapping
           log.debug("Check license property value for ${licprop}");
           if ( licprop.type == 'Refdata' ) {
             result &= checkValueMapping(policyHelper,
-                          feedbackHelper,false,"LASER::LICENSE/REFDATA/${licprop.refdataCategory}", licprop.value, 'LASERIMPORT', 
+                          feedbackHelper,false,"LASER::LICENSE/REFDATA/${licprop.refdataCategory}", licprop.value ?: 'NO-VALUE', 'LASERIMPORT', 
                              "FOLIO::LICENSE/REFDATA/${mapped_property.folioId}", 
-                             local_context, licprop.value,
-                             [prompt:"Map License refdata value ${licprop.refdataCategory}/${licprop.value} - in target category ${mapped_property.folioId}",
+                             local_context, licprop.value ?: 'NO-VALUE',
+                             [prompt:"Map License refdata value ${licprop.refdataCategory}/${licprop.value?:'NO-VALUE'} - in target category ${mapped_property.folioId}",
                               subtype:"refdata",
                               type:"refdata"
                              ]);
@@ -275,10 +274,6 @@ public class ProcessLaserLicense extends BaseTransformProcess implements Transfo
                               type:"refdata"
                              ]);
         }
-      }
-      else {
-        // Skipping NULL license property value
-      }
     }
   }
 
@@ -288,7 +283,6 @@ public class ProcessLaserLicense extends BaseTransformProcess implements Transfo
 
     laser_license?.properties?.each { licprop ->
       log.debug("Process license property : ${licprop}");
-      if ( licprop.value != null ) {
         String property_name = licprop.token
 
         def mapped_property = rms.lookupMapping('LASER::LICENSE/PROPERTY',licprop.token,'LASERIMPORT')
@@ -300,7 +294,7 @@ public class ProcessLaserLicense extends BaseTransformProcess implements Transfo
               local_context.processLog.add([ts:System.currentTimeMillis(), msg:"adding text property: ${licprop.token}"]);
               result[mapped_property.folioId] = [
                 note: noteParagraphJoiner(licprop.note, licprop.paragraph),
-                value: licprop.value
+                value: licprop.value ?: 'NO-VALUE'
               ]
               break;
             case 'Date':
@@ -328,7 +322,6 @@ public class ProcessLaserLicense extends BaseTransformProcess implements Transfo
           // Skip any unmapped license property
           local_context.processLog.add([ts:System.currentTimeMillis(), msg:"Skipping unmapped license property: ${licprop.token}"]);
         }
-      }
       // "note": "my test note",
       // "paragraph": "\u00a7 3 Abs. 1d:",
       // "refdataCategory": "permissions",
