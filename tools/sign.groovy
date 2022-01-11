@@ -46,9 +46,12 @@ println("Yay: ${pk}");
 
 public static PrivateKey getPrivateKey(String filename) throws Exception {
   println("Load ${filename}");
-  byte[] keyBytes = Files.readAllBytes(Paths.get(filename));
-  X509EncodedKeySpec spec = new X509EncodedKeySpec(keyBytes);
+  String key_text = new File(filename).text
+  byte[] decoded = Base64.decodeBase64(key_text);
+  // X509EncodedKeySpec spec = new X509EncodedKeySpec(keyBytes);
   // PKCS8EncodedKeySpec spec = new PKCS8EncodedKeySpec(keyBytes);
+  // ECPrivateKeySpec spec = new ECPrivateKeySpec(decoded);
+  PKCS8EncodedKeySpec spec = new PKCS8EncodedKeySpec(decoded);
   KeyFactory kf = KeyFactory.getInstance("EC");  // Using EC over RSA now
   return kf.generatePrivate(spec);
 }
