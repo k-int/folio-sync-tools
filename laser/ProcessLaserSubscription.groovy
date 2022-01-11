@@ -444,6 +444,7 @@ public class ProcessLaserSubscription extends BaseTransformProcess implements Tr
         [
           resource: [
             id: folio_pkg_id,
+            authority: 'LASER',
             reference: "LASER:${subscription.globalUID}"
           ]
         ]
@@ -581,9 +582,23 @@ public class ProcessLaserSubscription extends BaseTransformProcess implements Tr
 
     // Look to see if there is an entitlement for the custom package relating to this subscription
     def items = folio_agreement.items;
-    def located_laser_entitlement = items.find { it.resource.reference?.startsWith('LASER:') }
+
+    // reference: "LASER:${subscription.globalUID}"
+    def located_laser_entitlement = items.find { it.resource.reference == "LASER:${subscription.globalUID}".toString() }
     if ( located_laser_entitlement != null ) {
-      log.debug("Located entitlement for custom package")
+      log.debug("Located entitlement for custom package with reference LASER:${subscription.globalUID} - folio package is ${folio_pkg_id}")
+    }
+    else {
+      log.debug("Unable to locate agreement line for LASER:${subscription.globalUID}/${folio_pkg_id} - add it");
+      items.add (
+        [
+          resource: [
+            id: folio_pkg_id,
+            authority: 'LASER',
+            reference: "LASER:${subscription.globalUID}"
+          ]
+        ]
+      );
     }
 
     // items should contain a resource which includes folio_pkg_id
