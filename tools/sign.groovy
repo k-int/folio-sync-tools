@@ -52,9 +52,11 @@ println("got private key ${priv_key}");
 
 byte[] signature1 = getSignature('This is some text'.getBytes(), priv_key)
 println("Signature#1: ${signature1}");
+println("verify: ${verifySignature('This is some text'.getBytes(), signature1, pub_key)}");
 
 byte[] signature2 = getSignature('This is some different text'.getBytes(), priv_key)
 println("Signature#1: ${signature2}");
+println("verify: ${verifySignature('This is some different text'.getBytes(), signature2, pub_key)}");
 
 public static RSAPublicKey getPublicKey(File file) throws Exception {
     String key = new String(Files.readAllBytes(file.toPath()), Charset.defaultCharset());
@@ -94,4 +96,11 @@ public static byte[] getSignature(byte[] bytes, PrivateKey priv_key) {
   sign.initSign(priv_key);
   sign.update(bytes);
   return sign.sign();
+}
+
+public boolean verifySignature(byte[] bytes, byte[] sig, PublicKey pub_key) {
+  Signature sig_inst = Signature.getInstance( "SHA1withRSA" );
+  sig_inst.initVerify( pub_key );
+  sig_inst.update( bytes );
+  ret = sig_inst.verify( sig );
 }
