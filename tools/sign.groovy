@@ -26,7 +26,10 @@ cli.with {
 }
 
 def options = cli.parse(args)
-if (!options) {
+
+String definitions_file = options.arguments()[0]
+
+if (!options || !definitions_file ) {
   return
 }
 
@@ -39,7 +42,7 @@ String private_key_file = ini.get(cfgname, 'private_key', String.class);
 println "sign.groovy"
 if ( private_key_file == null ) {
   println("Invalid configuration - missing private key file");
-  system.exit(1);
+  System.exit(1);
 }
 
 
