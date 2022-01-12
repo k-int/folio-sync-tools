@@ -47,10 +47,9 @@ if ( private_key_file == null ) {
 println("start");
 PublicKey pub_key = getPublicKey(new File('./mypublic.pem'));
 println("got public key ${pub_key}");
-PrivateKey priv_key = getPrivateKey(new File('./myprivate.pem'));
-println("got private key");
+PrivateKey priv_key = getPrivateKey(new File('./myprivate.pcks8'));
+println("got private key ${priv_key}");
 
-println("Yay: ${pk}");
 
 public static RSAPublicKey getPublicKey(File file) throws Exception {
     String key = new String(Files.readAllBytes(file.toPath()), Charset.defaultCharset());
@@ -67,6 +66,9 @@ public static RSAPublicKey getPublicKey(File file) throws Exception {
     return (RSAPublicKey) keyFactory.generatePublic(keySpec);
 }
 
+// N.B this only works to load a pcks8 encoded file and an openssl generated private key is not in that formay
+// and must be converted with
+//  openssl pkcs8 -topk8 -nocrypt -in myprivate.pem -out myprivate.pcks8
 public RSAPrivateKey getPrivateKey(File file) throws Exception {
     String key = new String(Files.readAllBytes(file.toPath()), Charset.defaultCharset());
 

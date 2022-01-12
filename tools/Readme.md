@@ -9,3 +9,7 @@ Make a new RSA Key : https://medium.com/@bn121rajesh/rsa-sign-and-verify-using-o
 
 openssl genrsa -out myprivate.pem 512
 openssl rsa -in myprivate.pem -pubout > mypublic.pem
+
+Generate a pcks8 encoded private key
+openssl pkcs8 -topk8 -nocrypt -in myprivate.pem -out myprivate.pcks8
+
