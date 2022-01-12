@@ -13,7 +13,7 @@ import java.security.spec.*;
 import java.security.interfaces.*;
 import java.nio.charset.Charset;
 import org.apache.commons.codec.binary.Base64;
-
+import groovy.json.JsonSlurper
 
 println("mod-remote-sync sign Config");
 
@@ -47,19 +47,30 @@ if ( private_key_file == null ) {
 
 
 // PrivateKey pk = getPrivateKey(private_key_file);
-println("start");
+//println("start");
 PublicKey pub_key = getPublicKey(new File('./mypublic.pem'));
-println("got public key ${pub_key}");
+//println("got public key ${pub_key}");
 PrivateKey priv_key = getPrivateKey(new File('./myprivate.pcks8'));
-println("got private key ${priv_key}");
+//println("got private key ${priv_key}");
 
-byte[] signature1 = getSignature('This is some text'.getBytes(), priv_key)
-println("Signature#1: ${signature1}");
-println("verify: ${verifySignature('This is some text'.getBytes(), signature1, pub_key)}");
+// byte[] signature1 = getSignature('This is some text'.getBytes(), priv_key)
+//println("Signature#1: ${signature1}");
+//println("verify: ${verifySignature('This is some text'.getBytes(), signature1, pub_key)}");
+//
+//byte[] signature2 = getSignature('This is some different text'.getBytes(), priv_key)
+//println("Signature#1: ${signature2}");
+//println("verify: ${verifySignature('This is some different text'.getBytes(), signature2, pub_key)}");
 
-byte[] signature2 = getSignature('This is some different text'.getBytes(), priv_key)
-println("Signature#1: ${signature2}");
-println("verify: ${verifySignature('This is some different text'.getBytes(), signature2, pub_key)}");
+// Attempt to parse the definitions file
+String definition_json = new File(definitions_file).text
+def jsonSlurper = new JsonSlurper()
+parsed_config = jsonSlurper.parseText(definition_json)
+
+parsed_config.each { defn ->
+  if ( ( defn.recordType == 'source' ) || ( defn.recordType=='process') ) {
+    println("Find and sign ${defn.sourceFile}");
+  }
+}
 
 public static RSAPublicKey getPublicKey(File file) throws Exception {
     String key = new String(Files.readAllBytes(file.toPath()), Charset.defaultCharset());

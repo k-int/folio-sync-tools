@@ -3,6 +3,7 @@
     "recordType":"source",
     "authority":"LASER",
     "sourceName":"LaserLicenses",
+    "sourceFile":"LaserLicensesAgent.groovy",
     "sourceUrl":"https://raw.githubusercontent.com/k-int/folio-sync-tools/main/laser/LaserLicensesAgent.groovy",
     "language":"groovy",
     "packaging":"script",
@@ -24,6 +25,7 @@
     "recordType":"source",
     "authority":"LASER",
     "sourceName":"LaserSubscriptions",
+    "sourceFile":"LaserSubscriptionsAgent.groovy",
     "sourceUrl":"https://raw.githubusercontent.com/k-int/folio-sync-tools/main/laser/LaserSubscriptionsAgent.groovy",
     "language":"groovy",
     "packaging":"script",
@@ -45,6 +47,7 @@
   {
     "recordType":"process",
     "processName":"LaserSubscriptionImport",
+    "sourceFile":"ProcessLaserSubscription.groovy",
     "sourceUrl":"https://raw.githubusercontent.com/k-int/folio-sync-tools/main/laser/ProcessLaserSubscription.groovy",
     "language":"groovy",
     "packaging":"script",
@@ -56,6 +59,7 @@
   {
     "recordType":"process",
     "processName":"LaserLicenseImport",
+    "sourceFile":"ProcessLaserLicense.groovy",
     "sourceUrl":"https://raw.githubusercontent.com/k-int/folio-sync-tools/main/laser/ProcessLaserLicense.groovy",
     "language":"groovy",
     "packaging":"script",
