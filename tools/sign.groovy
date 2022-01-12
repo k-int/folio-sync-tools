@@ -38,6 +38,7 @@ String cfgname=options.c ?: 'default'
 Wini ini = new Wini(new File(System.getProperty("user.home")+'/.config/remote-sync-signing'));
 
 String private_key_file = ini.get(cfgname, 'private_key', String.class);
+String public_key_file = ini.get(cfgname, 'public_key', String.class);
 
 println "sign.groovy"
 if ( private_key_file == null ) {
@@ -48,9 +49,11 @@ if ( private_key_file == null ) {
 
 // PrivateKey pk = getPrivateKey(private_key_file);
 //println("start");
-PublicKey pub_key = getPublicKey(new File('./mypublic.pem'));
+// PublicKey pub_key = getPublicKey(new File('./mypublic.pem'));
+PublicKey pub_key = getPublicKey(new File(public_key_file));
 //println("got public key ${pub_key}");
-PrivateKey priv_key = getPrivateKey(new File('./myprivate.pcks8'));
+// PrivateKey priv_key = getPrivateKey(new File('./myprivate.pcks8'));
+PrivateKey priv_key = getPrivateKey(new File(private_key_file));
 //println("got private key ${priv_key}");
 
 // byte[] signature1 = getSignature('This is some text'.getBytes(), priv_key)
