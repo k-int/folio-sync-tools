@@ -50,6 +50,11 @@ println("got public key ${pub_key}");
 PrivateKey priv_key = getPrivateKey(new File('./myprivate.pcks8'));
 println("got private key ${priv_key}");
 
+byte[] signature1 = getSignature('This is some text'.getBytes(), priv_key)
+println("Signature#1: ${signature1}");
+
+byte[] signature2 = getSignature('This is some different text'.getBytes(), priv_key)
+println("Signature#1: ${signature2}");
 
 public static RSAPublicKey getPublicKey(File file) throws Exception {
     String key = new String(Files.readAllBytes(file.toPath()), Charset.defaultCharset());
@@ -82,4 +87,11 @@ public RSAPrivateKey getPrivateKey(File file) throws Exception {
     KeyFactory keyFactory = KeyFactory.getInstance("RSA");
     PKCS8EncodedKeySpec keySpec = new PKCS8EncodedKeySpec(encoded);
     return (RSAPrivateKey) keyFactory.generatePrivate(keySpec);
+}
+
+public static byte[] getSignature(byte[] bytes, PrivateKey priv_key) {
+  Signature sign = Signature.getInstance("SHA1withRSA");
+  sign.initSign(priv_key);
+  sign.update(bytes);
+  return sign.sign();
 }
