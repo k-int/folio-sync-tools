@@ -10,6 +10,9 @@ import org.ini4j.*;
 import java.nio.file.*;
 import java.security.*;
 import java.security.spec.*;
+import java.security.interfaces.*;
+import java.nio.charset.Charset;
+import org.apache.commons.codec.binary.Base64;
 
 
 println("mod-remote-sync sign Config");
@@ -40,27 +43,41 @@ if ( private_key_file == null ) {
 }
 
 
-PrivateKey pk = getPrivateKey(private_key_file);
+// PrivateKey pk = getPrivateKey(private_key_file);
+println("start");
+PublicKey pub_key = getPublicKey(new File('./mypublic.pem'));
+println("got public key ${pub_key}");
+PrivateKey priv_key = getPrivateKey(new File('./myprivate.pem'));
+println("got private key");
 
 println("Yay: ${pk}");
 
-public static PrivateKey getPrivateKey(String filename) throws Exception {
-  println("Load ${filename}");
-  String key_text = new File(filename).text
-  byte[] decoded = Base64.decodeBase64(key_text);
-  // X509EncodedKeySpec spec = new X509EncodedKeySpec(keyBytes);
-  // PKCS8EncodedKeySpec spec = new PKCS8EncodedKeySpec(keyBytes);
-  // ECPrivateKeySpec spec = new ECPrivateKeySpec(decoded);
-  PKCS8EncodedKeySpec spec = new PKCS8EncodedKeySpec(decoded);
-  KeyFactory kf = KeyFactory.getInstance("EC");  // Using EC over RSA now
-  return kf.generatePrivate(spec);
+public static RSAPublicKey getPublicKey(File file) throws Exception {
+    String key = new String(Files.readAllBytes(file.toPath()), Charset.defaultCharset());
+
+    String publicKeyPEM = key
+      .replace("-----BEGIN PUBLIC KEY-----", "")
+      .replaceAll(System.lineSeparator(), "")
+      .replace("-----END PUBLIC KEY-----", "");
+
+    byte[] encoded = Base64.decodeBase64(publicKeyPEM);
+
+    KeyFactory keyFactory = KeyFactory.getInstance("RSA");
+    X509EncodedKeySpec keySpec = new X509EncodedKeySpec(encoded);
+    return (RSAPublicKey) keyFactory.generatePublic(keySpec);
 }
 
+public RSAPrivateKey getPrivateKey(File file) throws Exception {
+    String key = new String(Files.readAllBytes(file.toPath()), Charset.defaultCharset());
 
+    String privateKeyPEM = key
+      .replace("-----BEGIN PRIVATE KEY-----", "")
+      .replaceAll(System.lineSeparator(), "")
+      .replace("-----END PRIVATE KEY-----", "");
 
-public static PublicKey getPublicKey(String filename) throws Exception {
-  byte[] keyBytes = Files.readAllBytes(Paths.get(filename));
-  X509EncodedKeySpec spec = new X509EncodedKeySpec(keyBytes);
-  KeyFactory kf = KeyFactory.getInstance("EC");  // Using EC over RSA now
-  return kf.generatePublic(spec);
+    byte[] encoded = Base64.decodeBase64(privateKeyPEM);
+
+    KeyFactory keyFactory = KeyFactory.getInstance("RSA");
+    PKCS8EncodedKeySpec keySpec = new PKCS8EncodedKeySpec(encoded);
+    return (RSAPrivateKey) keyFactory.generatePrivate(keySpec);
 }
