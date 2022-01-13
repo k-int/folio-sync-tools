@@ -1,13 +1,3 @@
-mod-remote-sync sign Config
-sign.groovy
-Find and sign LaserLicensesAgent.groovy
-encoded signature: rnB26v/AvX1CceiEKp9PL/JGodUSReJyD5ZG4s0G2V/bIkW2uti/X3Q1ZhMa1QdOIkARDpwjxewWXGbhA8usqA==
-Find and sign LaserSubscriptionsAgent.groovy
-encoded signature: daKU9lumqOS9RYrRg5bxiDW9h/W8KD/ZbnbHUOYXw5FNslnx4DzREuzSgrGA4veVJaUy45lwQMf4Ul/9LpyV8g==
-Find and sign ProcessLaserSubscription.groovy
-encoded signature: dP1TPNOkt4JWmKS4pQ5C0kpQMjbNhj5MlI8ZAVJOIuAvKZkKq7KZ+Vte+f9MYt+wEeGQ23Q2zji1GLWgB1u11Q==
-Find and sign ProcessLaserLicense.groovy
-encoded signature: jhAxNoArXyCaiYurwy7IC5zYR1xS+uzj/NmhJk8ggoatCdKXanRaMErlG4ExGcHLSu+FEhJvgrhKYSRhy1tsaw==
 [
     {
         "recordType": "source",
