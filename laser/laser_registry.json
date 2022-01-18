@@ -7,9 +7,9 @@
         "sourceUrl": "https://raw.githubusercontent.com/k-int/folio-sync-tools/main/laser/LaserLicensesAgent.groovy",
         "language": "groovy",
         "packaging": "script",
-        "sourceMD5": "C48748CE25766F97AF1ABF4933EB9B58",
+        "sourceMD5": "79133D680DEC51F98DB7BDFC8D5A57AC",
         "sourceSignedBy": "k-int",
-        "sourceSignature": "rnB26v/AvX1CceiEKp9PL/JGodUSReJyD5ZG4s0G2V/bIkW2uti/X3Q1ZhMa1QdOIkARDpwjxewWXGbhA8usqA==",
+        "sourceSignature": "756NuuOT0N2Ie9r1HtGY0leE4ccBl7zqtfOH7riHLViREm5Cf9BHOt9bRejcmD1OwKIqe6TQpZPanT5WAQDKDA==",
         "parameters": {
             "url": {
                 "section": "LASER.Integration",
@@ -73,9 +73,9 @@
         "sourceUrl": "https://raw.githubusercontent.com/k-int/folio-sync-tools/main/laser/LaserSubscriptionsAgent.groovy",
         "language": "groovy",
         "packaging": "script",
-        "sourceMD5": "59EAAD605EAB7A41DBEE05EEF3C20036",
+        "sourceMD5": "8F9912A3058B2E3C75172C6540C41087",
         "sourceSignedBy": "k-int",
-        "sourceSignature": "daKU9lumqOS9RYrRg5bxiDW9h/W8KD/ZbnbHUOYXw5FNslnx4DzREuzSgrGA4veVJaUy45lwQMf4Ul/9LpyV8g==",
+        "sourceSignature": "3l82OhmgC7e+Mlva0V6CHLw8DPgE9kB859Chm6ifPZGWxgImGmdo2spz6BdzLVOKlNWBxQqQKIBTmKdv+vL99w==",
         "parameters": {
             "url": {
                 "section": "LASER.Integration",
@@ -144,9 +144,9 @@
         "sourceUrl": "https://raw.githubusercontent.com/k-int/folio-sync-tools/main/laser/ProcessLaserSubscription.groovy",
         "language": "groovy",
         "packaging": "script",
-        "sourceMD5": "A9FE2F6C35DFE18398569FED410422F4",
+        "sourceMD5": "A651F24899DC6A7CFB95FA638E296527",
         "sourceSignedBy": "k-int",
-        "sourceSignature": "dP1TPNOkt4JWmKS4pQ5C0kpQMjbNhj5MlI8ZAVJOIuAvKZkKq7KZ+Vte+f9MYt+wEeGQ23Q2zji1GLWgB1u11Q==",
+        "sourceSignature": "6IfOVC1rsHAP1kVOYDe/dGf5RkQKmuANs7+4YGleCuyYfCERZmuPZMa2u8JT9FQHQKRnT6Ld/ZtvRnF76B5OLQ==",
         "accepts": "LASER::SUBSCRIPTION"
     },
     {
@@ -156,9 +156,9 @@
         "sourceUrl": "https://raw.githubusercontent.com/k-int/folio-sync-tools/main/laser/ProcessLaserLicense.groovy",
         "language": "groovy",
         "packaging": "script",
-        "sourceMD5": "60665A1CF1A0574A2D8E9D58359BED65",
+        "sourceMD5": "2FD769E205003E464AED267239F4AB01",
         "sourceSignedBy": "k-int",
-        "sourceSignature": "jhAxNoArXyCaiYurwy7IC5zYR1xS+uzj/NmhJk8ggoatCdKXanRaMErlG4ExGcHLSu+FEhJvgrhKYSRhy1tsaw==",
+        "sourceSignature": "oXBiOcH4FZajY0APK25vBqBvo44iK73i6nwRPUHKczNzMgUmCD7YqzuSSrMbiN3eJWrnkVubkC8hSG0e3c+ZgA==",
         "accepts": "LASER::LICENSE"
     },
     {

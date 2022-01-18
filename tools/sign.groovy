@@ -17,7 +17,7 @@ import groovy.json.JsonSlurper
 import groovy.json.JsonBuilder
 import javax.xml.bind.DatatypeConverter
 
-println("mod-remote-sync sign Config");
+// println("mod-remote-sync sign Config");
 
 def cli = new CliBuilder(usage: 'sign.groovy')
 
@@ -42,7 +42,7 @@ Wini ini = new Wini(new File(System.getProperty("user.home")+'/.config/remote-sy
 String private_key_file = ini.get(cfgname, 'private_key', String.class);
 String public_key_file = ini.get(cfgname, 'public_key', String.class);
 
-println "sign.groovy"
+// println "sign.groovy"
 if ( private_key_file == null ) {
   println("Invalid configuration - missing private key file");
   System.exit(1);
@@ -73,14 +73,14 @@ parsed_config = jsonSlurper.parseText(definition_json)
 
 parsed_config.each { defn ->
   if ( ( defn.recordType == 'source' ) || ( defn.recordType=='process') ) {
-    println("Find and sign ${defn.sourceFile}");
+    // println("Find and sign ${defn.sourceFile}");
     File f = new File(defn.sourceFile);
     byte[] file_bytes = Files.readAllBytes(f.toPath());
     // println("Loaded ${file_bytes.length} bytes of source");
     byte[] signature = getSignature(file_bytes, priv_key)
     // println("Signature: ${signature}")
     String encoded_sig = Base64.encodeBase64String(signature);
-    println("encoded signature: ${encoded_sig}");
+    // println("encoded signature: ${encoded_sig}");
     // println("decoded ${Base64.decodeBase64(encoded_sig)}");
     byte[] decoded_sig = Base64.decodeBase64(encoded_sig)
     assert Arrays.equals(signature,decoded_sig)
