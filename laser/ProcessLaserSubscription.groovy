@@ -590,21 +590,28 @@ public class ProcessLaserSubscription extends BaseTransformProcess implements Tr
     def items = folio_agreement.items;
 
     // reference: "LASER:${subscription.globalUID}"
-    def located_laser_entitlement = items.find { it.resource?.reference == "LASER:${subscription.globalUID}".toString() }
-    if ( located_laser_entitlement != null ) {
-      log.debug("Located entitlement for custom package with reference LASER:${subscription.globalUID} - folio package is ${folio_pkg_id}")
+    if ( folio_pkg_id != null ) {
+      local_context.processLog.add([ts:System.currentTimeMillis(), msg:"Checking for existing entitlement with reference: LASER.${subscription.globalUID}"]);
+      def located_laser_entitlement = items.find { it.resource?.reference == "LASER:${subscription.globalUID}".toString() }
+      if ( located_laser_entitlement != null ) {
+        local_context.processLog.add([ts:System.currentTimeMillis(), msg: "Located entitlement for custom package with reference LASER:${subscription.globalUID} - folio package is ${folio_pkg_id}"])
+      }
+      else {
+        local_context.processLog.add([ts:System.currentTimeMillis(), msg: "Unable to locate agreement line for LASER:${subscription.globalUID}/${folio_pkg_id} - add it"]);
+
+        items.add (
+          [
+            resource: [
+              id: folio_pkg_id,
+              authority: 'LASER',
+              reference: "LASER:${subscription.globalUID}"
+            ]
+          ]
+        );
+      }
     }
     else {
-      log.debug("Unable to locate agreement line for LASER:${subscription.globalUID}/${folio_pkg_id} - add it");
-      items.add (
-        [
-          resource: [
-            id: folio_pkg_id,
-            authority: 'LASER',
-            reference: "LASER:${subscription.globalUID}"
-          ]
-        ]
-      );
+      local_context.processLog.add([ts:System.currentTimeMillis(), msg: "No local package - is sync titles switched on?"]);
     }
 
     // items should contain a resource which includes folio_pkg_id
