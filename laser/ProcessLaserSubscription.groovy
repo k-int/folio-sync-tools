@@ -131,7 +131,7 @@ public class ProcessLaserSubscription extends BaseTransformProcess implements Tr
     log.info("ProcessLaserSubscription::process(${resource_id})");
     local_context.processLog.add([ts:System.currentTimeMillis(), msg:"ProcessLaserSubscription::process(${resource_id})"]);
 
-    String sync_titles = AppSetting.findByKey('laser.syncTitles')?.value?.value
+    String sync_titles = AppSetting.findByKey('laser.syncTitles')?.value
     String new_package_name = local_context.parsed_record.name;
 
     ResourceMappingService rms = ctx.getBean('resourceMappingService');
@@ -153,7 +153,7 @@ public class ProcessLaserSubscription extends BaseTransformProcess implements Tr
         }
       }
       else {
-        local_context.processLog.add([ts:System.currentTimeMillis(), msg:"Sync titles is off or unset - skip package creation"]);
+        local_context.processLog.add([ts:System.currentTimeMillis(), msg:"Sync titles is off or unset - skip package creation (${sync_titles})"]);
       }
 
       def upsert_sub_result = upsertSubscription(rms,
