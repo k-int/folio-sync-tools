@@ -346,7 +346,7 @@ public class ProcessLaserSubscription extends BaseTransformProcess implements Tr
 
     ResourceMapping rm = rms.lookupMapping('LASER-SUBSCRIPTION',subscription.globalUID,'LASERIMPORT');
 
-    def result = null;
+    def result = [:];
 
     if ( rm != null ) {
       // def existing_subscription = lookupAgreement(subscription.globalUID, folioHelper)

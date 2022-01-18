@@ -144,9 +144,9 @@
         "sourceUrl": "https://raw.githubusercontent.com/k-int/folio-sync-tools/main/laser/ProcessLaserSubscription.groovy",
         "language": "groovy",
         "packaging": "script",
-        "sourceMD5": "444328D50E78CD456610192440CFDA60",
+        "sourceMD5": "C0B47600035E0934F59490A831A384B6",
         "sourceSignedBy": "k-int",
-        "sourceSignature": "GCJaD/+v/hvJyZSCjixW0u4VmkBszIDd1OzilLdWLSmuTRVRQ3l2KRN1lNvr42k33kWIyQQ9Jww/1TxhUCI25Q==",
+        "sourceSignature": "5FITIMtZve3o4sr+1Cn7PLAzP3FYXZaLKcK8K8NzsBDQs9426oTBh6/mYTn0jZy51SjkmSSwLmFsLWgwDeqzQw==",
         "accepts": "LASER::SUBSCRIPTION"
     },
     {
