@@ -439,7 +439,7 @@ public class ProcessLaserSubscription extends BaseTransformProcess implements Tr
                       Map subscription, 
                       String folio_license_id, 
                       String folio_pkg_id) {
-    def result = null;
+    def result = [:];
     println("createAgreement(${subscription.name},${folio_license_id},${folio_pkg_id}...)");
 
     // We only add the custom package as an agreement line if the data from folio contained contentItems
@@ -497,7 +497,8 @@ public class ProcessLaserSubscription extends BaseTransformProcess implements Tr
       );
 
     } catch (Exception e) {
-      println("FATAL ERROR: Skipping agreement creation: ${e.message}")
+      log.error("Problem creating sub",e);
+      local_context.processLog.add([ts:System.currentTimeMillis(), msg:"FATAL ERROR: Skipping agreement creation: ${e.message}"])
     }
 
     return result;
