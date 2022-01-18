@@ -13,6 +13,12 @@ import java.security.MessageDigest
 
 public class LaserSubscriptionsAgent implements RemoteSyncActivity {
 
+  public Map getMetadata() {
+    return [
+      version:'101'
+    ]
+  }
+
   private String makeAuth(String path, String timestamp, String nonce, String q, String secret) {
     String string_to_hash = "GET${path}${timestamp}${nonce}${q}".toString()
 

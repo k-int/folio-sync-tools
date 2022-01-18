@@ -22,6 +22,12 @@ public class ProcessLaserLicense extends BaseTransformProcess implements Transfo
 
   public static String MANUAL_POLICY_MESSAGE='The manual resource mapping policy applies - Operator needs to choose if the system should Create a new License, Map to an Existing one, or Ignore this license';
 
+  public Map getMetadata() {
+    return [
+      version:'101'
+    ]
+  }
+
   public Map preflightCheck(String resource_id,
                             byte[] input_record,
                             ApplicationContext ctx,

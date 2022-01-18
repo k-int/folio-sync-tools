@@ -30,6 +30,12 @@ public class ProcessLaserSubscription extends BaseTransformProcess implements Tr
     'erm.packages.collection.import'
   ]
 
+  public Map getMetadata() {
+    return [
+      version:'101'
+    ]
+  }
+
   public Map preflightCheck(String resource_id,
                             byte[] input_record,
                             ApplicationContext ctx,
@@ -584,7 +590,7 @@ public class ProcessLaserSubscription extends BaseTransformProcess implements Tr
     def items = folio_agreement.items;
 
     // reference: "LASER:${subscription.globalUID}"
-    def located_laser_entitlement = items.find { it.resource.reference == "LASER:${subscription.globalUID}".toString() }
+    def located_laser_entitlement = items.find { it.resource?.reference == "LASER:${subscription.globalUID}".toString() }
     if ( located_laser_entitlement != null ) {
       log.debug("Located entitlement for custom package with reference LASER:${subscription.globalUID} - folio package is ${folio_pkg_id}")
     }
