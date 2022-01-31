@@ -32,6 +32,8 @@ def options = cli.parse(args)
 String definitions_file = options.arguments()[0]
 
 if (!options || !definitions_file ) {
+  System.err.println("No config or no definitions file");
+  System.err.println("usage: groovy sign.groovy definitions_file.json");
   return
 }
 

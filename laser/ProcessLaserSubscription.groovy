@@ -194,7 +194,11 @@ public class ProcessLaserSubscription extends BaseTransformProcess implements Tr
     return import_response;
   }
 
-  private Map generateFOLIOPackageJSON(String generated_package_name, Map subscription, Map local_context) {
+  private Map generateFOLIOPackageJSON(String generated_package_name, 
+                                       Map subscription, 
+                                       Map local_context) {
+
+    local_context.processLog.add([ts:System.currentTimeMillis(), msg:"generateFOLIOPackageJSON(${generated_package_name},...) - laser reference: ${subscription.globalUID}"]);
 
     def pkg_data = [
       "header": [
@@ -226,6 +230,9 @@ public class ProcessLaserSubscription extends BaseTransformProcess implements Tr
 
     // For each package (So far only ever seen one, but hey)
     subscription.packages.each { pkg ->
+
+      local_context.processLog.add([ts:System.currentTimeMillis(), msg:"Adding package..."]);
+
       // Iterate over the titles in the package and add a content item for each one
       pkg.issueEntitlements.each { ie ->
 
@@ -429,7 +436,7 @@ public class ProcessLaserSubscription extends BaseTransformProcess implements Tr
       else {
         local_context.processLog.add([ts:System.currentTimeMillis(), msg:"Process blocked awaiting feedback with correlation id ${feedback_correlation_id}"]);
       }
-    }
+    }, blank: false)
     return result;
   }
 
@@ -461,7 +468,7 @@ public class ProcessLaserSubscription extends BaseTransformProcess implements Tr
     }
 
     try {
-      ArrayList periods = buildPeriodList(subscription, null)
+      ArrayList periods = buildPeriodList(subscription, null, local_context)
       // Map statusMappings = pm.getAgreementStatusMap(subscription.status)
       // String statusString = statusMappings.get('agreement.status')
       String statusString = 'Draft';
@@ -487,7 +494,7 @@ public class ProcessLaserSubscription extends BaseTransformProcess implements Tr
           name:subscription.name,
           agreementStatus:statusString,
           reasonForClosure: reasonForClosure,
-          description:"Imported from LAS:eR on ${new Date()}",
+          description:"Created by remote-sync from LAS:eR on ${new Date()}",
           localReference: subscription.globalUID,
           periods: periods,
           linkedLicenses: linked_licenses,
@@ -553,7 +560,7 @@ public class ProcessLaserSubscription extends BaseTransformProcess implements Tr
     ArrayList periods = []
 
     try {
-      // periods = buildPeriodList(subscription, folio_agreement)
+      // periods = buildPeriodList(subscription, folio_agreement, local_context)
       // II removing this for now - we don't want to always be nuking the periods we have attached 
       // we should compare and carefully merge the data rather than nuke and replace.
       //
@@ -620,6 +627,7 @@ public class ProcessLaserSubscription extends BaseTransformProcess implements Tr
     Map requestBody = [
       'name': subscription.name,
       'linkedLicenses': linkedLicenses,
+      'description': "${folio_agreement.description?:''}\nUpdated by remote-sync from LAS:eR on ${new Date()}"
       'periods': periods,
       'items': items
     ]
@@ -634,9 +642,9 @@ public class ProcessLaserSubscription extends BaseTransformProcess implements Tr
     return result;
   }
 
+  public ArrayList buildPeriodList(Map subscription, Map folioAgreement, Map local_context) {
 
-  public ArrayList buildPeriodList(Map subscription, Map folioAgreement) {
-    println("buildPeriodList ::${subscription.globalUID}")
+    local_context.processLog.add([ts:System.currentTimeMillis(), msg: "buildPeriodList ::${subscription.globalUID} / laser_start:${subscription.startDate} laser_end:${subscription.endDate}"])
 
     if (subscription.startDate == null) {
       throw new RuntimeException ("There is no startDate for this subscription")
