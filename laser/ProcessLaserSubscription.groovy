@@ -436,7 +436,7 @@ public class ProcessLaserSubscription extends BaseTransformProcess implements Tr
       else {
         local_context.processLog.add([ts:System.currentTimeMillis(), msg:"Process blocked awaiting feedback with correlation id ${feedback_correlation_id}"]);
       }
-    }, blank: false)
+    }
     return result;
   }
 
