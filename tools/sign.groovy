@@ -90,6 +90,13 @@ parsed_config.each { defn ->
     defn.sourceSignedBy='k-int'
     defn.sourceSignature=encoded_sig
     defn.sourceMD5=getMD5(file_bytes)
+    defn.pubDate="${new Date()}"
+    if ( defn.version != null ) {
+      defn.version = defn.version + 1
+    }
+    else {
+      defn.version = 1
+    }
   }
 }
 

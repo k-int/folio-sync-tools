@@ -63,7 +63,9 @@
                 "label": "FOLIO ERM Pass"
             }
         },
-        "emits": "LASER::LICENSE"
+        "emits": "LASER::LICENSE",
+        "pubDate": "Mon Jan 31 09:09:02 GMT 2022",
+        "version": 1
     },
     {
         "recordType": "source",
@@ -135,7 +137,9 @@
                 "vocab": "YN"
             }
         },
-        "emits": "LASER::SUBSCRIPTION"
+        "emits": "LASER::SUBSCRIPTION",
+        "pubDate": "Mon Jan 31 09:09:02 GMT 2022",
+        "version": 1
     },
     {
         "recordType": "process",
@@ -147,7 +151,9 @@
         "sourceMD5": "FE237BCE3C1B71705867B9F6912C4985",
         "sourceSignedBy": "k-int",
         "sourceSignature": "p1sDURgUqrujfQxbb8Om6W/QEbmgOeqjm78W5T5YOzlPiEolvg1331Q6aNrPF6UOYgdTYSksPEyHo4kpC3Q6OA==",
-        "accepts": "LASER::SUBSCRIPTION"
+        "accepts": "LASER::SUBSCRIPTION",
+        "pubDate": "Mon Jan 31 09:09:02 GMT 2022",
+        "version": 1
     },
     {
         "recordType": "process",
@@ -159,7 +165,9 @@
         "sourceMD5": "2FD769E205003E464AED267239F4AB01",
         "sourceSignedBy": "k-int",
         "sourceSignature": "oXBiOcH4FZajY0APK25vBqBvo44iK73i6nwRPUHKczNzMgUmCD7YqzuSSrMbiN3eJWrnkVubkC8hSG0e3c+ZgA==",
-        "accepts": "LASER::LICENSE"
+        "accepts": "LASER::LICENSE",
+        "pubDate": "Mon Jan 31 09:09:02 GMT 2022",
+        "version": 1
     },
     {
         "recordType": "extract",
