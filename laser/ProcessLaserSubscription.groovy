@@ -627,7 +627,7 @@ public class ProcessLaserSubscription extends BaseTransformProcess implements Tr
     Map requestBody = [
       'name': subscription.name,
       'linkedLicenses': linkedLicenses,
-      'description': "${folio_agreement.description?:''}\nUpdated by remote-sync from LAS:eR on ${new Date()}"
+      'description': "${folio_agreement.description?:''}\nUpdated by remote-sync from LAS:eR on ${new Date()}",
       'periods': periods,
       'items': items
     ]
