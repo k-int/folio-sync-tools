@@ -131,7 +131,10 @@
       { "srcCtx":"LASER::LICENSE/REFDATA/y.n",   "srcValue":"No",    "mappingContext":"LASERIMPORT", "targetCtx":"FOLIO::LICENSE/REFDATA/y.n",     "targetValue":"No" },
       { "srcCtx":"LASER::LICENSE/REFDATA/y.n.o", "srcValue":"Yes",   "mappingContext":"LASERIMPORT", "targetCtx":"FOLIO::LICENSE/REFDATA/y.n.o",   "targetValue":"Yes" },
       { "srcCtx":"LASER::LICENSE/REFDATA/y.n.o", "srcValue":"No",    "mappingContext":"LASERIMPORT", "targetCtx":"FOLIO::LICENSE/REFDATA/y.n.o",   "targetValue":"No" },
-      { "srcCtx":"LASER::LICENSE/REFDATA/y.n.o", "srcValue":"Other", "mappingContext":"LASERIMPORT", "targetCtx":"FOLIO::LICENSE/REFDATA/y.n.o",   "targetValue":"Other" }
+      { "srcCtx":"LASER::LICENSE/REFDATA/y.n.o", "srcValue":"Other", "mappingContext":"LASERIMPORT", "targetCtx":"FOLIO::LICENSE/REFDATA/y.n.o",   "targetValue":"Other" },
+
+      { "srcCtx":"LASER::LICENSE/PROPERTY",  "srcValue":"EZB tagging (yellow)", "mappingContext":"LASERIMPORT", "targetCtx":"FOLIO::SUBSCRIPTION/PROPERTY",   "targetValue":"EZB tagging (yellow)" },
+      { "srcCtx":"LASER::LICENSE/PROPERTY",  "srcValue":"DBS subject group",    "mappingContext":"LASERIMPORT", "targetCtx":"FOLIO::SUBSCRIPTION/PROPERTY",   "targetValue":"DBS subject group" }
     ]
   },
   {

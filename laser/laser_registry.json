@@ -64,7 +64,7 @@
             }
         },
         "emits": "LASER::LICENSE",
-        "pubDate": "Mon Jan 31 09:40:28 GMT 2022",
+        "pubDate": "Wed Feb 02 14:25:41 GMT 2022",
         "version": 1
     },
     {
@@ -138,7 +138,7 @@
             }
         },
         "emits": "LASER::SUBSCRIPTION",
-        "pubDate": "Mon Jan 31 09:40:28 GMT 2022",
+        "pubDate": "Wed Feb 02 14:25:41 GMT 2022",
         "version": 1
     },
     {
@@ -148,11 +148,11 @@
         "sourceUrl": "https://raw.githubusercontent.com/k-int/folio-sync-tools/main/laser/ProcessLaserSubscription.groovy",
         "language": "groovy",
         "packaging": "script",
-        "sourceMD5": "AAC326622E00CC2BA3BC01B4A4410380",
+        "sourceMD5": "33FF72B7DF0CF6A2483D20E6DD5FA801",
         "sourceSignedBy": "k-int",
-        "sourceSignature": "wMsbEvCbEKMTFMPyNBsf3/y41lPOzC7PXqNLIcHGWBBITB1OgpLDyMVP2mw2PTvCHU4/esIIZDA0IFhj8uHEgQ==",
+        "sourceSignature": "tb1XkJ/oUamvwJI3y5KiX9kgszdoN9O5G7//PZaSVM7/OM8KG7lWV6L3PYWH3jltx/S8rnYRhEq7a/cOlhic6Q==",
         "accepts": "LASER::SUBSCRIPTION",
-        "pubDate": "Mon Jan 31 09:40:28 GMT 2022",
+        "pubDate": "Wed Feb 02 14:25:41 GMT 2022",
         "version": 1
     },
     {
@@ -166,7 +166,7 @@
         "sourceSignedBy": "k-int",
         "sourceSignature": "oXBiOcH4FZajY0APK25vBqBvo44iK73i6nwRPUHKczNzMgUmCD7YqzuSSrMbiN3eJWrnkVubkC8hSG0e3c+ZgA==",
         "accepts": "LASER::LICENSE",
-        "pubDate": "Mon Jan 31 09:40:28 GMT 2022",
+        "pubDate": "Wed Feb 02 14:25:41 GMT 2022",
         "version": 1
     },
     {
@@ -498,6 +498,20 @@
                 "mappingContext": "LASERIMPORT",
                 "targetCtx": "FOLIO::LICENSE/REFDATA/y.n.o",
                 "targetValue": "Other"
+            },
+            {
+                "srcCtx": "LASER::LICENSE/PROPERTY",
+                "srcValue": "EZB tagging (yellow)",
+                "mappingContext": "LASERIMPORT",
+                "targetCtx": "FOLIO::SUBSCRIPTION/PROPERTY",
+                "targetValue": "EZB tagging (yellow)"
+            },
+            {
+                "srcCtx": "LASER::LICENSE/PROPERTY",
+                "srcValue": "DBS subject group",
+                "mappingContext": "LASERIMPORT",
+                "targetCtx": "FOLIO::SUBSCRIPTION/PROPERTY",
+                "targetValue": "DBS subject group"
             }
         ]
     },
