@@ -64,7 +64,7 @@
             }
         },
         "emits": "LASER::LICENSE",
-        "pubDate": "Mon Feb 07 22:31:09 GMT 2022",
+        "pubDate": "Mon Feb 07 23:29:37 GMT 2022",
         "version": 1
     },
     {
@@ -138,7 +138,7 @@
             }
         },
         "emits": "LASER::SUBSCRIPTION",
-        "pubDate": "Mon Feb 07 22:31:09 GMT 2022",
+        "pubDate": "Mon Feb 07 23:29:37 GMT 2022",
         "version": 1
     },
     {
@@ -154,7 +154,7 @@
         "accepts": "LASER::SUBSCRIPTION",
         "parameters": {
             "custpropsHandling": {
-                "section": "LASER.Integration",
+                "section": "Shared",
                 "key": "custpropsHandling",
                 "type": "Refdata",
                 "required": true,
@@ -162,7 +162,7 @@
                 "vocab": "YN"
             },
             "refdataHandling": {
-                "section": "LASER.Integration",
+                "section": "Shared",
                 "key": "refdataHandling",
                 "type": "Refdata",
                 "required": true,
@@ -170,7 +170,7 @@
                 "vocab": "YN"
             }
         },
-        "pubDate": "Mon Feb 07 22:31:09 GMT 2022",
+        "pubDate": "Mon Feb 07 23:29:37 GMT 2022",
         "version": 1
     },
     {
@@ -186,7 +186,7 @@
         "accepts": "LASER::LICENSE",
         "parameters": {
             "custpropsHandling": {
-                "section": "LASER.Integration",
+                "section": "Shared",
                 "key": "custpropsHandling",
                 "type": "Refdata",
                 "required": true,
@@ -194,7 +194,7 @@
                 "vocab": "YN"
             },
             "refdataHandling": {
-                "section": "LASER.Integration",
+                "section": "Shared",
                 "key": "refdataHandling",
                 "type": "Refdata",
                 "required": true,
@@ -202,7 +202,7 @@
                 "vocab": "YN"
             }
         },
-        "pubDate": "Mon Feb 07 22:31:09 GMT 2022",
+        "pubDate": "Mon Feb 07 23:29:37 GMT 2022",
         "version": 1
     },
     {

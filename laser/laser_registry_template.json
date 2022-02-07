@@ -56,8 +56,8 @@
     "sourceSignature":null,
     "accepts":"LASER::SUBSCRIPTION",
     "parameters":{
-          "custpropsHandling":{ "section":"LASER.Integration", "key":"custpropsHandling", "type": "Refdata",  "required":true, "label":"Require Custom property Mapping", "vocab":"YN"},
-          "refdataHandling":{ "section":"LASER.Integration", "key":"refdataHandling", "type": "Refdata",  "required":true, "label":"Require Refdata Value Mapping", "vocab":"YN"}
+          "custpropsHandling":{ "section":"Shared", "key":"custpropsHandling", "type": "Refdata",  "required":true, "label":"Require Custom property Mapping", "vocab":"YN"},
+          "refdataHandling":{ "section":"Shared", "key":"refdataHandling", "type": "Refdata",  "required":true, "label":"Require Refdata Value Mapping", "vocab":"YN"}
     }
   },
   {
@@ -72,8 +72,8 @@
     "sourceSignature":null,
     "accepts":"LASER::LICENSE",
     "parameters":{
-          "custpropsHandling":{ "section":"LASER.Integration", "key":"custpropsHandling", "type": "Refdata",  "required":true, "label":"Require Custom property Mapping", "vocab":"YN"},
-          "refdataHandling":{ "section":"LASER.Integration", "key":"refdataHandling", "type": "Refdata",  "required":true, "label":"Require Refdata Value Mapping", "vocab":"YN"}
+          "custpropsHandling":{ "section":"Shared", "key":"custpropsHandling", "type": "Refdata",  "required":true, "label":"Require Custom property Mapping", "vocab":"YN"},
+          "refdataHandling":{ "section":"Shared", "key":"refdataHandling", "type": "Refdata",  "required":true, "label":"Require Refdata Value Mapping", "vocab":"YN"}
     }
   },
   { 
