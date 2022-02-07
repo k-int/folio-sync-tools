@@ -198,7 +198,7 @@ public class ProcessLaserSubscription extends BaseTransformProcess implements Tr
                                        Map subscription, 
                                        Map local_context) {
 
-    local_context.processLog.add([ts:System.currentTimeMillis(), msg:"generateFOLIOPackageJSON(${generated_package_name},...) - laser reference: ${subscription.globalUID}"]);
+    local_context.processLog.add([ts:System.currentTimeMillis(), msg:"generateFOLIOPackageJSON(${generated_package_name},...) - laser reference: ${subscription.globalUID}. Package count is ${subscription.packages?.size()}"]);
 
     def pkg_data = [
       "header": [
