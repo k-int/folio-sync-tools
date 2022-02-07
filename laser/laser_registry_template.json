@@ -54,7 +54,11 @@
     "sourceMD5":"",
     "sourceSignedBy":null,
     "sourceSignature":null,
-    "accepts":"LASER::SUBSCRIPTION"
+    "accepts":"LASER::SUBSCRIPTION",
+    "parameters":{
+          "custpropsHandling":{ "section":"LASER.Integration", "key":"custpropsHandling", "type": "Refdata",  "required":true, "label":"Require Custom property Mapping", "vocab":"YN"},
+          "refdataHandling":{ "section":"LASER.Integration", "key":"refdataHandling", "type": "Refdata",  "required":true, "label":"Require Refdata Value Mapping", "vocab":"YN"}
+    }
   },
   {
     "recordType":"process",
@@ -66,7 +70,11 @@
     "sourceMD5":"",
     "sourceSignedBy":null,
     "sourceSignature":null,
-    "accepts":"LASER::LICENSE"
+    "accepts":"LASER::LICENSE",
+    "parameters":{
+          "custpropsHandling":{ "section":"LASER.Integration", "key":"custpropsHandling", "type": "Refdata",  "required":true, "label":"Require Custom property Mapping", "vocab":"YN"},
+          "refdataHandling":{ "section":"LASER.Integration", "key":"refdataHandling", "type": "Refdata",  "required":true, "label":"Require Refdata Value Mapping", "vocab":"YN"}
+    }
   },
   { 
     "recordType":"extract",
