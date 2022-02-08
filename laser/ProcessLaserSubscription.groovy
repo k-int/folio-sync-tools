@@ -722,7 +722,8 @@ public class ProcessLaserSubscription extends BaseTransformProcess implements Tr
           log.debug("Check subscription property value for ${subprop}");
           if ( subprop.type == 'Refdata' ) {
 
-            boolean is_mandatory = local_context.require_mapped_refdata == Boolean.FALSE : false ? true;
+            boolean is_mandatory = ( local_context.require_mapped_refdata == Boolean.FALSE ? false : true ) ;
+
             result &= checkValueMapping(policyHelper,
                           feedbackHelper,is_mandatory,"LASER::SUBSCRIPTION/REFDATA/${subprop.refdataCategory}", subprop.value, 'LASERIMPORT',
                              "FOLIO::SUBSCRIPTION/REFDATA/${mapped_property.folioId}",
@@ -736,7 +737,7 @@ public class ProcessLaserSubscription extends BaseTransformProcess implements Tr
         }
         else {
 
-          boolean is_mandatory = local_context.require_mapped_custprops == Boolean.FALSE : false ? true;
+          boolean is_mandatory = local_context.require_mapped_custprops == Boolean.FALSE ? false : true;
 
           // We've not seen this subscription property before - add it to the list of potentials
           result &= checkValueMapping(policyHelper,

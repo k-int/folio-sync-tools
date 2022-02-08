@@ -268,7 +268,7 @@ public class ProcessLaserLicense extends BaseTransformProcess implements Transfo
           // We know about this license property - if it's refdata see if we know about the value mapping
           log.debug("Check license property value for ${licprop}");
           if ( licprop.type == 'Refdata' ) {
-          boolean is_mandatory = local_context.require_mapped_refdata == Boolean.FALSE : false ? true;
+            boolean is_mandatory = local_context.require_mapped_refdata == Boolean.FALSE ? false : true;
             result &= checkValueMapping(policyHelper,
                           feedbackHelper,is_mandatory,"LASER::LICENSE/REFDATA/${licprop.refdataCategory}", licprop.value ?: 'NO-VALUE', 'LASERIMPORT', 
                              "FOLIO::LICENSE/REFDATA/${mapped_property.folioId}", 
@@ -282,7 +282,7 @@ public class ProcessLaserLicense extends BaseTransformProcess implements Transfo
         }
         else {
           // We've not seen this license property before - add it to the list of potentials
-          boolean is_mandatory = local_context.require_mapped_custprops == Boolean.FALSE : false ? true;
+          boolean is_mandatory = local_context.require_mapped_custprops == Boolean.FALSE ? false : true;
           result &= checkValueMapping(policyHelper,
                           feedbackHelper,is_mandatory,'LASER::LICENSE/PROPERTY', licprop.token, 'LASERIMPORT', 'FOLIO::LICENSE/PROPERTY', local_context, licprop.token,
                              [prompt:"Map Optional License Property ${licprop.token}(${licprop.type})",
