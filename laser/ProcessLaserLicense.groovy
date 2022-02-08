@@ -45,7 +45,7 @@ public class ProcessLaserLicense extends BaseTransformProcess implements Transfo
 
       local_context.require_mapped_custprops = (require_mapped_custprops == 'yes' ? Boolean.TRUE : Boolean.FALSE )
       local_context.require_mapped_refdata = (require_mapped_refdata == 'yes' ? Boolean.TRUE : Boolean.FALSE )
-      local_context.processLog.add([ts:System.currentTimeMillis(), msg:"Require mapped custprops: ${local_context.require_mapped_custprops} refdata: ${local_context.require_mapped_refdata}");
+      local_context.processLog.add([ts:System.currentTimeMillis(), msg:"Require mapped custprops: ${local_context.require_mapped_custprops} refdata: ${local_context.require_mapped_refdata}"]);
 
       log.debug("user: ${folio_user},..., okapi_host:${okapi_host}, okapi_port:${okapi_port}");
 

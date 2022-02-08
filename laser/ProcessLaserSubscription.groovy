@@ -60,7 +60,7 @@ public class ProcessLaserSubscription extends BaseTransformProcess implements Tr
       local_context.require_mapped_custprops = (require_mapped_custprops == 'yes' ? Boolean.TRUE : Boolean.FALSE )
       local_context.require_mapped_refdata = (require_mapped_refdata == 'yes' ? Boolean.TRUE : Boolean.FALSE )
 
-      local_context.processLog.add([ts:System.currentTimeMillis(), msg:"Require mapped custprops: ${local_context.require_mapped_custprops} refdata: ${local_context.require_mapped_refdata}");
+      local_context.processLog.add([ts:System.currentTimeMillis(), msg:"Require mapped custprops: ${local_context.require_mapped_custprops} refdata: ${local_context.require_mapped_refdata}"]);
 
       FolioClient fc = new FolioClientImpl(okapi_host, okapi_port, local_context.tenant, folio_user, folio_pass, 60000);
       fc.ensureLogin();
