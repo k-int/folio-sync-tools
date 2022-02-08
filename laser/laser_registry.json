@@ -64,7 +64,7 @@
             }
         },
         "emits": "LASER::LICENSE",
-        "pubDate": "Mon Feb 07 23:29:37 GMT 2022",
+        "pubDate": "Tue Feb 08 11:06:56 GMT 2022",
         "version": 1
     },
     {
@@ -138,7 +138,7 @@
             }
         },
         "emits": "LASER::SUBSCRIPTION",
-        "pubDate": "Mon Feb 07 23:29:37 GMT 2022",
+        "pubDate": "Tue Feb 08 11:06:56 GMT 2022",
         "version": 1
     },
     {
@@ -148,14 +148,14 @@
         "sourceUrl": "https://raw.githubusercontent.com/k-int/folio-sync-tools/main/laser/ProcessLaserSubscription.groovy",
         "language": "groovy",
         "packaging": "script",
-        "sourceMD5": "3B77708A4B2BA9145239BFC75A93ADD2",
+        "sourceMD5": "0A3E9E11E6177C935188776F229D2A2F",
         "sourceSignedBy": "k-int",
-        "sourceSignature": "Fm9lzdAA9jEufhpSrFYXEZlARHz91XAhWrb5yyKq/NedIBFR6Hrx6S91gJacNRjSiV7pxl+C+3+8jC1bRy1tEQ==",
+        "sourceSignature": "uc+FYV+J0/u850mlmIkYa5beKdDOS/tYV/6eglA/S677wgvp+Vzc8Mv/R8uKujr/9umtuqs2OI+iRg9IWz8V/Q==",
         "accepts": "LASER::SUBSCRIPTION",
         "parameters": {
             "custpropsHandling": {
                 "section": "Shared",
-                "key": "custpropsHandling",
+                "key": "mandatoryCustpropsMapping",
                 "type": "Refdata",
                 "required": true,
                 "label": "Require Custom property Mapping",
@@ -163,14 +163,14 @@
             },
             "refdataHandling": {
                 "section": "Shared",
-                "key": "refdataHandling",
+                "key": "mandatoryRefdataMapping",
                 "type": "Refdata",
                 "required": true,
                 "label": "Require Refdata Value Mapping",
                 "vocab": "YN"
             }
         },
-        "pubDate": "Mon Feb 07 23:29:37 GMT 2022",
+        "pubDate": "Tue Feb 08 11:06:56 GMT 2022",
         "version": 1
     },
     {
@@ -180,14 +180,14 @@
         "sourceUrl": "https://raw.githubusercontent.com/k-int/folio-sync-tools/main/laser/ProcessLaserLicense.groovy",
         "language": "groovy",
         "packaging": "script",
-        "sourceMD5": "2FD769E205003E464AED267239F4AB01",
+        "sourceMD5": "8403D0A0D513D8679D4CB76B9B62B10C",
         "sourceSignedBy": "k-int",
-        "sourceSignature": "oXBiOcH4FZajY0APK25vBqBvo44iK73i6nwRPUHKczNzMgUmCD7YqzuSSrMbiN3eJWrnkVubkC8hSG0e3c+ZgA==",
+        "sourceSignature": "PjxUrbioFK8zLsX5XqNoNvBkhmvSlprrUMb5hlagIU8DkOsqeMPWlT6qvJtUciFxlcM2MB5SkcQXq7/0NPEwwA==",
         "accepts": "LASER::LICENSE",
         "parameters": {
             "custpropsHandling": {
                 "section": "Shared",
-                "key": "custpropsHandling",
+                "key": "mandatoryCustpropsMapping",
                 "type": "Refdata",
                 "required": true,
                 "label": "Require Custom property Mapping",
@@ -195,14 +195,14 @@
             },
             "refdataHandling": {
                 "section": "Shared",
-                "key": "refdataHandling",
+                "key": "mandatoryRefdataMapping",
                 "type": "Refdata",
                 "required": true,
                 "label": "Require Refdata Value Mapping",
                 "vocab": "YN"
             }
         },
-        "pubDate": "Mon Feb 07 23:29:37 GMT 2022",
+        "pubDate": "Tue Feb 08 11:06:56 GMT 2022",
         "version": 1
     },
     {
