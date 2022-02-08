@@ -60,6 +60,8 @@ public class ProcessLaserSubscription extends BaseTransformProcess implements Tr
       local_context.require_mapped_custprops = (require_mapped_custprops == 'yes' ? Boolean.TRUE : Boolean.FALSE )
       local_context.require_mapped_refdata = (require_mapped_refdata == 'yes' ? Boolean.TRUE : Boolean.FALSE )
 
+      local_context.processLog.add([ts:System.currentTimeMillis(), msg:"Require mapped custprops: ${local_context.require_mapped_custprops} refdata: ${local_context.require_mapped_refdata}");
+
       FolioClient fc = new FolioClientImpl(okapi_host, okapi_port, local_context.tenant, folio_user, folio_pass, 60000);
       fc.ensureLogin();
 
@@ -719,8 +721,10 @@ public class ProcessLaserSubscription extends BaseTransformProcess implements Tr
           // We know about this subscription property - if it's refdata see if we know about the value mapping
           log.debug("Check subscription property value for ${subprop}");
           if ( subprop.type == 'Refdata' ) {
+
+            boolean is_mandatory = local_context.require_mapped_refdata == Boolean.FALSE : false ? true;
             result &= checkValueMapping(policyHelper,
-                          feedbackHelper,false,"LASER::SUBSCRIPTION/REFDATA/${subprop.refdataCategory}", subprop.value, 'LASERIMPORT',
+                          feedbackHelper,is_mandatory,"LASER::SUBSCRIPTION/REFDATA/${subprop.refdataCategory}", subprop.value, 'LASERIMPORT',
                              "FOLIO::SUBSCRIPTION/REFDATA/${mapped_property.folioId}",
                              local_context, subprop.value,
                              [prompt:"Map License refdata value ${subprop.refdataCategory}/${subprop.value} - in target category ${mapped_property.folioId}",
@@ -731,9 +735,12 @@ public class ProcessLaserSubscription extends BaseTransformProcess implements Tr
           // other types are Text and Date
         }
         else {
+
+          boolean is_mandatory = local_context.require_mapped_custprops == Boolean.FALSE : false ? true;
+
           // We've not seen this subscription property before - add it to the list of potentials
           result &= checkValueMapping(policyHelper,
-                          feedbackHelper,false,'LASER::SUBSCRIPTION/PROPERTY', subprop.token, 'LASERIMPORT', 'FOLIO::SUBSCRIPTION/PROPERTY', local_context, subprop.token,
+                          feedbackHelper,is_mandatory,'LASER::SUBSCRIPTION/PROPERTY', subprop.token, 'LASERIMPORT', 'FOLIO::SUBSCRIPTION/PROPERTY', local_context, subprop.token,
                              [prompt:"Map Optional Subscription Property ${subprop.token}(${subprop.type})",
                               type:"refdata"
                              ]);

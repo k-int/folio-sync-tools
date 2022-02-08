@@ -45,6 +45,8 @@ public class ProcessLaserLicense extends BaseTransformProcess implements Transfo
 
       local_context.require_mapped_custprops = (require_mapped_custprops == 'yes' ? Boolean.TRUE : Boolean.FALSE )
       local_context.require_mapped_refdata = (require_mapped_refdata == 'yes' ? Boolean.TRUE : Boolean.FALSE )
+      local_context.processLog.add([ts:System.currentTimeMillis(), msg:"Require mapped custprops: ${local_context.require_mapped_custprops} refdata: ${local_context.require_mapped_refdata}");
+
       log.debug("user: ${folio_user},..., okapi_host:${okapi_host}, okapi_port:${okapi_port}");
 
       FolioClient fc = new FolioClientImpl(okapi_host, okapi_port, local_context.tenant, folio_user, folio_pass, 60000);
@@ -266,8 +268,9 @@ public class ProcessLaserLicense extends BaseTransformProcess implements Transfo
           // We know about this license property - if it's refdata see if we know about the value mapping
           log.debug("Check license property value for ${licprop}");
           if ( licprop.type == 'Refdata' ) {
+          boolean is_mandatory = local_context.require_mapped_refdata == Boolean.FALSE : false ? true;
             result &= checkValueMapping(policyHelper,
-                          feedbackHelper,false,"LASER::LICENSE/REFDATA/${licprop.refdataCategory}", licprop.value ?: 'NO-VALUE', 'LASERIMPORT', 
+                          feedbackHelper,is_mandatory,"LASER::LICENSE/REFDATA/${licprop.refdataCategory}", licprop.value ?: 'NO-VALUE', 'LASERIMPORT', 
                              "FOLIO::LICENSE/REFDATA/${mapped_property.folioId}", 
                              local_context, licprop.value ?: 'NO-VALUE',
                              [prompt:"Map License refdata value ${licprop.refdataCategory}/${licprop.value?:'NO-VALUE'} - in target category ${mapped_property.folioId}",
@@ -279,8 +282,9 @@ public class ProcessLaserLicense extends BaseTransformProcess implements Transfo
         }
         else {
           // We've not seen this license property before - add it to the list of potentials
+          boolean is_mandatory = local_context.require_mapped_custprops == Boolean.FALSE : false ? true;
           result &= checkValueMapping(policyHelper,
-                          feedbackHelper,false,'LASER::LICENSE/PROPERTY', licprop.token, 'LASERIMPORT', 'FOLIO::LICENSE/PROPERTY', local_context, licprop.token,
+                          feedbackHelper,is_mandatory,'LASER::LICENSE/PROPERTY', licprop.token, 'LASERIMPORT', 'FOLIO::LICENSE/PROPERTY', local_context, licprop.token,
                              [prompt:"Map Optional License Property ${licprop.token}(${licprop.type})",
                               type:"refdata"
                              ]);

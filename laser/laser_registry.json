@@ -64,7 +64,7 @@
             }
         },
         "emits": "LASER::LICENSE",
-        "pubDate": "Tue Feb 08 11:31:00 GMT 2022",
+        "pubDate": "Tue Feb 08 12:48:21 GMT 2022",
         "version": 1
     },
     {
@@ -138,7 +138,7 @@
             }
         },
         "emits": "LASER::SUBSCRIPTION",
-        "pubDate": "Tue Feb 08 11:31:00 GMT 2022",
+        "pubDate": "Tue Feb 08 12:48:21 GMT 2022",
         "version": 1
     },
     {
@@ -148,9 +148,9 @@
         "sourceUrl": "https://raw.githubusercontent.com/k-int/folio-sync-tools/main/laser/ProcessLaserSubscription.groovy",
         "language": "groovy",
         "packaging": "script",
-        "sourceMD5": "E4A20109CA5F449FC346F1708CEC9C67",
+        "sourceMD5": "5F3D27765763B8D233E17C11BA6AC265",
         "sourceSignedBy": "k-int",
-        "sourceSignature": "iKY6HHw0baHhPI8cXO9f3JIc0WzU86R5OBW8j9AIHDiyEtU0XvJNxCjPemK/p5YLpy9TLoQohFTrmfMH/F9M5A==",
+        "sourceSignature": "OLaSP6nR/k7Cvt5anCyZcLY0xH3f2nqg8n2nxINTzTB2glIPdXGLTzI4B/G6+pR5nCpDOKAosWaBEMyPIhJpmg==",
         "accepts": "LASER::SUBSCRIPTION",
         "parameters": {
             "custpropsHandling": {
@@ -170,7 +170,7 @@
                 "vocab": "YN"
             }
         },
-        "pubDate": "Tue Feb 08 11:31:00 GMT 2022",
+        "pubDate": "Tue Feb 08 12:48:21 GMT 2022",
         "version": 1
     },
     {
@@ -180,9 +180,9 @@
         "sourceUrl": "https://raw.githubusercontent.com/k-int/folio-sync-tools/main/laser/ProcessLaserLicense.groovy",
         "language": "groovy",
         "packaging": "script",
-        "sourceMD5": "B7D65A1596117D8CB17442D5B75B52B1",
+        "sourceMD5": "5275537BA201E71A67EB0FDFDB8CA0C9",
         "sourceSignedBy": "k-int",
-        "sourceSignature": "THpRmU85DQWte455/A7aQ4ftXiIk90m+86GMCeNyI4rcV/zzqFIpjjmlRd99xS6u0OBvMl8N1Tf61QpQR3clIQ==",
+        "sourceSignature": "BVTyXbBsiQooK1S3yn1Gi8smAKoUjdmpO52x1UiyS7ZKyWmjhVBShPtbLS5LtA4jvUCx6I+djomVNpWeSMcPig==",
         "accepts": "LASER::LICENSE",
         "parameters": {
             "custpropsHandling": {
@@ -202,7 +202,7 @@
                 "vocab": "YN"
             }
         },
-        "pubDate": "Tue Feb 08 11:31:00 GMT 2022",
+        "pubDate": "Tue Feb 08 12:48:21 GMT 2022",
         "version": 1
     },
     {
