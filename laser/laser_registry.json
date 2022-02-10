@@ -64,7 +64,7 @@
             }
         },
         "emits": "LASER::LICENSE",
-        "pubDate": "Tue Feb 08 13:43:01 GMT 2022",
+        "pubDate": "Thu Feb 10 09:13:25 GMT 2022",
         "version": 1
     },
     {
@@ -138,7 +138,7 @@
             }
         },
         "emits": "LASER::SUBSCRIPTION",
-        "pubDate": "Tue Feb 08 13:43:01 GMT 2022",
+        "pubDate": "Thu Feb 10 09:13:25 GMT 2022",
         "version": 1
     },
     {
@@ -170,7 +170,7 @@
                 "vocab": "YN"
             }
         },
-        "pubDate": "Tue Feb 08 13:43:01 GMT 2022",
+        "pubDate": "Thu Feb 10 09:13:25 GMT 2022",
         "version": 1
     },
     {
@@ -202,7 +202,7 @@
                 "vocab": "YN"
             }
         },
-        "pubDate": "Tue Feb 08 13:43:01 GMT 2022",
+        "pubDate": "Thu Feb 10 09:13:25 GMT 2022",
         "version": 1
     },
     {
@@ -313,10 +313,17 @@
             },
             {
                 "srcCtx": "LASER::LICENSE/PROPERTY",
-                "srcValue": "ILL electronic",
+                "srcValue": "APC Discount",
                 "mappingContext": "LASERIMPORT",
                 "targetCtx": "FOLIO::LICENSE/PROPERTY",
-                "targetValue": "illElectronic"
+                "targetValue": "apcDiscount"
+            },
+            {
+                "srcCtx": "LASER::LICENSE/PROPERTY",
+                "srcValue": "Archiving Rights",
+                "mappingContext": "LASERIMPORT",
+                "targetCtx": "FOLIO::LICENSE/PROPERTY",
+                "targetValue": "archivingRights"
             },
             {
                 "srcCtx": "LASER::LICENSE/PROPERTY",
@@ -327,17 +334,59 @@
             },
             {
                 "srcCtx": "LASER::LICENSE/PROPERTY",
-                "srcValue": "Post Cancellation Online Access",
+                "srcValue": "Electronically Archivable Version",
                 "mappingContext": "LASERIMPORT",
                 "targetCtx": "FOLIO::LICENSE/PROPERTY",
-                "targetValue": "postCancellationAccess"
+                "targetValue": "secondaryPublicationElectronicallyArchivableVersion"
             },
             {
                 "srcCtx": "LASER::LICENSE/PROPERTY",
-                "srcValue": "Ill ZETA inland only",
+                "srcValue": "End date",
                 "mappingContext": "LASERIMPORT",
                 "targetCtx": "FOLIO::LICENSE/PROPERTY",
-                "targetValue": "illZetaDomesticOnly"
+                "targetValue": "secondaryPublicationEndDate"
+            },
+            {
+                "srcCtx": "LASER::LICENSE/PROPERTY",
+                "srcValue": "Course pack electronic",
+                "mappingContext": "LASERIMPORT",
+                "targetCtx": "FOLIO::LICENSE/PROPERTY",
+                "targetValue": "authorisedUsers"
+            },
+            {
+                "srcCtx": "LASER::LICENSE/PROPERTY",
+                "srcValue": "Governing law",
+                "mappingContext": "LASERIMPORT",
+                "targetCtx": "FOLIO::LICENSE/PROPERTY",
+                "targetValue": "governingLaw"
+            },
+            {
+                "srcCtx": "LASER::LICENSE/PROPERTY",
+                "srcValue": "Hosting: Solution",
+                "mappingContext": "LASERIMPORT",
+                "targetCtx": "FOLIO::LICENSE/PROPERTY",
+                "targetValue": "hostingSolution"
+            },
+            {
+                "srcCtx": "LASER::LICENSE/PROPERTY",
+                "srcValue": "Invoicing",
+                "mappingContext": "LASERIMPORT",
+                "targetCtx": "FOLIO::LICENSE/PROPERTY",
+                "targetValue": "invoicing"
+            },
+            {
+                "srcCtx": "LASER::LICENSE/PROPERTY",
+                "srcValue": "ILL electronic",
+                "mappingContext": "LASERIMPORT",
+                "targetCtx": "FOLIO::LICENSE/PROPERTY",
+                "targetValue": "illElectronic"
+            },
+            {
+                "srcCtx": "LASER::LICENSE/PROPERTY",
+                "srcValue": "Ill ZETA code",
+                "mappingContext": "LASERIMPORT",
+                "targetCtx": "FOLIO::LICENSE/PROPERTY",
+                "targetValue": "illZetaCode"
             },
             {
                 "srcCtx": "LASER::LICENSE/PROPERTY",
@@ -348,10 +397,52 @@
             },
             {
                 "srcCtx": "LASER::LICENSE/PROPERTY",
-                "srcValue": "Ill ZETA code",
+                "srcValue": "Ill ZETA inland only",
                 "mappingContext": "LASERIMPORT",
                 "targetCtx": "FOLIO::LICENSE/PROPERTY",
-                "targetValue": "illZetaCode"
+                "targetValue": "illZetaDomesticOnly"
+            },
+            {
+                "srcCtx": "LASER::LICENSE/PROPERTY",
+                "srcValue": "License to Publish",
+                "mappingContext": "LASERIMPORT",
+                "targetCtx": "FOLIO::LICENSE/PROPERTY",
+                "targetValue": "licenseToPublish"
+            },
+            {
+                "srcCtx": "LASER::LICENSE/PROPERTY",
+                "srcValue": "Method of Authentication",
+                "mappingContext": "LASERIMPORT",
+                "targetCtx": "FOLIO::LICENSE/PROPERTY",
+                "targetValue": "methodOfAuthentication"
+            },
+            {
+                "srcCtx": "LASER::LICENSE/PROPERTY",
+                "srcValue": "Post Cancellation Online Access",
+                "mappingContext": "LASERIMPORT",
+                "targetCtx": "FOLIO::LICENSE/PROPERTY",
+                "targetValue": "postCancellationAccess"
+            },
+            {
+                "srcCtx": "LASER::LICENSE/PROPERTY",
+                "srcValue": "Publishing Fee",
+                "mappingContext": "LASERIMPORT",
+                "targetCtx": "FOLIO::LICENSE/PROPERTY",
+                "targetValue": "publishingFee"
+            },
+            {
+                "srcCtx": "LASER::LICENSE/PROPERTY",
+                "srcValue": "Text- and Datamining",
+                "mappingContext": "LASERIMPORT",
+                "targetCtx": "FOLIO::LICENSE/PROPERTY",
+                "targetValue": "Text- and Datamining"
+            },
+            {
+                "srcCtx": "LASER::LICENSE/PROPERTY",
+                "srcValue": "Regional Restriction",
+                "mappingContext": "LASERIMPORT",
+                "targetCtx": "FOLIO::LICENSE/PROPERTY",
+                "targetValue": "regionalRestriction"
             },
             {
                 "srcCtx": "LASER::LICENSE/PROPERTY",
@@ -369,27 +460,6 @@
             },
             {
                 "srcCtx": "LASER::LICENSE/PROPERTY",
-                "srcValue": "Text- and Datamining",
-                "mappingContext": "LASERIMPORT",
-                "targetCtx": "FOLIO::LICENSE/PROPERTY",
-                "targetValue": "Text- and Datamining"
-            },
-            {
-                "srcCtx": "LASER::LICENSE/PROPERTY",
-                "srcValue": "Post Cancellation Online Access",
-                "mappingContext": "LASERIMPORT",
-                "targetCtx": "FOLIO::LICENSE/PROPERTY",
-                "targetValue": "Zugriffsrechte dauerhaft"
-            },
-            {
-                "srcCtx": "LASER::LICENSE/PROPERTY",
-                "srcValue": "License to Publish",
-                "mappingContext": "LASERIMPORT",
-                "targetCtx": "FOLIO::LICENSE/PROPERTY",
-                "targetValue": "licenseToPublish"
-            },
-            {
-                "srcCtx": "LASER::LICENSE/PROPERTY",
                 "srcValue": "Start date",
                 "mappingContext": "LASERIMPORT",
                 "targetCtx": "FOLIO::LICENSE/PROPERTY",
@@ -397,17 +467,10 @@
             },
             {
                 "srcCtx": "LASER::LICENSE/PROPERTY",
-                "srcValue": "End date",
+                "srcValue": "Walk-in Access",
                 "mappingContext": "LASERIMPORT",
                 "targetCtx": "FOLIO::LICENSE/PROPERTY",
-                "targetValue": "secondaryPublicationEndDate"
-            },
-            {
-                "srcCtx": "LASER::LICENSE/PROPERTY",
-                "srcValue": "Electronically Archivable Version",
-                "mappingContext": "LASERIMPORT",
-                "targetCtx": "FOLIO::LICENSE/PROPERTY",
-                "targetValue": "secondaryPublicationElectronicallyArchivableVersion"
+                "targetValue": "walkinAccess"
             },
             {
                 "srcCtx": "LASER::LICENSE/PROPERTY",
@@ -515,6 +578,13 @@
                 "targetValue": "No"
             },
             {
+                "srcCtx": "LASER::LICENSE/REFDATA/y.n",
+                "srcValue": "NO-VALUE",
+                "mappingContext": "LASERIMPORT",
+                "targetCtx": "FOLIO::LICENSE/REFDATA/y.n",
+                "targetValue": "NoValue"
+            },
+            {
                 "srcCtx": "LASER::LICENSE/REFDATA/y.n.o",
                 "srcValue": "Yes",
                 "mappingContext": "LASERIMPORT",
@@ -536,24 +606,48 @@
                 "targetValue": "Other"
             },
             {
-                "srcCtx": "LASER::LICENSE/PROPERTY",
+                "srcCtx": "LASER::LICENSE/REFDATA/y.n.o",
+                "srcValue": "NO-VALUE",
+                "mappingContext": "LASERIMPORT",
+                "targetCtx": "FOLIO::LICENSE/REFDATA/y.n.o",
+                "targetValue": "NoValue"
+            },
+            {
+                "srcCtx": "LASER::SUBSCRIPTION/PROPERTY",
                 "srcValue": "EZB tagging (yellow)",
                 "mappingContext": "LASERIMPORT",
                 "targetCtx": "FOLIO::SUBSCRIPTION/PROPERTY",
                 "targetValue": "EZB tagging (yellow)"
             },
             {
-                "srcCtx": "LASER::LICENSE/PROPERTY",
+                "srcCtx": "LASER::SUBSCRIPTION/PROPERTY",
                 "srcValue": "DBS subject group",
                 "mappingContext": "LASERIMPORT",
                 "targetCtx": "FOLIO::SUBSCRIPTION/PROPERTY",
                 "targetValue": "DBS subject group"
+            },
+            {
+                "srcCtx": "LASER::SUBSCRIPTION/PROPERTY",
+                "srcValue": "Sim-User Number",
+                "mappingContext": "LASERIMPORT",
+                "targetCtx": "FOLIO::SUBSCRIPTION/PROPERTY",
+                "targetValue": "Sim User Number"
+            },
+            {
+                "srcCtx": "LASER::SUBSCRIPTION/PROPERTY",
+                "srcValue": "Joining during the period",
+                "mappingContext": "LASERIMPORT",
+                "targetCtx": "FOLIO::SUBSCRIPTION/PROPERTY",
+                "targetValue": "Joining during the period"
             }
         ]
     },
     {
         "recordType": "authorityControl",
         "authorities": {
+            "LASER::SUBSCRIPTION/PROPERTY": {
+                "label": "LASER Subscription Custom Properties"
+            },
             "LASER::LICENSE/PROPERTY": {
                 "label": "LASER License Custom Properties"
             },

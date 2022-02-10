@@ -162,6 +162,7 @@
   {
     "recordType":"authorityControl",
     "authorities":{
+            "LASER::SUBSCRIPTION/PROPERTY":{ "label": "LASER Subscription Custom Properties" },
                  "LASER::LICENSE/PROPERTY":{ "label": "LASER License Custom Properties" },
                    "LASER::LICENSE/STATUS":{ "label": "Laser License Status" },
                      "LASER::LICENSE/TYPE":{ "label": "Laser License Type" },
