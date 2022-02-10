@@ -107,7 +107,7 @@
       { "srcCtx":"LASER::LICENSE/STATUS",    "srcValue":"Expired",       "mappingContext":"LASERIMPORT", "targetCtx":"FOLIO::LICENSE/STATUS",    "targetValue":"Expired" },
 
       { "srcCtx":"LASER::LICENSE/PROPERTY",  "srcValue":"APC Discount",                      "mappingContext":"LASERIMPORT", "targetCtx":"FOLIO::LICENSE/PROPERTY",   "targetValue":"apcDiscount" },
-      { "srcCtx":"LASER::LICENSE/PROPERTY",  "srcValue":"Archiving Rights",                  "mappingContext":"LASERIMPORT", "targetCtx":"FOLIO::LICENSE/PROPERTY",   "targetValue":"archivingRights" },
+      { "srcCtx":"LASER::LICENSE/PROPERTY",  "srcValue":"Archiving rights",                  "mappingContext":"LASERIMPORT", "targetCtx":"FOLIO::LICENSE/PROPERTY",   "targetValue":"archivingRights" },
       { "srcCtx":"LASER::LICENSE/PROPERTY",  "srcValue":"Authorized Users",                  "mappingContext":"LASERIMPORT", "targetCtx":"FOLIO::LICENSE/PROPERTY",   "targetValue":"authorisedUsers" },
       { "srcCtx":"LASER::LICENSE/PROPERTY",  "srcValue":"Electronically Archivable Version", "mappingContext":"LASERIMPORT", "targetCtx":"FOLIO::LICENSE/PROPERTY",   "targetValue":"secondaryPublicationElectronicallyArchivableVersion" },
       { "srcCtx":"LASER::LICENSE/PROPERTY",  "srcValue":"End date",                          "mappingContext":"LASERIMPORT", "targetCtx":"FOLIO::LICENSE/PROPERTY",   "targetValue":"secondaryPublicationEndDate" },
