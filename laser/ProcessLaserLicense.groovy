@@ -290,6 +290,9 @@ public class ProcessLaserLicense extends BaseTransformProcess implements Transfo
                              ]);
         }
     }
+
+    local_context.processLog.add([ts:System.currentTimeMillis(), msg:"Preflight license properties: ${result}"]);
+    return result
   }
 
   private Map processLicenseProperties(ResourceMappingService rms, Map folio_license, Map laser_license, Map local_context) {
