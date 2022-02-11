@@ -64,7 +64,7 @@
             }
         },
         "emits": "LASER::LICENSE",
-        "pubDate": "Fri Feb 11 14:17:35 GMT 2022",
+        "pubDate": "Fri Feb 11 15:48:24 GMT 2022",
         "version": 1
     },
     {
@@ -138,7 +138,7 @@
             }
         },
         "emits": "LASER::SUBSCRIPTION",
-        "pubDate": "Fri Feb 11 14:17:35 GMT 2022",
+        "pubDate": "Fri Feb 11 15:48:24 GMT 2022",
         "version": 1
     },
     {
@@ -148,9 +148,9 @@
         "sourceUrl": "https://raw.githubusercontent.com/k-int/folio-sync-tools/main/laser/ProcessLaserSubscription.groovy",
         "language": "groovy",
         "packaging": "script",
-        "sourceMD5": "AB4D7848FA89E435C6F20B80424C3104",
+        "sourceMD5": "60ECA27D974F6471510871CB4D0F3880",
         "sourceSignedBy": "k-int",
-        "sourceSignature": "uDaILXRHQmSdSO6es3sbazqV6Tc/tKi1tWhUi3waTp6MYTo+RzoU3ED+OqtAXIsnnBtlcZSiprLiGS5m2supOA==",
+        "sourceSignature": "ARr8DwwBaJLqcKb1pkAFYCz7NdGxKLE1mef+JKwfmtxYCCqX9NN29KeAho4NaopzUvmeHMH7h4yiLF3tWITXnQ==",
         "accepts": "LASER::SUBSCRIPTION",
         "parameters": {
             "custpropsHandling": {
@@ -170,7 +170,7 @@
                 "vocab": "YN"
             }
         },
-        "pubDate": "Fri Feb 11 14:17:35 GMT 2022",
+        "pubDate": "Fri Feb 11 15:48:24 GMT 2022",
         "version": 1
     },
     {
@@ -202,7 +202,7 @@
                 "vocab": "YN"
             }
         },
-        "pubDate": "Fri Feb 11 14:17:35 GMT 2022",
+        "pubDate": "Fri Feb 11 15:48:24 GMT 2022",
         "version": 1
     },
     {
@@ -295,7 +295,7 @@
                 "srcValue": "Rejected",
                 "mappingContext": "LASERIMPORT",
                 "targetCtx": "FOLIO::LICENSE/STATUS",
-                "targetValue": "Rejected"
+                "targetValue": "Expired"
             },
             {
                 "srcCtx": "LASER::LICENSE/STATUS",
@@ -611,6 +611,69 @@
                 "mappingContext": "LASERIMPORT",
                 "targetCtx": "FOLIO::LICENSE/REFDATA/y.n.o",
                 "targetValue": "NoValue"
+            },
+            {
+                "srcCtx": "LASER::SUBSCRIPTION/STATUS",
+                "srcValue": "Draft",
+                "mappingContext": "LASERIMPORT",
+                "targetCtx": "FOLIO::SUBSCRIPTION/STATUS",
+                "targetValue": "Draft"
+            },
+            {
+                "srcCtx": "LASER::SUBSCRIPTION/STATUS",
+                "srcValue": "In Progress",
+                "mappingContext": "LASERIMPORT",
+                "targetCtx": "FOLIO::SUBSCRIPTION/STATUS",
+                "targetValue": "Active"
+            },
+            {
+                "srcCtx": "LASER::SUBSCRIPTION/STATUS",
+                "srcValue": "Current",
+                "mappingContext": "LASERIMPORT",
+                "targetCtx": "FOLIO::SUBSCRIPTION/STATUS",
+                "targetValue": "Active"
+            },
+            {
+                "srcCtx": "LASER::SUBSCRIPTION/STATUS",
+                "srcValue": "Participation",
+                "mappingContext": "LASERIMPORT",
+                "targetCtx": "FOLIO::SUBSCRIPTION/STATUS",
+                "targetValue": "Active"
+            },
+            {
+                "srcCtx": "LASER::SUBSCRIPTION/STATUS",
+                "srcValue": "In negotiation",
+                "mappingContext": "LASERIMPORT",
+                "targetCtx": "FOLIO::SUBSCRIPTION/STATUS",
+                "targetValue": "In negotiation"
+            },
+            {
+                "srcCtx": "LASER::SUBSCRIPTION/STATUS",
+                "srcValue": "Not yet active",
+                "mappingContext": "LASERIMPORT",
+                "targetCtx": "FOLIO::SUBSCRIPTION/STATUS",
+                "targetValue": "Requested"
+            },
+            {
+                "srcCtx": "LASER::SUBSCRIPTION/STATUS",
+                "srcValue": "Rejected",
+                "mappingContext": "LASERIMPORT",
+                "targetCtx": "FOLIO::SUBSCRIPTION/STATUS",
+                "targetValue": "Closed"
+            },
+            {
+                "srcCtx": "LASER::SUBSCRIPTION/STATUS",
+                "srcValue": "Retired",
+                "mappingContext": "LASERIMPORT",
+                "targetCtx": "FOLIO::SUBSCRIPTION/STATUS",
+                "targetValue": "Closed"
+            },
+            {
+                "srcCtx": "LASER::SUBSCRIPTION/STATUS",
+                "srcValue": "Expired",
+                "mappingContext": "LASERIMPORT",
+                "targetCtx": "FOLIO::SUBSCRIPTION/STATUS",
+                "targetValue": "Closed"
             },
             {
                 "srcCtx": "LASER::SUBSCRIPTION/PROPERTY",

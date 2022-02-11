@@ -112,6 +112,15 @@ public class ProcessLaserSubscription extends BaseTransformProcess implements Tr
       pass &= mappingCheck(policyHelper,feedbackHelper,true,'LASER-SUBSCRIPTION', resource_id, 'LASERIMPORT', 'FOLIO::AGREEMENT', local_context, parsed_record?.name,
                            [ prompt:"Please indicate if the LASER Subscription \"${parsed_record?.name}\" with ID ${parsed_record?.globalUID} should be mapped to an existing FOLIO Agreement, a new FOLIO Agreement created to track it, or the resorce should be ignored", folioResourceType:'agreement']);
 
+      pass &= checkValueMapping(policyHelper,feedbackHelper,true,'LASER::SUBSCRIPTION/STATUS', parsed_record.status, 'LASERIMPORT',
+                                'FOLIO::SUBSCRIPTION/STATUS', local_context, parsed_record?.status,
+                                [
+                                  prompt:"Please provide a mapping for LASER Subscription Status ${parsed_record.status}",
+                                  subtype:'refdata',
+                                  refdataUrl:'/erm/refdata/status'
+                                ]);
+
+
       pass &= preflightSubscriptionProperties(parsed_record, rms, policyHelper, feedbackHelper, local_context)
 
       local_context.processLog.add([ts:System.currentTimeMillis(), msg:"ProcessLaserSubscription::preflightCheck(${resource_id},..) ${new Date()} result: ${pass}"]);
@@ -477,9 +486,8 @@ public class ProcessLaserSubscription extends BaseTransformProcess implements Tr
 
     try {
       ArrayList periods = buildPeriodList(subscription, null, local_context)
-      // Map statusMappings = pm.getAgreementStatusMap(subscription.status)
-      // String statusString = statusMappings.get('agreement.status')
-      String statusString = 'Draft';
+      // String statusString = 'Draft';
+      String statusString =  getMappedValue(rms,'LASER::SUBSCRIPTION/STATUS',subscription.status,'LASERIMPORT')
       String reasonForClosure = null
 
       if (statusString == null) {
@@ -593,7 +601,7 @@ public class ProcessLaserSubscription extends BaseTransformProcess implements Tr
     Map statusMappings = [:]
     try {
       statusMappings = null; // pm.getAgreementStatusMap(subscription.status)
-      statusString = null; // statusMappings.get('agreement.status')
+      String statusString =  getMappedValue(rms,'LASER::SUBSCRIPTION/STATUS',subscription.status,'LASERIMPORT')
 
       if (statusString == null) {
         throw new Exception ("Mapping not found for LAS:eR status ${folio_agreement.status}")
