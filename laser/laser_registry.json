@@ -64,7 +64,7 @@
             }
         },
         "emits": "LASER::LICENSE",
-        "pubDate": "Thu Feb 10 09:13:25 GMT 2022",
+        "pubDate": "Fri Feb 11 14:17:35 GMT 2022",
         "version": 1
     },
     {
@@ -138,7 +138,7 @@
             }
         },
         "emits": "LASER::SUBSCRIPTION",
-        "pubDate": "Thu Feb 10 09:13:25 GMT 2022",
+        "pubDate": "Fri Feb 11 14:17:35 GMT 2022",
         "version": 1
     },
     {
@@ -170,7 +170,7 @@
                 "vocab": "YN"
             }
         },
-        "pubDate": "Thu Feb 10 09:13:25 GMT 2022",
+        "pubDate": "Fri Feb 11 14:17:35 GMT 2022",
         "version": 1
     },
     {
@@ -202,7 +202,7 @@
                 "vocab": "YN"
             }
         },
-        "pubDate": "Thu Feb 10 09:13:25 GMT 2022",
+        "pubDate": "Fri Feb 11 14:17:35 GMT 2022",
         "version": 1
     },
     {
@@ -320,7 +320,7 @@
             },
             {
                 "srcCtx": "LASER::LICENSE/PROPERTY",
-                "srcValue": "Archiving Rights",
+                "srcValue": "Archiving rights",
                 "mappingContext": "LASERIMPORT",
                 "targetCtx": "FOLIO::LICENSE/PROPERTY",
                 "targetValue": "archivingRights"
@@ -639,6 +639,55 @@
                 "mappingContext": "LASERIMPORT",
                 "targetCtx": "FOLIO::SUBSCRIPTION/PROPERTY",
                 "targetValue": "Joining during the period"
+            },
+            {
+                "srcCtx": "LASER::SUBSCRIPTION/REFDATA/y.n",
+                "srcValue": "Yes",
+                "mappingContext": "LASERIMPORT",
+                "targetCtx": "FOLIO::SUBSCRIPTION/REFDATA/y.n",
+                "targetValue": "Yes"
+            },
+            {
+                "srcCtx": "LASER::SUBSCRIPTION/REFDATA/y.n",
+                "srcValue": "No",
+                "mappingContext": "LASERIMPORT",
+                "targetCtx": "FOLIO::SUBSCRIPTION/REFDATA/y.n",
+                "targetValue": "No"
+            },
+            {
+                "srcCtx": "LASER::SUBSCRIPTION/REFDATA/y.n",
+                "srcValue": "NO-VALUE",
+                "mappingContext": "LASERIMPORT",
+                "targetCtx": "FOLIO::SUBSCRIPTION/REFDATA/y.n",
+                "targetValue": "NoValue"
+            },
+            {
+                "srcCtx": "LASER::SUBSCRIPTION/REFDATA/y.n.o",
+                "srcValue": "Yes",
+                "mappingContext": "LASERIMPORT",
+                "targetCtx": "FOLIO::SUBSCRIPTION/REFDATA/y.n.o",
+                "targetValue": "Yes"
+            },
+            {
+                "srcCtx": "LASER::SUBSCRIPTION/REFDATA/y.n.o",
+                "srcValue": "No",
+                "mappingContext": "LASERIMPORT",
+                "targetCtx": "FOLIO::SUBSCRIPTION/REFDATA/y.n.o",
+                "targetValue": "No"
+            },
+            {
+                "srcCtx": "LASER::SUBSCRIPTION/REFDATA/y.n.o",
+                "srcValue": "Other",
+                "mappingContext": "LASERIMPORT",
+                "targetCtx": "FOLIO::SUBSCRIPTION/REFDATA/y.n.o",
+                "targetValue": "Other"
+            },
+            {
+                "srcCtx": "LASER::SUBSCRIPTION/REFDATA/y.n.o",
+                "srcValue": "NO-VALUE",
+                "mappingContext": "LASERIMPORT",
+                "targetCtx": "FOLIO::SUBSCRIPTION/REFDATA/y.n.o",
+                "targetValue": "NoValue"
             }
         ]
     },

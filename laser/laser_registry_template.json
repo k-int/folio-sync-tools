@@ -156,7 +156,16 @@
       { "srcCtx":"LASER::SUBSCRIPTION/PROPERTY",  "srcValue":"EZB tagging (yellow)",     "mappingContext":"LASERIMPORT", "targetCtx":"FOLIO::SUBSCRIPTION/PROPERTY",   "targetValue":"EZB tagging (yellow)" },
       { "srcCtx":"LASER::SUBSCRIPTION/PROPERTY",  "srcValue":"DBS subject group",        "mappingContext":"LASERIMPORT", "targetCtx":"FOLIO::SUBSCRIPTION/PROPERTY",   "targetValue":"DBS subject group" },
       { "srcCtx":"LASER::SUBSCRIPTION/PROPERTY",  "srcValue":"Sim-User Number",          "mappingContext":"LASERIMPORT", "targetCtx":"FOLIO::SUBSCRIPTION/PROPERTY",   "targetValue":"Sim User Number" },
-      { "srcCtx":"LASER::SUBSCRIPTION/PROPERTY",  "srcValue":"Joining during the period","mappingContext":"LASERIMPORT", "targetCtx":"FOLIO::SUBSCRIPTION/PROPERTY",   "targetValue":"Joining during the period" }
+      { "srcCtx":"LASER::SUBSCRIPTION/PROPERTY",  "srcValue":"Joining during the period","mappingContext":"LASERIMPORT", "targetCtx":"FOLIO::SUBSCRIPTION/PROPERTY",   "targetValue":"Joining during the period" },
+
+      { "srcCtx":"LASER::SUBSCRIPTION/REFDATA/y.n",   "srcValue":"Yes",      "mappingContext":"LASERIMPORT", "targetCtx":"FOLIO::SUBSCRIPTION/REFDATA/y.n",     "targetValue":"Yes" },
+      { "srcCtx":"LASER::SUBSCRIPTION/REFDATA/y.n",   "srcValue":"No",       "mappingContext":"LASERIMPORT", "targetCtx":"FOLIO::SUBSCRIPTION/REFDATA/y.n",     "targetValue":"No" },
+      { "srcCtx":"LASER::SUBSCRIPTION/REFDATA/y.n",   "srcValue":"NO-VALUE", "mappingContext":"LASERIMPORT", "targetCtx":"FOLIO::SUBSCRIPTION/REFDATA/y.n",     "targetValue":"NoValue" },
+      { "srcCtx":"LASER::SUBSCRIPTION/REFDATA/y.n.o", "srcValue":"Yes",      "mappingContext":"LASERIMPORT", "targetCtx":"FOLIO::SUBSCRIPTION/REFDATA/y.n.o",   "targetValue":"Yes" },
+      { "srcCtx":"LASER::SUBSCRIPTION/REFDATA/y.n.o", "srcValue":"No",       "mappingContext":"LASERIMPORT", "targetCtx":"FOLIO::SUBSCRIPTION/REFDATA/y.n.o",   "targetValue":"No" },
+      { "srcCtx":"LASER::SUBSCRIPTION/REFDATA/y.n.o", "srcValue":"Other",    "mappingContext":"LASERIMPORT", "targetCtx":"FOLIO::SUBSCRIPTION/REFDATA/y.n.o",   "targetValue":"Other" },
+      { "srcCtx":"LASER::SUBSCRIPTION/REFDATA/y.n.o", "srcValue":"NO-VALUE", "mappingContext":"LASERIMPORT", "targetCtx":"FOLIO::SUBSCRIPTION/REFDATA/y.n.o",   "targetValue":"NoValue" }
+
     ]
   },
   {
