@@ -601,7 +601,7 @@ public class ProcessLaserSubscription extends BaseTransformProcess implements Tr
     Map statusMappings = [:]
     try {
       statusMappings = null; // pm.getAgreementStatusMap(subscription.status)
-      String statusString =  getMappedValue(rms,'LASER::SUBSCRIPTION/STATUS',subscription.status,'LASERIMPORT')
+      statusString =  getMappedValue(rms,'LASER::SUBSCRIPTION/STATUS',subscription.status,'LASERIMPORT')
 
       if (statusString == null) {
         throw new Exception ("Mapping not found for LAS:eR status ${folio_agreement.status}")
