@@ -376,7 +376,7 @@ public class ProcessLaserSubscription extends BaseTransformProcess implements Tr
       def existing_subscription = folioHelper.okapiGet('/erm/sas/'+rm.folioId,[:])
 
       if ( existing_subscription ) {
-        log.debug("Result of GET /erm/sas/${rm.folioId}: sub with id ${existing_subscription?.id}");
+        log.debug("Result of GET /erm/sas/${rm.folioId}: sub with id ${existing_subscription?.id} : ${existing_subscription} CALLUPDATE::");
     
         result = updateAgreement(rms,
                         local_context,
@@ -610,7 +610,7 @@ public class ProcessLaserSubscription extends BaseTransformProcess implements Tr
     }
 
     // Look to see if there is an entitlement for the custom package relating to this subscription
-    def items = folio_agreement.items;
+    def items = folio_agreement.items ?: [];
 
     // reference: "LASER:${subscription.globalUID}"
     if ( folio_pkg_id != null ) {
