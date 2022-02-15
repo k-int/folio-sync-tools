@@ -25,7 +25,6 @@ import com.k_int.web.toolkit.refdata.RefdataValue;
 public class ProcessLaserSubscription extends BaseTransformProcess implements TransformProcess {
 
   // see https://laser-dev.hbz-nrw.de/api/index
-
   private static String[] REQUIRED_PERMISSIONS = [
     'erm.packages.collection.import'
   ]
@@ -840,6 +839,4 @@ public class ProcessLaserSubscription extends BaseTransformProcess implements Tr
       return note;
     }
   }
-
-
 }
