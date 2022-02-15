@@ -620,7 +620,7 @@ public class ProcessLaserSubscription extends BaseTransformProcess implements Tr
 
       // Dump the existing agreement lines to the log
       items.each { it ->
-        local_context.processLog.add([ts:System.currentTimeMillis(), msg: "Existing AL -> id:${it.id} ref:${it.resource?.reference?}"]);
+        local_context.processLog.add([ts:System.currentTimeMillis(), msg: "Existing AL -> id:${it.id} ref:${it.resource?.reference}"]);
       }
 
       String entitlementReference = "LASER:${subscription.globalUID}".toString();
