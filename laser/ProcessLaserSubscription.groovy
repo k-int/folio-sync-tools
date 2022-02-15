@@ -618,6 +618,11 @@ public class ProcessLaserSubscription extends BaseTransformProcess implements Tr
       local_context.processLog.add([ts:System.currentTimeMillis(), msg:"Checking for existing entitlement with reference: LASER.${subscription.globalUID}."])
       local_context.processLog.add([ts:System.currentTimeMillis(), msg:"Current entitlement count: ${items?.size()}"]);
 
+      // Dump the existing agreement lines to the log
+      items.each { it ->
+        local_context.processLog.add([ts:System.currentTimeMillis(), msg: "Existing AL -> id:${it.id} ref:${it.resource?.reference?}"]);
+      }
+
       String entitlementReference = "LASER:${subscription.globalUID}".toString();
 
       def located_laser_entitlement = items.find { it.resource?.reference?.equals(entitlementReference) }
@@ -632,7 +637,8 @@ public class ProcessLaserSubscription extends BaseTransformProcess implements Tr
             resource: [
               id: folio_pkg_id,
               authority: 'LASER',
-              reference: entitlementReference
+              reference: entitlementReference,
+              note: "re: ${entitlementReference} on ${new Date()}".toString()
             ]
           ]
         );

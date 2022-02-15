@@ -64,7 +64,7 @@
             }
         },
         "emits": "LASER::LICENSE",
-        "pubDate": "Tue Feb 15 12:05:22 GMT 2022",
+        "pubDate": "Tue Feb 15 15:26:11 GMT 2022",
         "version": 1
     },
     {
@@ -138,7 +138,7 @@
             }
         },
         "emits": "LASER::SUBSCRIPTION",
-        "pubDate": "Tue Feb 15 12:05:22 GMT 2022",
+        "pubDate": "Tue Feb 15 15:26:11 GMT 2022",
         "version": 1
     },
     {
@@ -148,9 +148,9 @@
         "sourceUrl": "https://raw.githubusercontent.com/k-int/folio-sync-tools/main/laser/ProcessLaserSubscription.groovy",
         "language": "groovy",
         "packaging": "script",
-        "sourceMD5": "1F1728FEB9DA8FDE62FC2C197FAE2E23",
+        "sourceMD5": "2DA9198D1FF87C3082A1E0A5A0F3F6D7",
         "sourceSignedBy": "k-int",
-        "sourceSignature": "jze2mFTFuegEsK84c94+QlsAuuPbUvO386kFcCpfIfmeVzPsONK1S3e/C6blvXimg8ZuV00u9Dw3MjWZkzZKpg==",
+        "sourceSignature": "5FPGOTAVEch4/ODyK/T1UBIjk0PUADbwiLfuZJsNLhsbIbROkZEyb2FhnjM5r6gm3xqlHc1bksbGgEOaOUpqLA==",
         "accepts": "LASER::SUBSCRIPTION",
         "parameters": {
             "custpropsHandling": {
@@ -170,7 +170,7 @@
                 "vocab": "YN"
             }
         },
-        "pubDate": "Tue Feb 15 12:05:22 GMT 2022",
+        "pubDate": "Tue Feb 15 15:26:11 GMT 2022",
         "version": 1
     },
     {
@@ -202,7 +202,7 @@
                 "vocab": "YN"
             }
         },
-        "pubDate": "Tue Feb 15 12:05:22 GMT 2022",
+        "pubDate": "Tue Feb 15 15:26:11 GMT 2022",
         "version": 1
     },
     {
