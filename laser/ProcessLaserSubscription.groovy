@@ -740,14 +740,19 @@ public class ProcessLaserSubscription extends BaseTransformProcess implements Tr
 
             boolean is_mandatory = ( local_context.require_mapped_refdata == Boolean.FALSE ? false : true ) ;
 
-            result &= checkValueMapping(policyHelper,
-                          feedbackHelper,is_mandatory,"LASER::SUBSCRIPTION/REFDATA/${subprop.refdataCategory}", subprop.value, 'LASERIMPORT',
-                             "FOLIO::SUBSCRIPTION/REFDATA/${mapped_property.folioId}",
-                             local_context, subprop.value,
-                             [prompt:"Map License refdata value ${subprop.refdataCategory}/${subprop.value} - in target category ${mapped_property.folioId}",
-                              subtype:"refdata",
-                              type:"refdata"
-                             ]);
+            if ( mapped_property.getParsedAdditional()?.ConvertTo == 'text' ) {
+              // If we have refdata, but the mapping says to convert it to text then there is no need to try and map the value.
+            }
+            else {
+              result &= checkValueMapping(policyHelper,
+                            feedbackHelper,is_mandatory,"LASER::SUBSCRIPTION/REFDATA/${subprop.refdataCategory}", subprop.value, 'LASERIMPORT',
+                               "FOLIO::SUBSCRIPTION/REFDATA/${mapped_property.folioId}",
+                               local_context, subprop.value,
+                               [prompt:"Map License refdata value ${subprop.refdataCategory}/${subprop.value} - in target category ${mapped_property.folioId}",
+                                subtype:"refdata",
+                                type:"refdata"
+                               ]);
+            }
           }
           // other types are Text and Date
         }
@@ -801,15 +806,24 @@ public class ProcessLaserSubscription extends BaseTransformProcess implements Tr
               ]
               break;
             case 'Refdata':
-              def mapped_value = rms.lookupMapping("LASER::SUBSCRIPTION/REFDATA/${subprop.refdataCategory}",subprop.value,'LASERIMPORT')
-              local_context.processLog.add([ts:System.currentTimeMillis(), msg:"adding refdata property: ${subprop.token}:${subprop.value} mapped value ${mapped_value}"]);
-              if ( mapped_value ) {
+              if ( mapped_property.getParsedAdditional()?.ConvertTo == 'text' ) {
+                // The mapping requests that we convert this refdata into text
                 result[mapped_property.folioId] = [
-                  //  internal: internalValue,
                   note: noteParagraphJoiner(subprop.note, subprop.paragraph),
-                  value: mapped_value.folioId,
-                  type: 'com.k_int.web.toolkit.custprops.types.CustomPropertyRefdata'
+                  value: subprop.value
                 ]
+              }
+              else {
+                def mapped_value = rms.lookupMapping("LASER::SUBSCRIPTION/REFDATA/${subprop.refdataCategory}",subprop.value,'LASERIMPORT')
+                local_context.processLog.add([ts:System.currentTimeMillis(), msg:"adding refdata property: ${subprop.token}:${subprop.value} mapped value ${mapped_value}"]);
+                if ( mapped_value ) {
+                  result[mapped_property.folioId] = [
+                    //  internal: internalValue,
+                    note: noteParagraphJoiner(subprop.note, subprop.paragraph),
+                    value: mapped_value.folioId,
+                    type: 'com.k_int.web.toolkit.custprops.types.CustomPropertyRefdata'
+                  ]
+                }
               }
               break;
           }

@@ -64,7 +64,7 @@
             }
         },
         "emits": "LASER::LICENSE",
-        "pubDate": "Wed Feb 16 17:21:49 GMT 2022",
+        "pubDate": "Wed Feb 16 19:31:32 GMT 2022",
         "version": 1
     },
     {
@@ -138,7 +138,7 @@
             }
         },
         "emits": "LASER::SUBSCRIPTION",
-        "pubDate": "Wed Feb 16 17:21:49 GMT 2022",
+        "pubDate": "Wed Feb 16 19:31:32 GMT 2022",
         "version": 1
     },
     {
@@ -148,9 +148,9 @@
         "sourceUrl": "https://raw.githubusercontent.com/k-int/folio-sync-tools/main/laser/ProcessLaserSubscription.groovy",
         "language": "groovy",
         "packaging": "script",
-        "sourceMD5": "8FBE7B86128F449A21E2C179F33080DD",
+        "sourceMD5": "EF4634E25DD43BC86CA72D686A1780C3",
         "sourceSignedBy": "k-int",
-        "sourceSignature": "u5Vxsg5wghOhXaHwhtgeeexTXmw1xbfKt7VKyepjpivjgyfJf4ko9N25d4FI4hh0YBcMQmu+0NBLrQnExEDa8g==",
+        "sourceSignature": "SgmD0c4i/YFb7oVAMC8Aold5jpiTUTNtZWTSqFXkoWII9ptJPZ5KOOqR8welg6CepvP/igtRR4cji75bbBzCtA==",
         "accepts": "LASER::SUBSCRIPTION",
         "parameters": {
             "custpropsHandling": {
@@ -170,7 +170,7 @@
                 "vocab": "YN"
             }
         },
-        "pubDate": "Wed Feb 16 17:21:49 GMT 2022",
+        "pubDate": "Wed Feb 16 19:31:32 GMT 2022",
         "version": 1
     },
     {
@@ -202,7 +202,7 @@
                 "vocab": "YN"
             }
         },
-        "pubDate": "Wed Feb 16 17:21:49 GMT 2022",
+        "pubDate": "Wed Feb 16 19:31:32 GMT 2022",
         "version": 1
     },
     {
@@ -680,21 +680,30 @@
                 "srcValue": "EZB tagging (yellow)",
                 "mappingContext": "LASERIMPORT",
                 "targetCtx": "FOLIO::SUBSCRIPTION/PROPERTY",
-                "targetValue": "EZB tagging (yellow)"
+                "targetValue": "EZB tagging (yellow)",
+                "additional": {
+                    "ConvertTo": "Text"
+                }
             },
             {
                 "srcCtx": "LASER::SUBSCRIPTION/PROPERTY",
-                "srcValue": "DBS subject group",
+                "srcValue": "dbs.subject.group",
                 "mappingContext": "LASERIMPORT",
                 "targetCtx": "FOLIO::SUBSCRIPTION/PROPERTY",
-                "targetValue": "DBS subject group"
+                "targetValue": "dbs.subject.group",
+                "additional": {
+                    "ConvertTo": "Text"
+                }
             },
             {
                 "srcCtx": "LASER::SUBSCRIPTION/PROPERTY",
                 "srcValue": "Sim-User Number",
                 "mappingContext": "LASERIMPORT",
                 "targetCtx": "FOLIO::SUBSCRIPTION/PROPERTY",
-                "targetValue": "Sim User Number"
+                "targetValue": "Sim User Number",
+                "additional": {
+                    "ConvertTo": "Text"
+                }
             },
             {
                 "srcCtx": "LASER::SUBSCRIPTION/PROPERTY",
@@ -756,6 +765,7 @@
     },
     {
         "recordType": "authorityControl",
+        "documentataion": "This section gives display labels for reference authorities and where appropriate information on the FOLIO endpoint that can be used to look up values",
         "authorities": {
             "LASER::SUBSCRIPTION/PROPERTY": {
                 "label": "LASER Subscription Custom Properties"
