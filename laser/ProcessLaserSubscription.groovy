@@ -233,10 +233,12 @@ public class ProcessLaserSubscription extends BaseTransformProcess implements Tr
     // agreement to only contain a package rather than indvidual entitlements (WHich would be much closer to the LAS:eR model)
     def content_items = [];
 
+    String packageReference = "LASER:${subscription.globalUID}".toString();
+
     // Add a record foe the package
     pkg_data.records.add([
       "source": "LAS:eR",
-      "reference": subscription.globalUID,
+      "reference": packageReference,
       "name": generated_package_name,
       // "packageProvider": [
       //   "name": "provider"
@@ -472,10 +474,9 @@ public class ProcessLaserSubscription extends BaseTransformProcess implements Tr
       items = [
         [
           resource: [
-            id: folio_pkg_id,
-            authority: 'LASER',
-            reference: "LASER:${subscription.globalUID}"
-          ]
+            id: folio_pkg_id
+          ],
+          note: "re: ${entitlementReference} on ${new Date()}".toString()
         ]
       ]
     }
@@ -619,12 +620,12 @@ public class ProcessLaserSubscription extends BaseTransformProcess implements Tr
 
       // Dump the existing agreement lines to the log
       items.each { it ->
-        local_context.processLog.add([ts:System.currentTimeMillis(), msg: "Existing AL -> id:${it.id} ref:${it.resource?.reference}"]);
+        local_context.processLog.add([ts:System.currentTimeMillis(), msg: "Existing AL -> id:${it.id} ref:${it.resource?._object?.reference}"]);
       }
 
       String entitlementReference = "LASER:${subscription.globalUID}".toString();
 
-      def located_laser_entitlement = items.find { it.resource?.reference?.equals(entitlementReference) }
+      def located_laser_entitlement = items.find { it.resource?._object?.reference?.equals(entitlementReference) }
       if ( located_laser_entitlement != null ) {
         local_context.processLog.add([ts:System.currentTimeMillis(), msg: "Located entitlement for custom package with reference ${entitlementReference} - folio package is ${folio_pkg_id}"])
       }
@@ -634,11 +635,9 @@ public class ProcessLaserSubscription extends BaseTransformProcess implements Tr
         items.add (
           [
             resource: [
-              id: folio_pkg_id,
-              authority: 'LASER',
-              reference: entitlementReference,
-              note: "re: ${entitlementReference} on ${new Date()}".toString()
+              id: folio_pkg_id
             ]
+            note: "re: ${entitlementReference} on ${new Date()}".toString()
           ]
         );
       }
