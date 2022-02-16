@@ -636,7 +636,7 @@ public class ProcessLaserSubscription extends BaseTransformProcess implements Tr
           [
             resource: [
               id: folio_pkg_id
-            ]
+            ],
             note: "re: ${entitlementReference} on ${new Date()}".toString()
           ]
         );
