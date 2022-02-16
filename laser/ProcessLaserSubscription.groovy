@@ -148,7 +148,7 @@ public class ProcessLaserSubscription extends BaseTransformProcess implements Tr
     local_context.processLog.add([ts:System.currentTimeMillis(), msg:"ProcessLaserSubscription::process(${resource_id})"]);
 
     String sync_titles = AppSetting.findByKey('laser.syncTitles')?.value
-    String new_package_name = local_context.parsed_record.name;
+    String new_package_name = "${local_context.parsed_record.name}/${resource_id}".toString();
 
     ResourceMappingService rms = ctx.getBean('resourceMappingService');
     ImportFeedbackService feedbackHelper = ctx.getBean('importFeedbackService');
