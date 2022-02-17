@@ -402,7 +402,7 @@ public class ProcessLaserSubscription extends BaseTransformProcess implements Tr
         def answer = fi.parsedAnswer
         log.debug("apply feedback ${answer}");
 
-        local_context.processLog.add([ts:System.currentTimeMillis(), msg:"Applying located feedbacko ${answer}"])
+        local_context.processLog.add([ts:System.currentTimeMillis(), msg:"Applying located feedback (existing answer): ${answer}"])
         switch ( answer?.answerType ) {
           case 'create':
               result = createAgreement(rms,
@@ -471,6 +471,7 @@ public class ProcessLaserSubscription extends BaseTransformProcess implements Tr
     def items
 
     String entitlementReference = "LASER:${subscription.globalUID}".toString();
+    local_context.processLog.add([ts:System.currentTimeMillis(), msg:"Create agreement : ${entitlementReference}"])
 
     if (folio_pkg_id) {
       items = [
