@@ -470,6 +470,8 @@ public class ProcessLaserSubscription extends BaseTransformProcess implements Tr
     // We only add the custom package as an agreement line if the data from folio contained contentItems
     def items
 
+    String entitlementReference = "LASER:${subscription.globalUID}".toString();
+
     if (folio_pkg_id) {
       items = [
         [
