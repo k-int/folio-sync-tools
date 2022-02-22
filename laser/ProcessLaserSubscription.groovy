@@ -479,7 +479,9 @@ public class ProcessLaserSubscription extends BaseTransformProcess implements Tr
           resource: [
             id: folio_pkg_id
           ],
-          note: "re: ${entitlementReference} on ${new Date()}".toString()
+          note: "re: ${entitlementReference} on ${new Date()}".toString(),
+          activeFrom: dealWithLaserDate(subscription.startDate),
+          activeTo: dealWithLaserDate(subscription.endDate),
         ]
       ]
     }
@@ -583,18 +585,25 @@ public class ProcessLaserSubscription extends BaseTransformProcess implements Tr
       // II removing this for now - we don't want to always be nuking the periods we have attached 
       // we should compare and carefully merge the data rather than nuke and replace.
       //
-      def period_for_sub = null; // folio_agreement.periods.find { ( ( it.startDate == subscription.startDate ) && ( it.endDate == subscription.endDate ) ) }
+      def period_overlap = false;
       folio_agreement.periods.each { agg_period ->
         log.debug("check period ${agg_period} for ${subscription.startDate}/${subscription.endDate}");
-        if ( ( agg_period.startDate.equals(subscription.startDate) ) &&
-             ( agg_period.endDate.equals(subscription.endDate ) ) ) {
-          period_for_sub = agg_period;
+
+        // If the start date of this subscrption is before a period end date AND
+        // the end date of this subscription is after the end data of any period
+        // Then the date range on this subscription overlaps an existing period and we cannot continue.
+        if ( ( subscription.startDate < agg_period.endDate ) &&
+             ( subscription.endDate > agg_period.endDate ) ) {
+          period_overlap = true;
         }
       }
 
-      if ( period_for_sub == null ) {
+      if ( period_overlap == false) {
         log.debug("Unable to locate period for agreement relating to sub - add one");
-        // periods.add([ startDate: subscription.startDate, endDate: subscription.endDate ])
+        periods.add([ startDate: subscription.startDate, endDate: subscription.endDate ])
+      }
+      else {
+        local_context.processLog.add([ts:System.currentTimeMillis(), msg:"Subscription period ${subscription.startDate} - ${subscription.endDate} OVERLAPS with existing agreement period. Unable to add"]);
       }
     } catch (Exception e) {
       println("Warning: Cannot update period information for agreement: ${e.message}")
@@ -640,7 +649,9 @@ public class ProcessLaserSubscription extends BaseTransformProcess implements Tr
             resource: [
               id: folio_pkg_id
             ],
-            note: "re: ${entitlementReference} on ${new Date()}".toString()
+            note: "re: ${entitlementReference} on ${new Date()}".toString(),
+            activeFrom: dealWithLaserDate(subscription.startDate),
+            activeTo: dealWithLaserDate(subscription.endDate),
           ]
         );
       }
