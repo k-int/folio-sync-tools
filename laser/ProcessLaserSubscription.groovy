@@ -589,11 +589,12 @@ public class ProcessLaserSubscription extends BaseTransformProcess implements Tr
       folio_agreement.periods.each { agg_period ->
         log.debug("check period ${agg_period} for ${subscription.startDate}/${subscription.endDate} agains period ${}");
 
+
         // If the start date of this subscrption is before a period end date AND
         // the end date of this subscription is after the end data of any period
         // Then the date range on this subscription overlaps an existing period and we cannot continue.
-        if ( ( subscription.startDate < agg_period.endDate ) &&
-             ( subscription.endDate > agg_period.startDate ) ) {
+        if ( ( ( subscription.startDate ?: '2000' ) < ( agg_period.endDate ?: '2100' ) ) &&
+             ( ( subscription.endDate ?: '2100' ) > ( agg_period.startDate ?: '2000' ) ) ) {
           period_overlap = true;
         }
       }
