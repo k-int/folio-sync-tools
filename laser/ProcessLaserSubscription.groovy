@@ -587,19 +587,20 @@ public class ProcessLaserSubscription extends BaseTransformProcess implements Tr
       //
       def period_overlap = false;
       folio_agreement.periods.each { agg_period ->
-        log.debug("check period ${agg_period} for ${subscription.startDate}/${subscription.endDate}");
+        log.debug("check period ${agg_period} for ${subscription.startDate}/${subscription.endDate} agains period ${}");
 
         // If the start date of this subscrption is before a period end date AND
         // the end date of this subscription is after the end data of any period
         // Then the date range on this subscription overlaps an existing period and we cannot continue.
         if ( ( subscription.startDate < agg_period.endDate ) &&
-             ( subscription.endDate > agg_period.endDate ) ) {
+             ( subscription.endDate > agg_period.startDate ) ) {
           period_overlap = true;
         }
       }
 
       if ( period_overlap == false) {
         log.debug("Unable to locate period for agreement relating to sub - add one");
+        local_context.processLog.add([ts:System.currentTimeMillis(), msg:"Adding agreement period ${subscription.startDate} - ${subscription.endDate}"])
         periods.add([ startDate: subscription.startDate, endDate: subscription.endDate ])
       }
       else {
