@@ -606,9 +606,12 @@ public class ProcessLaserSubscription extends BaseTransformProcess implements Tr
       }
       else {
         local_context.processLog.add([ts:System.currentTimeMillis(), msg:"Subscription period ${subscription.startDate} - ${subscription.endDate} OVERLAPS with existing agreement period. Unable to add"]);
+        throw new RuntimeException("Overlapping subscription period");
       }
     } catch (Exception e) {
       println("Warning: Cannot update period information for agreement: ${e.message}")
+      // Rethrow the exception and halt processing.
+      throw new RuntimeException("Incoming subscription has overlapping periods. Please correct in LASER");
     }
 
     String statusString = null
