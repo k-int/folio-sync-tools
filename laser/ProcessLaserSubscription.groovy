@@ -782,7 +782,7 @@ public class ProcessLaserSubscription extends BaseTransformProcess implements Tr
           // We've not seen this subscription property before - add it to the list of potentials
           result &= checkValueMapping(policyHelper,
                           feedbackHelper,is_mandatory,'LASER::SUBSCRIPTION/PROPERTY', subprop.token, 'LASERIMPORT', 'FOLIO::SUBSCRIPTION/PROPERTY', local_context, subprop.token,
-                             [prompt:"Map Optional Subscription Property ${subprop.token}(${subprop.type})",
+                             [prompt:"Map Optional Subscription Property ${subprop.token} (${subprop.type})",
                               type:"refdata"
                              ]);
         }
