@@ -13,3 +13,8 @@ openssl rsa -in myprivate.pem -pubout > mypublic.pem
 Generate a pcks8 encoded private key
 openssl pkcs8 -topk8 -nocrypt -in myprivate.pem -out myprivate.pcks8
 
+
+To sign a given config (For example, the laser config in ../laser) 
+
+cd ../laser  -- Be in the directory containing the registry - laser_registry.json in this case
+groovy ../tools/sign.groovy ./laser_registry.json
