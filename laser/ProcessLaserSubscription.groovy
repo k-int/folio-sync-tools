@@ -520,7 +520,8 @@ public class ProcessLaserSubscription extends BaseTransformProcess implements Tr
           periods: periods,
           linkedLicenses: linked_licenses,
           items: items,
-          customProperties: processSubscriptionProperties(rms,[:],subscription,local_context)
+          customProperties: processSubscriptionProperties(rms,[:],subscription,local_context),
+          isPerpetual: subscription.hasPerpetualAccess
         ]
       );
 
@@ -672,7 +673,8 @@ public class ProcessLaserSubscription extends BaseTransformProcess implements Tr
       'linkedLicenses': linkedLicenses,
       'description': "${folio_agreement.description?:''}\nUpdated by remote-sync from LAS:eR on ${new Date()}",
       'periods': periods,
-      'items': items
+      'items': items,
+      'isPerpetual': subscription.hasPerpetualAccess
     ]
 
     if (statusString != null) {
