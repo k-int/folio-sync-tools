@@ -165,6 +165,7 @@
 
       { "srcCtx":"LASER::SUBSCRIPTION/PROPERTY",  "srcValue":"EZB tagging (yellow)",     "mappingContext":"LASERIMPORT", "targetCtx":"FOLIO::SUBSCRIPTION/PROPERTY",   "targetValue":"EZB tagging (yellow)",      "additional":{"ConvertTo":"Text"} },
       { "srcCtx":"LASER::SUBSCRIPTION/PROPERTY",  "srcValue":"dbs.subject.group",        "mappingContext":"LASERIMPORT", "targetCtx":"FOLIO::SUBSCRIPTION/PROPERTY",   "targetValue":"dbs.subject.group",         "additional":{"ConvertTo":"Text"} },
+      { "srcCtx":"LASER::SUBSCRIPTION/PROPERTY",  "srcValue":"DBS Subject Group",        "mappingContext":"LASERIMPORT", "targetCtx":"FOLIO::SUBSCRIPTION/PROPERTY",   "targetValue":"dbs.subject.group",         "additional":{"ConvertTo":"Text"} },
       { "srcCtx":"LASER::SUBSCRIPTION/PROPERTY",  "srcValue":"Sim-User Number",          "mappingContext":"LASERIMPORT", "targetCtx":"FOLIO::SUBSCRIPTION/PROPERTY",   "targetValue":"Sim User Number",           "additional":{"ConvertTo":"Text"} },
       { "srcCtx":"LASER::SUBSCRIPTION/PROPERTY",  "srcValue":"Joining during the period","mappingContext":"LASERIMPORT", "targetCtx":"FOLIO::SUBSCRIPTION/PROPERTY",   "targetValue":"Joining during the period" },
 

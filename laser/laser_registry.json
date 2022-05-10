@@ -64,7 +64,7 @@
             }
         },
         "emits": "LASER::LICENSE",
-        "pubDate": "Tue May 10 12:24:08 BST 2022",
+        "pubDate": "Tue May 10 13:47:38 BST 2022",
         "version": 1
     },
     {
@@ -138,7 +138,7 @@
             }
         },
         "emits": "LASER::SUBSCRIPTION",
-        "pubDate": "Tue May 10 12:24:08 BST 2022",
+        "pubDate": "Tue May 10 13:47:38 BST 2022",
         "version": 1
     },
     {
@@ -170,7 +170,7 @@
                 "vocab": "YN"
             }
         },
-        "pubDate": "Tue May 10 12:24:08 BST 2022",
+        "pubDate": "Tue May 10 13:47:38 BST 2022",
         "version": 1
     },
     {
@@ -202,7 +202,7 @@
                 "vocab": "YN"
             }
         },
-        "pubDate": "Tue May 10 12:24:08 BST 2022",
+        "pubDate": "Tue May 10 13:47:38 BST 2022",
         "version": 1
     },
     {
@@ -688,6 +688,16 @@
             {
                 "srcCtx": "LASER::SUBSCRIPTION/PROPERTY",
                 "srcValue": "dbs.subject.group",
+                "mappingContext": "LASERIMPORT",
+                "targetCtx": "FOLIO::SUBSCRIPTION/PROPERTY",
+                "targetValue": "dbs.subject.group",
+                "additional": {
+                    "ConvertTo": "Text"
+                }
+            },
+            {
+                "srcCtx": "LASER::SUBSCRIPTION/PROPERTY",
+                "srcValue": "DBS Subject Group",
                 "mappingContext": "LASERIMPORT",
                 "targetCtx": "FOLIO::SUBSCRIPTION/PROPERTY",
                 "targetValue": "dbs.subject.group",
