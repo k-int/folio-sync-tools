@@ -1,0 +1,650 @@
+[
+    {
+        "recordType": "source",
+        "authority": "LASER",
+        "sourceName": "LaserLicenses",
+        "sourceFile": "LaserLicensesAgent.groovy",
+        "sourceUrl": "https://raw.githubusercontent.com/k-int/folio-sync-tools/main/laser/LaserLicensesAgent.groovy",
+        "language": "groovy",
+        "packaging": "script",
+        "sourceMD5": "79133D680DEC51F98DB7BDFC8D5A57AC",
+        "sourceSignedBy": "k-int",
+        "sourceSignature": "756NuuOT0N2Ie9r1HtGY0leE4ccBl7zqtfOH7riHLViREm5Cf9BHOt9bRejcmD1OwKIqe6TQpZPanT5WAQDKDA==",
+        "parameters": {
+            "url": {
+                "section": "LASER.Integration",
+                "key": "laser.url",
+                "type": "String",
+                "required": true,
+                "label": "Laser URL",
+                "default": "https://laser-qa.hbz-nrw.de"
+            },
+            "secret": {
+                "section": "LASER.Integration",
+                "key": "laser.secret",
+                "type": "Password",
+                "required": true,
+                "label": "Laser Secret [API password]"
+            },
+            "token": {
+                "section": "LASER.Integration",
+                "key": "laser.token",
+                "type": "Password",
+                "required": true,
+                "label": "Laser Token [API key]"
+            },
+            "identifier": {
+                "section": "LASER.Integration",
+                "key": "laser.identifier",
+                "type": "String",
+                "required": true,
+                "label": "Laser Identifier"
+            },
+            "identifierType": {
+                "section": "LASER.Integration",
+                "key": "laser.identifierType",
+                "type": "String",
+                "required": true,
+                "label": "Laser Identifier Type",
+                "default": "globalUID"
+            },
+            "ermFOLIOUser": {
+                "section": "LASER.Integration",
+                "key": "laser.ermFOLIOUser",
+                "type": "String",
+                "required": true,
+                "label": "FOLIO ERM User"
+            },
+            "ermFOLIOPass": {
+                "section": "LASER.Integration",
+                "key": "laser.ermFOLIOPass",
+                "type": "Password",
+                "required": true,
+                "label": "FOLIO ERM Pass"
+            }
+        },
+        "emits": "LASER::LICENSE",
+        "pubDate": "Tue Jul 12 09:32:57 BST 2022",
+        "version": 2
+    },
+    {
+        "recordType": "source",
+        "authority": "LASER",
+        "sourceName": "LaserSubscriptions",
+        "sourceFile": "LaserSubscriptionsAgent.groovy",
+        "sourceUrl": "https://raw.githubusercontent.com/k-int/folio-sync-tools/main/laser/LaserSubscriptionsAgent.groovy",
+        "language": "groovy",
+        "packaging": "script",
+        "sourceMD5": "8F9912A3058B2E3C75172C6540C41087",
+        "sourceSignedBy": "k-int",
+        "sourceSignature": "3l82OhmgC7e+Mlva0V6CHLw8DPgE9kB859Chm6ifPZGWxgImGmdo2spz6BdzLVOKlNWBxQqQKIBTmKdv+vL99w==",
+        "parameters": {
+            "url": {
+                "section": "LASER.Integration",
+                "key": "laser.url",
+                "type": "String",
+                "required": true,
+                "label": "Laser URL"
+            },
+            "secret": {
+                "section": "LASER.Integration",
+                "key": "laser.secret",
+                "type": "Password",
+                "required": true,
+                "label": "Laser Secret [API password]"
+            },
+            "token": {
+                "section": "LASER.Integration",
+                "key": "laser.token",
+                "type": "Password",
+                "required": true,
+                "label": "Laser Token [API key]"
+            },
+            "identifier": {
+                "section": "LASER.Integration",
+                "key": "laser.identifier",
+                "type": "String",
+                "required": true,
+                "label": "Laser Identifier"
+            },
+            "identifierType": {
+                "section": "LASER.Integration",
+                "key": "laser.identifierType",
+                "type": "String",
+                "required": true,
+                "label": "Laser Identifier Type"
+            },
+            "ermFOLIOUser": {
+                "section": "LASER.Integration",
+                "key": "laser.ermFOLIOUser",
+                "type": "String",
+                "required": true,
+                "label": "FOLIO ERM User"
+            },
+            "ermFOLIOPass": {
+                "section": "LASER.Integration",
+                "key": "laser.ermFOLIOPass",
+                "type": "Password",
+                "required": true,
+                "label": "FOLIO ERM Pass"
+            },
+            "syncTitles": {
+                "section": "LASER.Integration",
+                "key": "laser.syncTitles",
+                "type": "Refdata",
+                "required": true,
+                "label": "Should package titles be synced",
+                "vocab": "YN"
+            }
+        },
+        "emits": "LASER::SUBSCRIPTION",
+        "pubDate": "Tue Jul 12 09:32:57 BST 2022",
+        "version": 2
+    },
+    {
+        "recordType": "process",
+        "processName": "LaserSubscriptionImport",
+        "sourceFile": "ProcessLaserSubscription.groovy",
+        "sourceUrl": "https://raw.githubusercontent.com/k-int/folio-sync-tools/main/laser/ProcessLaserSubscription.groovy",
+        "language": "groovy",
+        "packaging": "script",
+        "sourceMD5": "58BA36823B02F8470C3960D5F3B18C70",
+        "sourceSignedBy": "k-int",
+        "sourceSignature": "NuP0JMC/3l0nrRjLamHtqcDMfXCw5SLX4srPYOYIcA3RHW/iOO0K+Cea+mJxQRpypilesGjOkVUoiExqsMaKMA==",
+        "accepts": "LASER::SUBSCRIPTION",
+        "parameters": {
+            "custpropsHandling": {
+                "section": "Shared",
+                "key": "mandatoryCustpropsMapping",
+                "type": "Refdata",
+                "required": true,
+                "label": "Require Custom property Mapping",
+                "vocab": "YN"
+            },
+            "refdataHandling": {
+                "section": "Shared",
+                "key": "mandatoryRefdataMapping",
+                "type": "Refdata",
+                "required": true,
+                "label": "Require Refdata Value Mapping",
+                "vocab": "YN"
+            }
+        },
+        "pubDate": "Tue Jul 12 09:32:57 BST 2022",
+        "version": 2
+    },
+    {
+        "recordType": "process",
+        "processName": "LaserLicenseImport",
+        "sourceFile": "ProcessLaserLicense.groovy",
+        "sourceUrl": "https://raw.githubusercontent.com/k-int/folio-sync-tools/main/laser/ProcessLaserLicense.groovy",
+        "language": "groovy",
+        "packaging": "script",
+        "sourceMD5": "95A7A3078AD7BAE86FC6E717625C1560",
+        "sourceSignedBy": "k-int",
+        "sourceSignature": "O+qm9RqYUWjSeRrLdKXSVWHwONzfmX0GQdQUNSG1vJlkz5sm90ozXeRSe7qYAyiWurL60Y9gc3AwfqwBM74C+A==",
+        "accepts": "LASER::LICENSE",
+        "parameters": {
+            "custpropsHandling": {
+                "section": "Shared",
+                "key": "mandatoryCustpropsMapping",
+                "type": "Refdata",
+                "required": true,
+                "label": "Require Custom property Mapping",
+                "vocab": "YN"
+            },
+            "refdataHandling": {
+                "section": "Shared",
+                "key": "mandatoryRefdataMapping",
+                "type": "Refdata",
+                "required": true,
+                "label": "Require Refdata Value Mapping",
+                "vocab": "YN"
+            }
+        },
+        "pubDate": "Tue Jul 12 09:32:57 BST 2022",
+        "version": 2
+    },
+    {
+        "recordType": "extract",
+        "extractName": "LASERLicenseExtract",
+        "source": "LaserLicenses",
+        "process": "LaserLicenseImport"
+    },
+    {
+        "recordType": "extract",
+        "extractName": "LASERSubscriptionExtract",
+        "source": "LaserSubscriptions",
+        "process": "LaserSubscriptionImport"
+    },
+    {
+        "recordType": "mappings",
+        "mappings": [
+            {
+                "srcCtx": "LASER::LICENSE/TYPE",
+                "srcValue": "Consortium",
+                "mappingContext": "LASERIMPORT",
+                "targetCtx": "FOLIO::LICENSE/TYPE",
+                "targetValue": "consortial"
+            },
+            {
+                "srcCtx": "LASER::LICENSE/TYPE",
+                "srcValue": "Local",
+                "mappingContext": "LASERIMPORT",
+                "targetCtx": "FOLIO::LICENSE/TYPE",
+                "targetValue": "local"
+            },
+            {
+                "srcCtx": "LASER::LICENSE/TYPE",
+                "srcValue": "National",
+                "mappingContext": "LASERIMPORT",
+                "targetCtx": "FOLIO::LICENSE/TYPE",
+                "targetValue": "national"
+            },
+            {
+                "srcCtx": "LASER::LICENSE/TYPE",
+                "srcValue": "Alliance",
+                "mappingContext": "LASERIMPORT",
+                "targetCtx": "FOLIO::LICENSE/TYPE",
+                "targetValue": "alliance"
+            },
+            {
+                "srcCtx": "LASER::LICENSE/TYPE",
+                "srcValue": "Participation",
+                "mappingContext": "LASERIMPORT",
+                "targetCtx": "FOLIO::LICENSE/TYPE",
+                "targetValue": "alliance"
+            },
+            {
+                "srcCtx": "LASER::LICENSE/STATUS",
+                "srcValue": "In Progress",
+                "mappingContext": "LASERIMPORT",
+                "targetCtx": "FOLIO::LICENSE/STATUS",
+                "targetValue": "not_yet_active"
+            },
+            {
+                "srcCtx": "LASER::LICENSE/STATUS",
+                "srcValue": "Current",
+                "mappingContext": "LASERIMPORT",
+                "targetCtx": "FOLIO::LICENSE/STATUS",
+                "targetValue": "active"
+            },
+            {
+                "srcCtx": "LASER::LICENSE/STATUS",
+                "srcValue": "Participation",
+                "mappingContext": "LASERIMPORT",
+                "targetCtx": "FOLIO::LICENSE/STATUS",
+                "targetValue": "active"
+            },
+            {
+                "srcCtx": "LASER::LICENSE/STATUS",
+                "srcValue": "In negotiation",
+                "mappingContext": "LASERIMPORT",
+                "targetCtx": "FOLIO::LICENSE/STATUS",
+                "targetValue": "in_negotiation"
+            },
+            {
+                "srcCtx": "LASER::LICENSE/STATUS",
+                "srcValue": "Not yet active",
+                "mappingContext": "LASERIMPORT",
+                "targetCtx": "FOLIO::LICENSE/STATUS",
+                "targetValue": "not_yet_active"
+            },
+            {
+                "srcCtx": "LASER::LICENSE/STATUS",
+                "srcValue": "Rejected",
+                "mappingContext": "LASERIMPORT",
+                "targetCtx": "FOLIO::LICENSE/STATUS",
+                "targetValue": "rejected"
+            },
+            {
+                "srcCtx": "LASER::LICENSE/STATUS",
+                "srcValue": "Retired",
+                "mappingContext": "LASERIMPORT",
+                "targetCtx": "FOLIO::LICENSE/STATUS",
+                "targetValue": "expired"
+            },
+            {
+                "srcCtx": "LASER::LICENSE/STATUS",
+                "srcValue": "Expired",
+                "mappingContext": "LASERIMPORT",
+                "targetCtx": "FOLIO::LICENSE/STATUS",
+                "targetValue": "expired"
+            },
+            {
+                "srcCtx": "LASER::LICENSE/PROPERTY",
+                "srcValue": "Archiving rights",
+                "mappingContext": "LASERIMPORT",
+                "targetCtx": "FOLIO::LICENSE/PROPERTY",
+                "targetValue": "archivingNote"
+            },
+            {
+                "srcCtx": "LASER::LICENSE/PROPERTY",
+                "srcValue": "Authorized Users",
+                "mappingContext": "LASERIMPORT",
+                "targetCtx": "FOLIO::LICENSE/PROPERTY",
+                "targetValue": "authorizedUsersLaser",
+                "additional": {
+                    "ConvertTo": "Text"
+                }
+            },
+            {
+                "srcCtx": "LASER::LICENSE/PROPERTY",
+                "srcValue": "Course pack electronic",
+                "mappingContext": "LASERIMPORT",
+                "targetCtx": "FOLIO::LICENSE/PROPERTY",
+                "targetValue": "coursePackE"
+            },
+            {
+                "srcCtx": "LASER::LICENSE/PROPERTY",
+                "srcValue": "Governing law",
+                "mappingContext": "LASERIMPORT",
+                "targetCtx": "FOLIO::LICENSE/PROPERTY",
+                "targetValue": "governingLaw",
+                "additional": {
+                    "ConvertTo": "Text"
+                }
+            },
+            {
+                "srcCtx": "LASER::LICENSE/PROPERTY",
+                "srcValue": "ILL electronic",
+                "mappingContext": "LASERIMPORT",
+                "targetCtx": "FOLIO::LICENSE/PROPERTY",
+                "targetValue": "illElectronic"
+            },
+            {
+                "srcCtx": "LASER::LICENSE/PROPERTY",
+                "srcValue": "Text- and Datamining",
+                "mappingContext": "LASERIMPORT",
+                "targetCtx": "FOLIO::LICENSE/PROPERTY",
+                "targetValue": "tdm"
+            },
+            {
+                "srcCtx": "LASER::LICENSE/PROPERTY",
+                "srcValue": "Remote Access",
+                "mappingContext": "LASERIMPORT",
+                "targetCtx": "FOLIO::LICENSE/PROPERTY",
+                "targetValue": "remoteAccess"
+            },
+            {
+                "srcCtx": "LASER::LICENSE/PROPERTY",
+                "srcValue": "Walk-in Access",
+                "mappingContext": "LASERIMPORT",
+                "targetCtx": "FOLIO::LICENSE/PROPERTY",
+                "targetValue": "authorizedUsers_WalkIns"
+            },
+            {
+                "srcCtx": "LASER::LICENSE/PROPERTY",
+                "srcValue": "Digitalkopie Bedingungen",
+                "mappingContext": "LASERIMPORT",
+                "targetCtx": "FOLIO::LICENSE/PROPERTY",
+                "targetValue": "copyE"
+            },
+            {
+                "srcCtx": "LASER::LICENSE/PROPERTY",
+                "srcValue": "Druckkopie Bedingungen",
+                "mappingContext": "LASERIMPORT",
+                "targetCtx": "FOLIO::LICENSE/PROPERTY",
+                "targetValue": "copyP"
+            },
+            {
+                "srcCtx": "LASER::LICENSE/PROPERTY",
+                "srcValue": "Weitergabe im Rahmen der Lehre Bedingungen",
+                "mappingContext": "LASERIMPORT",
+                "targetCtx": "FOLIO::LICENSE/PROPERTY",
+                "targetValue": "scholarySharing"
+            },
+            {
+                "srcCtx": "LASER::LICENSE/REFDATA/permissions",
+                "srcValue": "Prohibited (explicit)",
+                "mappingContext": "LASERIMPORT",
+                "targetCtx": "FOLIO::LICENSE/REFDATA/permissions",
+                "targetValue": "verboten_(explizit)"
+            },
+            {
+                "srcCtx": "LASER::LICENSE/REFDATA/permissions",
+                "srcValue": "Permitted (explicit)",
+                "mappingContext": "LASERIMPORT",
+                "targetCtx": "FOLIO::LICENSE/REFDATA/permissions",
+                "targetValue": "zulassig_(explizit)"
+            },
+            {
+                "srcCtx": "LASER::LICENSE/REFDATA/permissions",
+                "srcValue": "Prohibited (interpreted)",
+                "mappingContext": "LASERIMPORT",
+                "targetCtx": "FOLIO::LICENSE/REFDATA/permissions",
+                "targetValue": "verboten_(auslegung)"
+            },
+            {
+                "srcCtx": "LASER::LICENSE/REFDATA/permissions",
+                "srcValue": "Permitted (interpreted)",
+                "mappingContext": "LASERIMPORT",
+                "targetCtx": "FOLIO::LICENSE/REFDATA/permissions",
+                "targetValue": "zulassig_(auslegung)"
+            },
+            {
+                "srcCtx": "LASER::LICENSE/REFDATA/y.n",
+                "srcValue": "Yes",
+                "mappingContext": "LASERIMPORT",
+                "targetCtx": "FOLIO::LICENSE/REFDATA/y.n",
+                "targetValue": "Yes"
+            },
+            {
+                "srcCtx": "LASER::LICENSE/REFDATA/y.n",
+                "srcValue": "No",
+                "mappingContext": "LASERIMPORT",
+                "targetCtx": "FOLIO::LICENSE/REFDATA/y.n",
+                "targetValue": "No"
+            },
+            {
+                "srcCtx": "LASER::LICENSE/REFDATA/y.n",
+                "srcValue": "NO-VALUE",
+                "mappingContext": "LASERIMPORT",
+                "targetCtx": "FOLIO::LICENSE/REFDATA/y.n",
+                "targetValue": "NoValue"
+            },
+            {
+                "srcCtx": "LASER::LICENSE/REFDATA/y.n.o",
+                "srcValue": "Yes",
+                "mappingContext": "LASERIMPORT",
+                "targetCtx": "FOLIO::LICENSE/REFDATA/y.n.o",
+                "targetValue": "Yes"
+            },
+            {
+                "srcCtx": "LASER::LICENSE/REFDATA/y.n.o",
+                "srcValue": "No",
+                "mappingContext": "LASERIMPORT",
+                "targetCtx": "FOLIO::LICENSE/REFDATA/y.n.o",
+                "targetValue": "No"
+            },
+            {
+                "srcCtx": "LASER::LICENSE/REFDATA/y.n.o",
+                "srcValue": "Other",
+                "mappingContext": "LASERIMPORT",
+                "targetCtx": "FOLIO::LICENSE/REFDATA/y.n.o",
+                "targetValue": "Other"
+            },
+            {
+                "srcCtx": "LASER::LICENSE/REFDATA/y.n.o",
+                "srcValue": "NO-VALUE",
+                "mappingContext": "LASERIMPORT",
+                "targetCtx": "FOLIO::LICENSE/REFDATA/y.n.o",
+                "targetValue": "NoValue"
+            },
+            {
+                "srcCtx": "LASER::SUBSCRIPTION/STATUS",
+                "srcValue": "Draft",
+                "mappingContext": "LASERIMPORT",
+                "targetCtx": "FOLIO::SUBSCRIPTION/STATUS",
+                "targetValue": "draft"
+            },
+            {
+                "srcCtx": "LASER::SUBSCRIPTION/STATUS",
+                "srcValue": "In Progress",
+                "mappingContext": "LASERIMPORT",
+                "targetCtx": "FOLIO::SUBSCRIPTION/STATUS",
+                "targetValue": "requested"
+            },
+            {
+                "srcCtx": "LASER::SUBSCRIPTION/STATUS",
+                "srcValue": "Current",
+                "mappingContext": "LASERIMPORT",
+                "targetCtx": "FOLIO::SUBSCRIPTION/STATUS",
+                "targetValue": "active"
+            },
+            {
+                "srcCtx": "LASER::SUBSCRIPTION/STATUS",
+                "srcValue": "Participation",
+                "mappingContext": "LASERIMPORT",
+                "targetCtx": "FOLIO::SUBSCRIPTION/STATUS",
+                "targetValue": "active"
+            },
+            {
+                "srcCtx": "LASER::SUBSCRIPTION/STATUS",
+                "srcValue": "In negotiation",
+                "mappingContext": "LASERIMPORT",
+                "targetCtx": "FOLIO::SUBSCRIPTION/STATUS",
+                "targetValue": "in_negotiation"
+            },
+            {
+                "srcCtx": "LASER::SUBSCRIPTION/STATUS",
+                "srcValue": "Not yet active",
+                "mappingContext": "LASERIMPORT",
+                "targetCtx": "FOLIO::SUBSCRIPTION/STATUS",
+                "targetValue": "requested"
+            },
+            {
+                "srcCtx": "LASER::SUBSCRIPTION/STATUS",
+                "srcValue": "Rejected",
+                "mappingContext": "LASERIMPORT",
+                "targetCtx": "FOLIO::SUBSCRIPTION/STATUS",
+                "targetValue": "closed"
+            },
+            {
+                "srcCtx": "LASER::SUBSCRIPTION/STATUS",
+                "srcValue": "Retired",
+                "mappingContext": "LASERIMPORT",
+                "targetCtx": "FOLIO::SUBSCRIPTION/STATUS",
+                "targetValue": "closed"
+            },
+            {
+                "srcCtx": "LASER::SUBSCRIPTION/STATUS",
+                "srcValue": "Expired",
+                "mappingContext": "LASERIMPORT",
+                "targetCtx": "FOLIO::SUBSCRIPTION/STATUS",
+                "targetValue": "closed"
+            },
+            {
+                "srcCtx": "LASER::SUBSCRIPTION/PROPERTY",
+                "srcValue": "Joining during the period",
+                "mappingContext": "LASERIMPORT",
+                "targetCtx": "FOLIO::SUBSCRIPTION/PROPERTY",
+                "targetValue": "JoiningDuringPeriod",
+                "additional": {
+                    "ConvertTo": "Text"
+                }
+            },
+            {
+                "srcCtx": "LASER::SUBSCRIPTION/REFDATA/y.n",
+                "srcValue": "Yes",
+                "mappingContext": "LASERIMPORT",
+                "targetCtx": "FOLIO::SUBSCRIPTION/REFDATA/y.n",
+                "targetValue": "Yes"
+            },
+            {
+                "srcCtx": "LASER::SUBSCRIPTION/REFDATA/y.n",
+                "srcValue": "No",
+                "mappingContext": "LASERIMPORT",
+                "targetCtx": "FOLIO::SUBSCRIPTION/REFDATA/y.n",
+                "targetValue": "No"
+            },
+            {
+                "srcCtx": "LASER::SUBSCRIPTION/REFDATA/y.n",
+                "srcValue": "NO-VALUE",
+                "mappingContext": "LASERIMPORT",
+                "targetCtx": "FOLIO::SUBSCRIPTION/REFDATA/y.n",
+                "targetValue": "NoValue"
+            },
+            {
+                "srcCtx": "LASER::SUBSCRIPTION/REFDATA/y.n.o",
+                "srcValue": "Yes",
+                "mappingContext": "LASERIMPORT",
+                "targetCtx": "FOLIO::SUBSCRIPTION/REFDATA/y.n.o",
+                "targetValue": "Yes"
+            },
+            {
+                "srcCtx": "LASER::SUBSCRIPTION/REFDATA/y.n.o",
+                "srcValue": "No",
+                "mappingContext": "LASERIMPORT",
+                "targetCtx": "FOLIO::SUBSCRIPTION/REFDATA/y.n.o",
+                "targetValue": "No"
+            },
+            {
+                "srcCtx": "LASER::SUBSCRIPTION/REFDATA/y.n.o",
+                "srcValue": "Other",
+                "mappingContext": "LASERIMPORT",
+                "targetCtx": "FOLIO::SUBSCRIPTION/REFDATA/y.n.o",
+                "targetValue": "Other"
+            },
+            {
+                "srcCtx": "LASER::SUBSCRIPTION/REFDATA/y.n.o",
+                "srcValue": "NO-VALUE",
+                "mappingContext": "LASERIMPORT",
+                "targetCtx": "FOLIO::SUBSCRIPTION/REFDATA/y.n.o",
+                "targetValue": "NoValue"
+            }
+        ]
+    },
+    {
+        "recordType": "authorityControl",
+        "documentataion": "This section gives display labels for reference authorities and where appropriate information on the FOLIO endpoint that can be used to look up values",
+        "authorities": {
+            "LASER::SUBSCRIPTION/PROPERTY": {
+                "label": "LASER Subscription Custom Properties"
+            },
+            "LASER::LICENSE/PROPERTY": {
+                "label": "LASER License Custom Properties"
+            },
+            "LASER::LICENSE/STATUS": {
+                "label": "Laser License Status"
+            },
+            "LASER::LICENSE/TYPE": {
+                "label": "Laser License Type"
+            },
+            "LASER::LICENSE/REFDATA/permissions": {
+                "label": "LASER Refdata - Permissions"
+            },
+            "LASER::LICENSE/REFDATA/y.n": {
+                "label": "LASER Refdata - Yes/No"
+            },
+            "LASER::LICENSE/REFDATA/y.n.o": {
+                "label": "LASER Refdata - Yes/No/Other"
+            },
+            "FOLIO::LICENSE/PROPERTY": {
+                "type": "custprop",
+                "service": "/licenses/custprops",
+                "label": "Folio License Custom Properties"
+            },
+            "FOLIO::LICENSE/REFDATA/y.n.o": {
+                "type": "refdata",
+                "service": "/licenses/refdata/Yes%2FNo%2FOther",
+                "label": "Folio Refdata - Yes/No/Other"
+            },
+            "FOLIO::LICENSE/REFDATA/permissions": {
+                "type": "refdata",
+                "service": "/licenses/refdata/Permitted%2FProhibited",
+                "label": "Folio Refdata - Permitted"
+            },
+            "FOLIO::LICENSE/STATUS": {
+                "type": "refdata",
+                "service": "/licenses/refdata/License/status",
+                "label": "Folio Refdata - License Status"
+            },
+            "FOLIO::LICENSE/TYPE": {
+                "type": "refdata",
+                "service": "/licenses/refdata/License/type",
+                "label": "Folio Refdata - License Type"
+            }
+        }
+    }
+]
