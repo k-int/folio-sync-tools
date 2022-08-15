@@ -24,14 +24,14 @@
                 "key": "laser.secret",
                 "type": "Password",
                 "required": true,
-                "label": "Laser Secret"
+                "label": "Laser Secret [API password]"
             },
             "token": {
                 "section": "LASER.Integration",
                 "key": "laser.token",
                 "type": "Password",
                 "required": true,
-                "label": "Laser Token"
+                "label": "Laser Token [API key]"
             },
             "identifier": {
                 "section": "LASER.Integration",
@@ -64,8 +64,8 @@
             }
         },
         "emits": "LASER::LICENSE",
-        "pubDate": "Tue May 10 15:02:06 BST 2022",
-        "version": 1
+        "version": 3,
+        "pubDate": "Mon Aug 15 10:00:07 BST 2022"
     },
     {
         "recordType": "source",
@@ -91,14 +91,14 @@
                 "key": "laser.secret",
                 "type": "Password",
                 "required": true,
-                "label": "Laser Secret"
+                "label": "Laser Secret [API password]"
             },
             "token": {
                 "section": "LASER.Integration",
                 "key": "laser.token",
                 "type": "Password",
                 "required": true,
-                "label": "Laser Token"
+                "label": "Laser Token [API key]"
             },
             "identifier": {
                 "section": "LASER.Integration",
@@ -138,8 +138,8 @@
             }
         },
         "emits": "LASER::SUBSCRIPTION",
-        "pubDate": "Tue May 10 15:02:06 BST 2022",
-        "version": 1
+        "version": 3,
+        "pubDate": "Mon Aug 15 10:00:07 BST 2022"
     },
     {
         "recordType": "process",
@@ -170,7 +170,7 @@
                 "vocab": "YN"
             }
         },
-        "pubDate": "Tue May 10 15:02:06 BST 2022",
+        "pubDate": "Mon Aug 15 10:00:07 BST 2022",
         "version": 1
     },
     {
@@ -180,9 +180,9 @@
         "sourceUrl": "https://raw.githubusercontent.com/k-int/folio-sync-tools/main/laser/ProcessLaserLicense.groovy",
         "language": "groovy",
         "packaging": "script",
-        "sourceMD5": "95A7A3078AD7BAE86FC6E717625C1560",
+        "sourceMD5": "664B2562FBCD8BEF61DFC936966FE264",
         "sourceSignedBy": "k-int",
-        "sourceSignature": "O+qm9RqYUWjSeRrLdKXSVWHwONzfmX0GQdQUNSG1vJlkz5sm90ozXeRSe7qYAyiWurL60Y9gc3AwfqwBM74C+A==",
+        "sourceSignature": "MeaeIdCcac3TJWjW8CPTBZXLxabEe67HEwwr+/EFF1hXeXNo886c5n7K02og+iEMTR1A6SHCvbZOh93h3Ejz4w==",
         "accepts": "LASER::LICENSE",
         "parameters": {
             "custpropsHandling": {
@@ -202,7 +202,7 @@
                 "vocab": "YN"
             }
         },
-        "pubDate": "Tue May 10 15:02:06 BST 2022",
+        "pubDate": "Mon Aug 15 10:00:07 BST 2022",
         "version": 1
     },
     {
@@ -225,91 +225,91 @@
                 "srcValue": "Consortium",
                 "mappingContext": "LASERIMPORT",
                 "targetCtx": "FOLIO::LICENSE/TYPE",
-                "targetValue": "Consortial"
+                "targetValue": "consortial"
             },
             {
                 "srcCtx": "LASER::LICENSE/TYPE",
                 "srcValue": "Local",
                 "mappingContext": "LASERIMPORT",
                 "targetCtx": "FOLIO::LICENSE/TYPE",
-                "targetValue": "Local"
+                "targetValue": "local"
             },
             {
                 "srcCtx": "LASER::LICENSE/TYPE",
                 "srcValue": "National",
                 "mappingContext": "LASERIMPORT",
                 "targetCtx": "FOLIO::LICENSE/TYPE",
-                "targetValue": "National"
+                "targetValue": "national"
             },
             {
                 "srcCtx": "LASER::LICENSE/TYPE",
                 "srcValue": "Alliance",
                 "mappingContext": "LASERIMPORT",
                 "targetCtx": "FOLIO::LICENSE/TYPE",
-                "targetValue": "Alliance"
+                "targetValue": "alliance"
             },
             {
                 "srcCtx": "LASER::LICENSE/TYPE",
                 "srcValue": "Participation",
                 "mappingContext": "LASERIMPORT",
                 "targetCtx": "FOLIO::LICENSE/TYPE",
-                "targetValue": "Alliance"
+                "targetValue": "alliance"
             },
             {
                 "srcCtx": "LASER::LICENSE/STATUS",
                 "srcValue": "In Progress",
                 "mappingContext": "LASERIMPORT",
                 "targetCtx": "FOLIO::LICENSE/STATUS",
-                "targetValue": "Active"
+                "targetValue": "not_yet_active"
             },
             {
                 "srcCtx": "LASER::LICENSE/STATUS",
                 "srcValue": "Current",
                 "mappingContext": "LASERIMPORT",
                 "targetCtx": "FOLIO::LICENSE/STATUS",
-                "targetValue": "Active"
+                "targetValue": "active"
             },
             {
                 "srcCtx": "LASER::LICENSE/STATUS",
                 "srcValue": "Participation",
                 "mappingContext": "LASERIMPORT",
                 "targetCtx": "FOLIO::LICENSE/STATUS",
-                "targetValue": "Active"
+                "targetValue": "active"
             },
             {
                 "srcCtx": "LASER::LICENSE/STATUS",
                 "srcValue": "In negotiation",
                 "mappingContext": "LASERIMPORT",
                 "targetCtx": "FOLIO::LICENSE/STATUS",
-                "targetValue": "In negotiation"
+                "targetValue": "in_negotiation"
             },
             {
                 "srcCtx": "LASER::LICENSE/STATUS",
                 "srcValue": "Not yet active",
                 "mappingContext": "LASERIMPORT",
                 "targetCtx": "FOLIO::LICENSE/STATUS",
-                "targetValue": "Not yet active"
+                "targetValue": "not_yet_active"
             },
             {
                 "srcCtx": "LASER::LICENSE/STATUS",
                 "srcValue": "Rejected",
                 "mappingContext": "LASERIMPORT",
                 "targetCtx": "FOLIO::LICENSE/STATUS",
-                "targetValue": "Expired"
+                "targetValue": "rejected"
             },
             {
                 "srcCtx": "LASER::LICENSE/STATUS",
                 "srcValue": "Retired",
                 "mappingContext": "LASERIMPORT",
                 "targetCtx": "FOLIO::LICENSE/STATUS",
-                "targetValue": "Expired"
+                "targetValue": "expired"
             },
             {
                 "srcCtx": "LASER::LICENSE/STATUS",
                 "srcValue": "Expired",
                 "mappingContext": "LASERIMPORT",
                 "targetCtx": "FOLIO::LICENSE/STATUS",
-                "targetValue": "Expired"
+                "targetValue": "expired"
             },
             {
                 "srcCtx": "LASER::LICENSE/PROPERTY",
@@ -323,14 +323,17 @@
                 "srcValue": "Archiving rights",
                 "mappingContext": "LASERIMPORT",
                 "targetCtx": "FOLIO::LICENSE/PROPERTY",
-                "targetValue": "archivingRights"
+                "targetValue": "archivingNote"
             },
             {
                 "srcCtx": "LASER::LICENSE/PROPERTY",
                 "srcValue": "Authorized Users",
                 "mappingContext": "LASERIMPORT",
                 "targetCtx": "FOLIO::LICENSE/PROPERTY",
-                "targetValue": "authorisedUsers"
+                "targetValue": "authorizedUsersLaser",
+                "additional": {
+                    "ConvertTo": "Text"
+                }
             },
             {
                 "srcCtx": "LASER::LICENSE/PROPERTY",
@@ -351,14 +354,17 @@
                 "srcValue": "Course pack electronic",
                 "mappingContext": "LASERIMPORT",
                 "targetCtx": "FOLIO::LICENSE/PROPERTY",
-                "targetValue": "authorisedUsers"
+                "targetValue": "coursePackE"
             },
             {
                 "srcCtx": "LASER::LICENSE/PROPERTY",
                 "srcValue": "Governing law",
                 "mappingContext": "LASERIMPORT",
                 "targetCtx": "FOLIO::LICENSE/PROPERTY",
-                "targetValue": "governingLaw"
+                "targetValue": "governingLaw",
+                "additional": {
+                    "ConvertTo": "Text"
+                }
             },
             {
                 "srcCtx": "LASER::LICENSE/PROPERTY",
@@ -435,7 +441,7 @@
                 "srcValue": "Text- and Datamining",
                 "mappingContext": "LASERIMPORT",
                 "targetCtx": "FOLIO::LICENSE/PROPERTY",
-                "targetValue": "Text- and Datamining"
+                "targetValue": "tdm"
             },
             {
                 "srcCtx": "LASER::LICENSE/PROPERTY",
@@ -456,7 +462,7 @@
                 "srcValue": "Remote Access",
                 "mappingContext": "LASERIMPORT",
                 "targetCtx": "FOLIO::LICENSE/PROPERTY",
-                "targetValue": "Remote Access"
+                "targetValue": "remoteAccess"
             },
             {
                 "srcCtx": "LASER::LICENSE/PROPERTY",
@@ -470,7 +476,7 @@
                 "srcValue": "Walk-in Access",
                 "mappingContext": "LASERIMPORT",
                 "targetCtx": "FOLIO::LICENSE/PROPERTY",
-                "targetValue": "walkinAccess"
+                "targetValue": "authorizedUsers_WalkIns"
             },
             {
                 "srcCtx": "LASER::LICENSE/PROPERTY",
@@ -519,14 +525,14 @@
                 "srcValue": "Digitalkopie Bedingungen",
                 "mappingContext": "LASERIMPORT",
                 "targetCtx": "FOLIO::LICENSE/PROPERTY",
-                "targetValue": "digitalCopyTerms"
+                "targetValue": "copyE"
             },
             {
                 "srcCtx": "LASER::LICENSE/PROPERTY",
                 "srcValue": "Druckkopie Bedingungen",
                 "mappingContext": "LASERIMPORT",
                 "targetCtx": "FOLIO::LICENSE/PROPERTY",
-                "targetValue": "printCopyTerms"
+                "targetValue": "copyP"
             },
             {
                 "srcCtx": "LASER::LICENSE/PROPERTY",
@@ -540,28 +546,28 @@
                 "srcValue": "Prohibited (explicit)",
                 "mappingContext": "LASERIMPORT",
                 "targetCtx": "FOLIO::LICENSE/REFDATA/permissions",
-                "targetValue": "prohibited_(explicit)"
+                "targetValue": "verboten_(explizit)"
             },
             {
                 "srcCtx": "LASER::LICENSE/REFDATA/permissions",
                 "srcValue": "Permitted (explicit)",
                 "mappingContext": "LASERIMPORT",
                 "targetCtx": "FOLIO::LICENSE/REFDATA/permissions",
-                "targetValue": "permitted_(explicit)"
+                "targetValue": "zulassig_(explizit)"
             },
             {
                 "srcCtx": "LASER::LICENSE/REFDATA/permissions",
                 "srcValue": "Prohibited (interpreted)",
                 "mappingContext": "LASERIMPORT",
                 "targetCtx": "FOLIO::LICENSE/REFDATA/permissions",
-                "targetValue": "prohibited_(interpreted)"
+                "targetValue": "verboten_(auslegung)"
             },
             {
                 "srcCtx": "LASER::LICENSE/REFDATA/permissions",
                 "srcValue": "Prohibited (explicit)",
                 "mappingContext": "LASERIMPORT",
                 "targetCtx": "FOLIO::LICENSE/REFDATA/permissions",
-                "targetValue": "prohibited_(explicit)"
+                "targetValue": "zulassig_(auslegung)"
             },
             {
                 "srcCtx": "LASER::LICENSE/REFDATA/y.n",
@@ -617,63 +623,63 @@
                 "srcValue": "Draft",
                 "mappingContext": "LASERIMPORT",
                 "targetCtx": "FOLIO::SUBSCRIPTION/STATUS",
-                "targetValue": "Draft"
+                "targetValue": "draft"
             },
             {
                 "srcCtx": "LASER::SUBSCRIPTION/STATUS",
                 "srcValue": "In Progress",
                 "mappingContext": "LASERIMPORT",
                 "targetCtx": "FOLIO::SUBSCRIPTION/STATUS",
-                "targetValue": "Active"
+                "targetValue": "requested"
             },
             {
                 "srcCtx": "LASER::SUBSCRIPTION/STATUS",
                 "srcValue": "Current",
                 "mappingContext": "LASERIMPORT",
                 "targetCtx": "FOLIO::SUBSCRIPTION/STATUS",
-                "targetValue": "Active"
+                "targetValue": "active"
             },
             {
                 "srcCtx": "LASER::SUBSCRIPTION/STATUS",
                 "srcValue": "Participation",
                 "mappingContext": "LASERIMPORT",
                 "targetCtx": "FOLIO::SUBSCRIPTION/STATUS",
-                "targetValue": "Active"
+                "targetValue": "active"
             },
             {
                 "srcCtx": "LASER::SUBSCRIPTION/STATUS",
                 "srcValue": "In negotiation",
                 "mappingContext": "LASERIMPORT",
                 "targetCtx": "FOLIO::SUBSCRIPTION/STATUS",
-                "targetValue": "In negotiation"
+                "targetValue": "in_negotiation"
             },
             {
                 "srcCtx": "LASER::SUBSCRIPTION/STATUS",
                 "srcValue": "Not yet active",
                 "mappingContext": "LASERIMPORT",
                 "targetCtx": "FOLIO::SUBSCRIPTION/STATUS",
-                "targetValue": "Requested"
+                "targetValue": "requested"
             },
             {
                 "srcCtx": "LASER::SUBSCRIPTION/STATUS",
                 "srcValue": "Rejected",
                 "mappingContext": "LASERIMPORT",
                 "targetCtx": "FOLIO::SUBSCRIPTION/STATUS",
-                "targetValue": "Closed"
+                "targetValue": "closed"
             },
             {
                 "srcCtx": "LASER::SUBSCRIPTION/STATUS",
                 "srcValue": "Retired",
                 "mappingContext": "LASERIMPORT",
                 "targetCtx": "FOLIO::SUBSCRIPTION/STATUS",
-                "targetValue": "Closed"
+                "targetValue": "closed"
             },
             {
                 "srcCtx": "LASER::SUBSCRIPTION/STATUS",
                 "srcValue": "Expired",
                 "mappingContext": "LASERIMPORT",
                 "targetCtx": "FOLIO::SUBSCRIPTION/STATUS",
-                "targetValue": "Closed"
+                "targetValue": "closed"
             },
             {
                 "srcCtx": "LASER::SUBSCRIPTION/PROPERTY",
@@ -720,7 +726,10 @@
                 "srcValue": "Joining during the period",
                 "mappingContext": "LASERIMPORT",
                 "targetCtx": "FOLIO::SUBSCRIPTION/PROPERTY",
-                "targetValue": "Joining during the period"
+                "targetValue": "JoiningDuringPeriod",
+                "additional": {
+                    "ConvertTo": "Text"
+                }
             },
             {
                 "srcCtx": "LASER::SUBSCRIPTION/REFDATA/y.n",

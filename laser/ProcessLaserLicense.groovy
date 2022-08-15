@@ -252,7 +252,21 @@ public class ProcessLaserLicense extends BaseTransformProcess implements Transfo
   }
 
   private void updateLicense(FolioClient folioHelper, String folio_license_id, Map laser_record, Map result) {
-    log.debug("update existing license");
+    log.debug("update existing license ${folio_license_id} - ${laser_record}");
+    try {
+      def folio_license = folioHelper.okapiGet('/licenses/licenses'+folio_license_id, requestBody);
+      folio_license.name = laser_record?.reference,
+      folio_license.description = "Updated from LAS:eR license ${laser_record?.reference}/${laser_record?.globalUID} on ${new Date()}",
+      // folio_license.type = typeString,
+      // folio_license.customProperties: processLicenseProperties(rms,[:],laser_record,local_context),
+      // folio_license.status:statusString,
+      // folio_license.localReference: laser_record.globalUID,
+      folio_license.startDate = laser_record?.startDate,
+      folio_license.endDate = laser_record?.endDate
+      folioHelper.okapiPost('/licenses/licenses', folio_license);
+    }
+    catch ( Exception e ) {
+    }
   }
 
   private boolean preflightLicenseProperties(Map laser_license,
