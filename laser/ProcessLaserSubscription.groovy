@@ -256,7 +256,7 @@ public class ProcessLaserSubscription extends BaseTransformProcess implements Tr
 
         ArrayList coverage = buildCoverageStatements(ie.coverages);
 
-        local_context.processLog.add([ts:System.currentTimeMillis(), msg:"Adding Title ${ie?.tipp?.title?.title}"]);
+        local_context.processLog.add([ts:System.currentTimeMillis(), msg:"Adding Title ${ie?.name}"]);
 
         content_items.add([
           "accessStart": dealWithLaserDate(ie.accessStartDate),
@@ -267,9 +267,9 @@ public class ProcessLaserSubscription extends BaseTransformProcess implements Tr
             "platform_url": ie.tipp.platform.primaryUrl,
             "url": ie.tipp.hostPlatformURL,
             "titleInstance": [
-              "name": ie.tipp.title.title,
-              "identifiers":ie.tipp.title.identifiers,
-              "type": ie.tipp.title.medium,
+              "name": ie.name,
+              "identifiers":ie.tipp.identifiers,
+              "type": ie.tipp.medium,
               "subtype": "electronic",
             ]
           ]
